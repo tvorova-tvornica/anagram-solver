@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "anagram_solver": {
+    "App": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7209;http://localhost:5014",
