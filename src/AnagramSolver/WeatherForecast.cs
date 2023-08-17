@@ -1,4 +1,4 @@
-namespace anagram_solver;
+namespace AnagramSolver;
 
 public class WeatherForecast
 {
