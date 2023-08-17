@@ -1,4 +1,4 @@
-namespace App;
+namespace AnagramSolver;
 
 public class WeatherForecast
 {

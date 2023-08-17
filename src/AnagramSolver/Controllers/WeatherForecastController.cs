@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace App.Controllers;
+namespace AnagramSolver.Controllers;
 
 [ApiController]
 [Route("[controller]")]
