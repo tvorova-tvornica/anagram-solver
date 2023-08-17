@@ -19,7 +19,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "prestart": "node aspnetcore-https && node aspnetcore-react",
+    "prestart": "node ./.proxy/aspnetcore-https && node ./.proxy/aspnetcore-react",
     "start": "rimraf ./build && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
