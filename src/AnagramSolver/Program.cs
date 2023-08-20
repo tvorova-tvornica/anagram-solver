@@ -1,8 +1,14 @@
+using AnagramSolver.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<AnagramSolverContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("AnagramSolverContext")));
 
 var app = builder.Build();
 
@@ -14,14 +20,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-//app.Use(async (context, next) => {
-//    if (!context.Request.IsHttps) {
-//        context.Response.StatusCode = StatusCodes.Status400BadRequest;
-//        await context.Response.WriteAsync("HTTPS required!");
-//    } else {
-//        await next(context);
-//    }
-//});
 
 app.UseStaticFiles();
 app.UseRouting();
