@@ -15,6 +15,7 @@ if (!app.Environment.IsDevelopment())
 
 app.Use(async (context, next) => {
     if (!context.Request.IsHttps) {
+        Console.WriteLine(context.Request);
         context.Response.StatusCode = StatusCodes.Status400BadRequest;
         await context.Response.WriteAsync("HTTPS required!");
     } else {
