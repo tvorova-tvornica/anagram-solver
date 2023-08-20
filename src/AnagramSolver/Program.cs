@@ -13,11 +13,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-// Fly.io handles https redirection, so there is no need for it in production
-if (app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+app.Use(async (context, next) => {
+    if (!context.Request.IsHttps) {
+        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        await context.Response.WriteAsync("HTTPS required!");
+    } else {
+        await next(context);
+    }
+});
 
 app.UseStaticFiles();
 app.UseRouting();
