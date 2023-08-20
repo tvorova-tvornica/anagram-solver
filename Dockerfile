@@ -21,7 +21,7 @@ RUN npm run build
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 as runtime
 
-ENV ASPNETCORE_URLS=https://+:3100;
+ENV ASPNETCORE_URLS=http://+:3100;
 
 WORKDIR /app
 COPY --from=build /app/out ./
