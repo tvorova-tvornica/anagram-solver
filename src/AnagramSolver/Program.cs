@@ -13,14 +13,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.Use(async (context, next) => {
-    if (!context.Request.IsHttps) {
-        context.Response.StatusCode = StatusCodes.Status400BadRequest;
-        await context.Response.WriteAsync("HTTPS required!");
-    } else {
-        await next(context);
-    }
-});
+app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseRouting();
