@@ -1,4 +1,5 @@
 using AnagramSolver.Data.Entities;
+using EntityFramework.Exceptions.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 
 namespace AnagramSolver.Data;
@@ -11,6 +12,11 @@ public class AnagramSolverContext : DbContext
     }
 
     public DbSet<Celebrity> Celebrities { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseExceptionProcessor();
+    }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AnagramSolverContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("AnagramSolverContext")));
+            options.UseNpgsql(builder.Configuration.GetValue<string>("DATABASE_URL")));
 
 var app = builder.Build();
 
