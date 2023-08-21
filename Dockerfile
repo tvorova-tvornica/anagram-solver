@@ -21,11 +21,13 @@ RUN npm run build
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 as runtime
 
+ENV ASPNETCORE_URLS=https://+:443;
+
 WORKDIR /app
 COPY --from=build /app/out ./
 COPY --from=client-build /app/client/build ./wwwroot
 
-EXPOSE 80
+EXPOSE 443
 
 ENTRYPOINT ["dotnet", "AnagramSolver.dll"]
 
