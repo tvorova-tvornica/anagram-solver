@@ -1,3 +1,5 @@
+using AnagramSolver.Extensions;
+
 namespace AnagramSolver.Data.Entities;
 
 public class Celebrity 
@@ -9,6 +11,6 @@ public class Celebrity
     public Celebrity(string fullName)
     {
         FullName = fullName;
-        SortedName = new string(fullName.Where(x => !char.IsWhiteSpace(x)).OrderBy(x => x).ToArray());
+        SortedName = fullName.ToTrimmedSorted();
     }
 }
