@@ -1,3 +1,4 @@
+using AnagramSolver.Controllers.Dto;
 using AnagramSolver.Data;
 using AnagramSolver.Data.Entities;
 using AnagramSolver.Extensions;
@@ -17,15 +18,15 @@ public class CelebrityController : ControllerBase
         _dbContext = dbContext;
     }
 
-    [HttpPost]
-    public async Task CreateCelebrity(string fullName)
+    [HttpPost("create-celebrity")]
+    public async Task CreateCelebrity([FromBody] CreateCelebrityDto celebrityDto)
     {
-        var celebrity = new Celebrity(fullName);
+        var celebrity = new Celebrity(celebrityDto.FullName);
         _dbContext.Add(celebrity);
         await _dbContext.SaveChangesAsync();
     }
 
-    [HttpGet]
+    [HttpGet("resolve-anagram")]
     public async Task<List<string>> ResolveAnagram(string anagram)
     {
         var sortedAnagram = anagram.ToTrimmedSorted();
