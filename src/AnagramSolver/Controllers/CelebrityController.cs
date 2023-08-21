@@ -29,7 +29,7 @@ public class CelebrityController : ControllerBase
     [HttpGet("resolve-anagram")]
     public async Task<List<string>> ResolveAnagram(string anagram)
     {
-        var sortedAnagram = anagram.ToTrimmedSorted();
+        var sortedAnagram = anagram.ToTrimmedSortedLowercase();
         return await _dbContext.Celebrities
             .Where(c => c.SortedName == sortedAnagram)
             .Select(c => c.FullName)
