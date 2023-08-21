@@ -2,8 +2,8 @@ namespace AnagramSolver.Extensions;
 
 public static class StringExtensions
 {
-    public static string ToTrimmedSortedLowercase(this string value)
+    public static string ToSortedLowercaseWithoutWhitespaces(this string value)
     {
-        return new string(value.Where(x => !char.IsWhiteSpace(x)).OrderBy(x => x).ToArray()).ToLower();
+        return new string(value.ToLower().Where(x => !char.IsWhiteSpace(x)).OrderBy(x => x).ToArray());
     }
 }

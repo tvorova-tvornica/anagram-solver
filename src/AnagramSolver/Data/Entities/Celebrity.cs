@@ -11,6 +11,6 @@ public class Celebrity
     public Celebrity(string fullName)
     {
         FullName = fullName;
-        SortedName = fullName.ToTrimmedSortedLowercase();
+        SortedName = fullName.ToSortedLowercaseWithoutWhitespaces();
     }
 }
