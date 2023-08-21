@@ -1,8 +1,14 @@
+using AnagramSolver.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<AnagramSolverContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetValue<string>("DATABASE_URL")));
 
 var app = builder.Build();
 
