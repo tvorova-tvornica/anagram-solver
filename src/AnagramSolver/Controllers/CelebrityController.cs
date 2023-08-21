@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AnagramSolver.Controllers;
 
+[ApiController]
+[Route("[controller]")]
 public class CelebrityController : ControllerBase
 {
     private readonly AnagramSolverContext _dbContext;
