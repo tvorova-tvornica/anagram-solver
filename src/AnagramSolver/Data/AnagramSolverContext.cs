@@ -17,14 +17,18 @@ public class AnagramSolverContext : DbContext
         modelBuilder.Entity<Celebrity>().ToTable("Celebrities");
         
         modelBuilder.Entity<Celebrity>()
-            .Property(c => c.FullName)
-            .IsRequired();
+                    .Property(c => c.FullName)
+                    .IsRequired();
+
+        modelBuilder.Entity<Celebrity>()
+                    .HasIndex(c => c.FullName)
+                    .IsUnique();
 
         modelBuilder.Entity<Celebrity>()
                     .Property(c => c.SortedName)
                     .IsRequired();
         
         modelBuilder.Entity<Celebrity>()
-            .HasIndex(c => c.SortedName);
+                    .HasIndex(c => c.SortedName);
     }
 }
