@@ -1,3 +1,5 @@
+[![Deploy](https://github.com/ChainsOfPower/anagram-solver/actions/workflows/deploy.yml/badge.svg)](https://github.com/ChainsOfPower/anagram-solver/actions/workflows/deploy.yml)
+
 # anagram-solver
 
 This app allows users to upload wikidata json generated from https://query.wikidata.org/querybuilder/?uselang=en to populate its database and to query anagrams for matching persons available in database.
