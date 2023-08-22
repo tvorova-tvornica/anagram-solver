@@ -1,8 +1,5 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import {
-    QueryClient,
-    QueryClientProvider
-} from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -15,8 +12,8 @@ const queryClient = new QueryClient({
         queries: {
             refetchOnMount: false,
             refetchOnWindowFocus: false,
-        }
-    }
+        },
+    },
 });
 
 const root = ReactDOM.createRoot(
