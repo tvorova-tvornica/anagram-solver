@@ -5,7 +5,7 @@ export const Navbar = () => {
     return (
         <Box w="100%" minHeight="50px" background="ghostwhite">
             <Stack direction="row">
-                <NavbarLink title="Anagram Solver" path="/" />
+                {false && <NavbarLink title="Anagram Solver" path="/" />}
             </Stack>
         </Box>
     );
