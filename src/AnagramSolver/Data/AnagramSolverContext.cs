@@ -31,10 +31,11 @@ public class AnagramSolverContext : DbContext
                     .IsUnique();
 
         modelBuilder.Entity<Celebrity>()
-                    .Property(c => c.SortedName)
+                    .Property(c => c.AnagramKey)
                     .IsRequired();
         
         modelBuilder.Entity<Celebrity>()
-                    .HasIndex(c => c.SortedName);
+                    .HasIndex(c => c.AnagramKey)
+                    .HasMethod("hash");
     }
 }
