@@ -16,38 +16,39 @@ builder.Services.AddDbContext<AnagramSolverContext>(options =>
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+app.UseExceptionHandler(exceptionHandlerApp =>
 {
-    app.UseExceptionHandler(exceptionHandlerApp =>
+    exceptionHandlerApp.Run(async context =>
     {
-        exceptionHandlerApp.Run(async context =>
+        // using static System.Net.Mime.MediaTypeNames;
+        context.Response.ContentType = Text.Plain;
+
+        var exceptionHandlerPathFeature =
+            context.Features.Get<IExceptionHandlerPathFeature>();
+
+        if (exceptionHandlerPathFeature?.Error is InvalidFullNameException)
         {
-            // using static System.Net.Mime.MediaTypeNames;
-            context.Response.ContentType = Text.Plain;
-
-            var exceptionHandlerPathFeature =
-                context.Features.Get<IExceptionHandlerPathFeature>();
-
-            if (exceptionHandlerPathFeature?.Error is InvalidFullNameException)
-            {
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                await context.Response.WriteAsync($"Celebrity full name is invalid: {exceptionHandlerPathFeature.Error.Message}!");
-                return;
-            }
-
-            if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
-            {
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                await context.Response.WriteAsync($"Celebrity with same name already exists!");
-                return;
-            }
-
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            await context.Response.WriteAsync("Something went wrong, try again");
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsync($"Celebrity full name is invalid: {exceptionHandlerPathFeature.Error.Message}!");
             return;
-        });
+        }
+
+        //if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
+        //{
+        //    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        //    await context.Response.WriteAsync($"Celebrity with same name already exists!");
+        //    return;
+        //}
+
+        if (exceptionHandlerPathFeature?.Error is not null)
+        {
+            throw exceptionHandlerPathFeature.Error;
+        }
     });
-    
+});
+
+if (!app.Environment.IsDevelopment())
+{   
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
