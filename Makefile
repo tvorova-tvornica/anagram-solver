@@ -10,3 +10,7 @@ docker-run:
 
 docker-build:
 	docker build -t anagram-solver .
+
+npm-install:
+	cd ./src/AnagramSolver/ClientApp && npm install
+	

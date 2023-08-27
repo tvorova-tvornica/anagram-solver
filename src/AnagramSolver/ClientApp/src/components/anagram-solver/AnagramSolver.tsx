@@ -21,7 +21,7 @@ export const AnagramSolver: FC<{}> = () => {
     const resolveAnagramResult = useResolveAnagramQuery(debouncedAnagram);
 
     return (
-        <Box minW={["300px", null, "600px"]} minH="500px" mb="10%">
+        <Box minW={["300px", null, "600px"]} minH="500px" mt="25%">
             <AnimatedText
                 m="auto"
                 w="fit-content"
