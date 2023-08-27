@@ -31,7 +31,6 @@ public class AuthController : ControllerBase
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, "Admin"),
-            new Claim(ClaimTypes.Role, "Administrator"),
         };
 
         var claimsIdentity = new ClaimsIdentity(
@@ -60,5 +59,11 @@ public class AuthController : ControllerBase
             CookieAuthenticationDefaults.AuthenticationScheme);
         
         return Ok();
+    }
+
+    [HttpGet("is-logged-in")]
+    public bool IsLoggedIn()
+    {
+        return HttpContext.User?.Identity?.IsAuthenticated ?? false;
     }
 }

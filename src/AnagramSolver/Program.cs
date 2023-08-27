@@ -16,10 +16,20 @@ builder.Services.AddDbContext<AnagramSolverContext>(options =>
             options.UseNpgsql(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => 
+    .AddCookie(options =>
     {
         options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
         options.SlidingExpiration = true;
+        options.Events.OnRedirectToAccessDenied = c =>
+        {
+            c.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return Task.FromResult<object?>(null);
+        };
+        options.Events.OnRedirectToLogin = c =>
+        {
+            c.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.FromResult<object?>(null);
+        };
     });
 
 var app = builder.Build();
@@ -62,7 +72,7 @@ if (!app.Environment.IsDevelopment())
     app.UseCookiePolicy(new CookiePolicyOptions
     {
         MinimumSameSitePolicy = SameSiteMode.Strict,
-        HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always
+        HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
     });
 }
 else 
