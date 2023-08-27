@@ -1,6 +1,7 @@
 using AnagramSolver.Controllers.Dto;
 using AnagramSolver.Data;
 using AnagramSolver.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ public class CelebrityController : ControllerBase
         _dbContext = dbContext;
     }
 
+    [Authorize]
     [HttpPost("create-celebrity")]
     public async Task CreateCelebrity([FromBody] CreateCelebrityDto celebrityDto)
     {
