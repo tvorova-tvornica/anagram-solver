@@ -29,7 +29,7 @@ public class CelebrityController : ControllerBase
     public async Task<List<string>> ResolveAnagram([FromQuery] ResolveAnagramDto anagramDto)
     {
         return await _dbContext.Celebrities
-            .Where(c => c.AnagramKey == anagramDto.SortedAnagram)
+            .Where(c => c.AnagramKey == anagramDto.AnagramKey)
             .Select(c => c.FullName)
             .ToListAsync();
     }
