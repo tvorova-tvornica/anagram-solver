@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Text;
 
 namespace AnagramSolver.Extensions;
@@ -20,25 +19,23 @@ public static class StringExtensions
 
     public static string ToRemovedPunctuation(this string value)
     {
-        return new string(value.Where(x => !char.IsPunctuation(x)).ToArray());
+        var sb = new StringBuilder();
+
+        foreach (var rune in value.EnumerateRunes())
+            if (!Rune.IsPunctuation(rune))
+                sb.Append(rune);
+                
+        return sb.ToString();
     }
 
     public static string ToAlphabeticallyOrdered(this string value)
     {
-        var enumerator = StringInfo.GetTextElementEnumerator(value);
-        var elements = new StringBuilder();
+        var sb = new StringBuilder();
+        var orderedValue = value.EnumerateRunes().OrderBy(x => x);
 
-        while (enumerator.MoveNext())
-        {
-            elements.Append(enumerator.GetTextElement());
-        }
+        foreach (var rune in orderedValue)
+            sb.Append(rune);
 
-        string normalizedString = elements.ToString().Normalize(NormalizationForm.FormD);
-
-        char[] sortedCharacters = normalizedString.ToCharArray();
-        Array.Sort(sortedCharacters);
-
-        return new string(sortedCharacters);
-        //return new string(value.OrderBy(x => x).ToArray());
+        return sb.ToString();
     }
 }
