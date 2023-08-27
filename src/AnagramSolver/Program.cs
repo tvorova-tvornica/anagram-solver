@@ -1,5 +1,9 @@
 using AnagramSolver.Data;
+using AnagramSolver.Extensions;
+using EntityFramework.Exceptions.Common;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +19,36 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
+    app.UseExceptionHandler(exceptionHandlerApp =>
+    {
+        exceptionHandlerApp.Run(async context =>
+        {
+            // using static System.Net.Mime.MediaTypeNames;
+            context.Response.ContentType = Text.Plain;
+
+            var exceptionHandlerPathFeature =
+                context.Features.Get<IExceptionHandlerPathFeature>();
+
+            if (exceptionHandlerPathFeature?.Error is InvalidFullNameException)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsync($"Celebrity full name is invalid: {exceptionHandlerPathFeature.Error.Message}!");
+                return;
+            }
+
+            if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsync($"Celebrity with same name already exists!");
+                return;
+            }
+
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            await context.Response.WriteAsync("Something went wrong, try again");
+            return;
+        });
+    });
+    
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
