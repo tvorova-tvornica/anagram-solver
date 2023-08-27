@@ -85,7 +85,6 @@ else
 }
 
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();
