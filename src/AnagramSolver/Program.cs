@@ -16,7 +16,6 @@ builder.Services.AddDbContext<AnagramSolverContext>(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler(exceptionHandlerApp =>
