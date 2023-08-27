@@ -8,11 +8,11 @@ export function ToggleColorMode(): JSX.Element {
         <Box position="absolute" top="2%" right="1%">
             <IconButton
                 aria-label="Toggle Mode"
-                size='sm'
+                size="sm"
                 variant="ghost"
-                icon={colorMode === 'dark' ? <SunIcon /> : <MoonIcon />}
+                icon={colorMode === "dark" ? <SunIcon /> : <MoonIcon />}
                 onClick={toggleColorMode}
             />
         </Box>
-    )
+    );
 }
