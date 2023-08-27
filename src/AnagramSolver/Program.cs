@@ -33,12 +33,12 @@ app.UseExceptionHandler(exceptionHandlerApp =>
             return;
         }
 
-        //if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
-        //{
-        //    context.Response.StatusCode = StatusCodes.Status400BadRequest;
-        //    await context.Response.WriteAsync($"Celebrity with same name already exists!");
-        //    return;
-        //}
+        if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsync($"Celebrity with same name already exists!");
+            return;
+        }
 
         if (exceptionHandlerPathFeature?.Error is not null)
         {
