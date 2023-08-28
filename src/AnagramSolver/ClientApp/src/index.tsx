@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
 import reportWebVitals from "./reportWebVitals";
 import { theme } from "./theme";
+import { ToggleColorMode } from "./components/toggle-color-mode";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -25,6 +26,7 @@ root.render(
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <QueryClientProvider client={queryClient}>
             <ChakraProvider theme={theme}>
+                <ToggleColorMode />
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" Component={Home} />
