@@ -30,6 +30,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
             c.Response.StatusCode = StatusCodes.Status401Unauthorized;
             return Task.FromResult<object?>(null);
         };
+        options.Cookie.SameSite = SameSiteMode.Strict;
     });
 
 var app = builder.Build();
@@ -69,19 +70,6 @@ if (!app.Environment.IsDevelopment())
 {   
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-    app.UseCookiePolicy(new CookiePolicyOptions
-    {
-        MinimumSameSitePolicy = SameSiteMode.Strict,
-        HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
-    });
-}
-else 
-{
-    app.UseCookiePolicy(new CookiePolicyOptions
-    {
-        MinimumSameSitePolicy = SameSiteMode.None,
-        HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
-    });
 }
 
 app.UseStaticFiles();
