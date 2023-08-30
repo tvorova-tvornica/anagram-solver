@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 
 namespace AnagramSolver.Extensions;
@@ -30,12 +31,12 @@ public static class StringExtensions
 
     public static string ToAlphabeticallyOrdered(this string value)
     {
-        var sb = new StringBuilder();
-        var orderedValue = value.EnumerateRunes().OrderBy(x => x);
+        var graphemeClusters = new List<string>();
+        var textElements = StringInfo.GetTextElementEnumerator(value);
 
-        foreach (var rune in orderedValue)
-            sb.Append(rune);
+        while (textElements.MoveNext())
+            graphemeClusters.Add(textElements.Current.ToString()!);
 
-        return sb.ToString();
+        return string.Concat(graphemeClusters.OrderBy(x => x).ToList());
     }
 }
