@@ -35,7 +35,7 @@ public static class StringExtensions
         var textElements = StringInfo.GetTextElementEnumerator(value);
 
         while (textElements.MoveNext())
-            graphemeClusters.Add(new StringBuilder().Append(textElements.Current).ToString());
+            graphemeClusters.Add(textElements.Current.ToString()!);
 
         return string.Concat(graphemeClusters.OrderBy(x => x).ToList());
     }
