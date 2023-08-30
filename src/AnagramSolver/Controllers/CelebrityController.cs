@@ -18,7 +18,7 @@ public class CelebrityController : ControllerBase
         _dbContext = dbContext;
     }
 
-    //[Authorize]
+    [Authorize]
     [HttpPost("create-celebrity")]
     public async Task CreateCelebrity([FromBody] CreateCelebrityDto celebrityDto)
     {
