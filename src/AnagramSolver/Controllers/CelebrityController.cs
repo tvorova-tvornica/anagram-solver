@@ -41,6 +41,7 @@ public class CelebrityController : ControllerBase
             .ToListAsync();
     }
 
+    [Authorize]
     [HttpPost("import-celebrities")]
     public async Task ImportCelebrities([FromBody] ImportCelebritiesRequestDto importCelebritiesRequestDto)
     {
