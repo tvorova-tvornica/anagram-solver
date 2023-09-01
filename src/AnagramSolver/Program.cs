@@ -1,6 +1,8 @@
 using AnagramSolver.Data;
 using AnagramSolver.Extensions;
 using EntityFramework.Exceptions.Common;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +34,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         };
         options.Cookie.SameSite = SameSiteMode.Strict;
     });
+
+builder.Services.AddHangfire(config =>
+		        config.UsePostgreSqlStorage(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
+
+builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
@@ -77,6 +84,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHangfireDashboard();
 
 app.MapControllerRoute(
     name: "default",
