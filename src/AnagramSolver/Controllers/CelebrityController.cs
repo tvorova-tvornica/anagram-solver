@@ -27,7 +27,7 @@ public class CelebrityController : ControllerBase
             PhotoUrl = celebrityDto.PhotoUrl,
             WikipediaUrl = celebrityDto.WikipediaUrl,
         };
-        
+
         _dbContext.Add(celebrity);
         await _dbContext.SaveChangesAsync();
     }
@@ -39,5 +39,16 @@ public class CelebrityController : ControllerBase
             .Where(c => c.AnagramKey == anagramDto.AnagramKey)
             .Select(c => c.FullName)
             .ToListAsync();
+    }
+
+    [HttpPost("import-celebrities")]
+    public async Task ImportCelebrities([FromBody] ImportCelebritiesRequestDto importCelebritiesRequestDto)
+    {
+        // TODO
+        // create import request to be processed by hangfire
+        // create request processor that polls for all requests and creates jobs for each, marking them processing scheduled
+        // handle each separately -> create import page requests and its processor which does the same as first one -> mark principal as processed
+        // each page job imports celebrities and marks itself as done
+        // principal computes its completness based on dependants
     }
 }
