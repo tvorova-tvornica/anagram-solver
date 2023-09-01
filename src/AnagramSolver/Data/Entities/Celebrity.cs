@@ -5,8 +5,8 @@ namespace AnagramSolver.Data.Entities;
 public class Celebrity 
 {
     public int Id { get; private set; }
-    public string FullName { get; init; }
-    public string AnagramKey { get; init; }
+    public string FullName { get; private init; }
+    public string AnagramKey { get; private init; }
     public string? PhotoUrl { get; init; }
     public string? WikipediaUrl { get; init; }
 
