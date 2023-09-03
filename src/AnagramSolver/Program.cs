@@ -1,6 +1,6 @@
+using AnagramSolver.BackgroundJobs;
 using AnagramSolver.Data;
 using AnagramSolver.Exceptions;
-using AnagramSolver.Extensions;
 using EntityFramework.Exceptions.Common;
 using Hangfire;
 using Hangfire.PostgreSql;
@@ -63,7 +63,7 @@ app.UseExceptionHandler(exceptionHandlerApp =>
         if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsync($"Celebrity with same name already exists!");
+            await context.Response.WriteAsync($"Unique entity already exists!");
             return;
         }
 
@@ -86,6 +86,9 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+GlobalConfiguration.Configuration
+       .UseActivator(new HangfireActivator(app.Services));
+       
 app.UseHangfireDashboard();
 
 app.MapControllerRoute(

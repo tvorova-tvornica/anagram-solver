@@ -20,7 +20,7 @@ public class ImportWikiDataCelebritiesRequest
             throw new BusinessRuleViolationException("Only scheduled import requests can add page requests");
         }
 
-        var pageSize = 1000;
+        var pageSize = 200;
         var pageCount = (totalCount + pageSize - 1) / pageSize;
 
         for (int i = 0; i < pageCount; i++)
