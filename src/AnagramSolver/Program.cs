@@ -97,7 +97,7 @@ app.UseAuthorization();
 GlobalConfiguration.Configuration
        .UseActivator(new HangfireActivator(app.Services));
        
-app.UseHangfireDashboard();
+app.UseHangfireDashboard("/background-jobs");
 
 app.MapControllerRoute(
     name: "default",
@@ -105,6 +105,8 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 
-RecurringJob.AddOrUpdate<ImportWikiDataCelebrityRequestsSchedulerJob>("easyjob", x => x.ScheduleAsync(), Cron.Minutely);
+RecurringJob.AddOrUpdate<ImportWikiDataCelebrityRequestsSchedulerJob>("ImportWikiDataCelebrityRequestsSchedulerJob", x => x.ScheduleAsync(), Cron.Minutely);
+RecurringJob.AddOrUpdate<ImportWikiDataCelebrityPagesSchedulerJob>("ImportWikiDataCelebrityPagesSchedulerJob", x => x.ScheduleAsync(), Cron.Minutely);
+RecurringJob.AddOrUpdate<ProcessImportWikiDataCelebrityRequestsJob>("ProcessImportWikiDataCelebrityRequestsJob", x => x.ProcessAsync(), Cron.Minutely);
 
 app.Run();
