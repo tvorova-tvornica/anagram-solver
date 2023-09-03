@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0
+WORKDIR /app
+
+EXPOSE 44410
+EXPOSE 7209
+
+CMD dotnet dev-certs https
+CMD dotnet watch --project src/AnagramSolver
+

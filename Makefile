@@ -1,3 +1,6 @@
+dev:
+	docker-compose up
+
 watch:
 	dotnet watch --project src/AnagramSolver
 
@@ -13,4 +16,7 @@ docker-build:
 
 npm-install:
 	cd ./src/AnagramSolver/ClientApp && npm install
-	
+
+cert:
+	dotnet dev-certs https -ep ${HOME}/.aspnet/https/aspnetapp.pfx -p admin
+	dotnet dev-certs https --trust

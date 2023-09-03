@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  anagram-solver:
+    build:
+      context: .
+      dockerfile: Dockerfile.develop
+    ports:
+      - "44410:44410"
+      - "7209:7209"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=admin
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - .:/app
+      - ~/.aspnet/https:/https:ro
