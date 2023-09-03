@@ -1,4 +1,5 @@
 using AnagramSolver.Data;
+using AnagramSolver.Exceptions;
 using AnagramSolver.Extensions;
 using EntityFramework.Exceptions.Common;
 using Hangfire;
@@ -52,10 +53,10 @@ app.UseExceptionHandler(exceptionHandlerApp =>
         var exceptionHandlerPathFeature =
             context.Features.Get<IExceptionHandlerPathFeature>();
 
-        if (exceptionHandlerPathFeature?.Error is InvalidFullNameException)
+        if (exceptionHandlerPathFeature?.Error is BusinessRuleViolationException)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsync($"Celebrity full name is invalid: {exceptionHandlerPathFeature.Error.Message}!");
+            await context.Response.WriteAsync($"Business rule violation: {exceptionHandlerPathFeature.Error.Message}!");
             return;
         }
 

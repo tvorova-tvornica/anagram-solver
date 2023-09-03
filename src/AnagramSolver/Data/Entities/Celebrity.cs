@@ -1,3 +1,4 @@
+using AnagramSolver.Exceptions;
 using AnagramSolver.Extensions;
 
 namespace AnagramSolver.Data.Entities;
@@ -16,7 +17,7 @@ public class Celebrity
 
         if (string.IsNullOrWhiteSpace(nameWithoutWhitespacesAndPunctuation))
         {
-            throw new InvalidFullNameException("Name must contain letters");
+            throw new BusinessRuleViolationException("Celebrity full name must contain letters");
         }
 
         FullName = fullName;
