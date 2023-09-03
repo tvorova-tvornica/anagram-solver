@@ -1,3 +1,5 @@
+using AnagramSolver.Exceptions;
+
 namespace AnagramSolver.Data.Entities;
 
 public class ImportWikiDataCelebritiesPageRequest
@@ -12,11 +14,19 @@ public class ImportWikiDataCelebritiesPageRequest
 
     public void MarkScheduled()
     {
+        if (Status != ImportWikiDataCelebritiesPageRequestStatus.Requested)
+        {
+            throw new BusinessRuleViolationException("Only requested import page requests can transition to scheduled.");
+        }
         Status = ImportWikiDataCelebritiesPageRequestStatus.Scheduled;
     }
 
     public void MarkProcessed()
     {
+        if (Status != ImportWikiDataCelebritiesPageRequestStatus.Scheduled)
+        {
+            throw new BusinessRuleViolationException("Only scheduled requested import page requests can transition to scheduled.");
+        }
         Status = ImportWikiDataCelebritiesPageRequestStatus.Processed;
     }
 
