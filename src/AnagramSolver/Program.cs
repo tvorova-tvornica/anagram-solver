@@ -1,6 +1,7 @@
 using AnagramSolver.BackgroundJobs;
 using AnagramSolver.Data;
 using AnagramSolver.Exceptions;
+using AnagramSolver.HttpClients;
 using EntityFramework.Exceptions.Common;
 using Hangfire;
 using Hangfire.PostgreSql;
@@ -17,6 +18,13 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AnagramSolverContext>(options =>
             options.UseNpgsql(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
+
+builder.Services.AddTransient<ImportWikiDataCelebritiesPageJob>();
+builder.Services.AddTransient<ImportWikiDataCelebrityPagesSchedulerJob>();
+builder.Services.AddTransient<ImportWikiDataCelebrityRequestsSchedulerJob>();
+builder.Services.AddTransient<ProcessImportWikiDataCelebrityRequestsJob>();
+builder.Services.AddTransient<RequestImportWikiDataCelebrityPagesJob>();
+builder.Services.AddHttpClient<WikiDataHttpClient>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -96,5 +104,7 @@ app.MapControllerRoute(
     pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapFallbackToFile("index.html");
+
+RecurringJob.AddOrUpdate<ImportWikiDataCelebrityRequestsSchedulerJob>("easyjob", x => x.ScheduleAsync(), Cron.Minutely);
 
 app.Run();
