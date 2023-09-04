@@ -18,7 +18,10 @@ public class ImportWikiDataCelebritiesPageJob
 
     public async Task ImportAsync(int importPageRequestId)
     {
-        var pageRequest = await _db.ImportWikiDataCelebritiesPageRequests.SingleAsync(x => x.Id == importPageRequestId);
+        var pageRequest = await _db.ImportWikiDataCelebritiesPageRequests
+            .Include(x => x.ImportCelebritiesRequest)
+            .SingleAsync(x => x.Id == importPageRequestId);
+
         var occupationId = pageRequest.ImportCelebritiesRequest.WikiDataOccupationId;
         var nationalityId = pageRequest.ImportCelebritiesRequest.WikiDataNationalityId;
         var limit = pageRequest.Limit;
@@ -26,11 +29,12 @@ public class ImportWikiDataCelebritiesPageJob
 
         var wikiDataCelebrities = await _httpClient.GetCelebritiesPageAsync(occupationId, nationalityId, limit, offset);
 
-        var celebrities = wikiDataCelebrities.Select(x => new Celebrity(x.ItemLabel)
+        var celebrities = wikiDataCelebrities!.Results!.Bindings.Select(x => new Celebrity(x.ItemLabel.Value)
         {
-            PhotoUrl = x.Image,
-            WikipediaUrl = x.WikipediaLink,
+            PhotoUrl = x.Image?.Value,
+            WikipediaUrl = x.WikipediaLink?.Value,
         })
+        .DistinctBy(x => x.FullName.ToLower())
         .ToList();
 
         var celebrityNames = celebrities.Select(x => x.FullName.ToLower()).ToList();

@@ -1,4 +1,5 @@
 using AnagramSolver.HttpClients.Dto;
+using Microsoft.Net.Http.Headers;
 
 namespace AnagramSolver.HttpClients;
 
@@ -9,27 +10,34 @@ public class WikiDataHttpClient
     public WikiDataHttpClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
+        _httpClient.BaseAddress = new Uri("https://query.wikidata.org");
+        _httpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/sparql-results+json");
+        _httpClient.DefaultRequestHeaders.Add(HeaderNames.UserAgent, ".NET/6.0 ScraperBot/1.0 (+http://www.example.com/ScraperBot.html)");
     }
 
     public async Task<int> GetTotalCelebrityCountAsync(string occupationId, string? nationalityId)
     {
-        var query = nationalityId is null ? GetOccupationOnlyCountUrl(occupationId) : GetFullCountUrl(occupationId, nationalityId);
+        var query = nationalityId is null
+            ? GetOccupationOnlyCountQuery(occupationId)
+            : GetFullCountQuery(occupationId, nationalityId);
+        
+        var response = (await _httpClient.GetFromJsonAsync<WikiDataCountResponse>(query))!;
 
-        return await _httpClient.GetFromJsonAsync<int>(query);
+        return response.Results.Bindings.First().Count.Value;
     }
 
-    public async Task<List<WikiDataCelebrity>> GetCelebritiesPageAsync(string occupationId, string? nationalityId, int limit, int offset)
+    public async Task<WikiDataCelebritiesResponse> GetCelebritiesPageAsync(string occupationId, string? nationalityId, int limit, int offset)
     {
         var query = nationalityId is null 
-            ? GetOccupationOnlyCelebritiesPageUrl(occupationId, limit, offset) 
-            : GetFullCelebritiesPageUrl(occupationId, nationalityId, limit, offset);
+            ? GetOccupationOnlyCelebritiesPageQuery(occupationId, limit, offset) 
+            : GetFullCelebritiesPageQuery(occupationId, nationalityId, limit, offset);
 
-        return (await _httpClient.GetFromJsonAsync<List<WikiDataCelebrity>>(query))!;
+        return (await _httpClient.GetFromJsonAsync<WikiDataCelebritiesResponse>(query))!;
     }
 
-    private string GetOccupationOnlyCountUrl(string occupationId)
+    private string GetOccupationOnlyCountQuery(string occupationId)
     {
-        return $@"https://query.wikidata.org/sparql?query=SELECT DISTINCT (COUNT(?item) AS ?count) WHERE {{
+        return $@"sparql?query=SELECT DISTINCT (COUNT(?item) AS ?count) WHERE {{
                 SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE]"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
@@ -40,9 +48,9 @@ public class WikiDataHttpClient
         }}";
     }
 
-    private string GetFullCountUrl(string occupationId, string nationalityId)
+    private string GetFullCountQuery(string occupationId, string nationalityId)
     {
-        return $@"https://query.wikidata.org/sparql?query=SELECT DISTINCT (COUNT(?item) AS ?count) WHERE {{
+        return $@"sparql?query=SELECT DISTINCT (COUNT(?item) AS ?count) WHERE {{
                 SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE]"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
@@ -55,10 +63,10 @@ public class WikiDataHttpClient
         }}";
     }
 
-    private string GetOccupationOnlyCelebritiesPageUrl(string occupationId, int limit, int offset)
+    private string GetOccupationOnlyCelebritiesPageQuery(string occupationId, int limit, int offset)
     {
-        return $@"https://query.wikidata.org/sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?genderLabel ?wikipediaLink WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE]"". }}
+        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?genderLabel ?wikipediaLink WHERE {{
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hrv"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
@@ -87,10 +95,10 @@ public class WikiDataHttpClient
         }}";
     }
 
-    private string GetFullCelebritiesPageUrl(string occupationId, string nationalityId, int limit, int offset)
+    private string GetFullCelebritiesPageQuery(string occupationId, string nationalityId, int limit, int offset)
     {
-        return $@"https://query.wikidata.org/sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?genderLabel ?wikipediaLink WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE]"". }}
+        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?genderLabel ?wikipediaLink WHERE {{
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hrv"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
