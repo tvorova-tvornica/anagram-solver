@@ -15,7 +15,7 @@ public class ImportWikiDataCelebritiesRequest
 
     public ImportWikiDataCelebritiesRequest(string? wikiDataOccupationId, string? wikiDataNationalityId)
     {
-        if (wikiDataOccupationId == null && wikiDataOccupationId == null)
+        if (wikiDataOccupationId == null && wikiDataNationalityId == null)
         {
             throw new BusinessRuleViolationException("At least one of occupationId or nationalityId is required");
         }
