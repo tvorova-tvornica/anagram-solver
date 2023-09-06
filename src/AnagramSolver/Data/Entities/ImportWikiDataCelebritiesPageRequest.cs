@@ -8,7 +8,7 @@ public class ImportWikiDataCelebritiesPageRequest
     public required int Offset { get; init; }
     public required int Limit { get; init; }
 
-    public ImportWikiDataCelebritiesRequest ImportCelebritiesRequest { get; private set; }
+    public ImportWikiDataCelebritiesRequest ImportCelebritiesRequest { get; private set; } = null!;
 
     public ImportWikiDataCelebritiesPageRequestStatus Status { get; private set; } = ImportWikiDataCelebritiesPageRequestStatus.Requested;
 
