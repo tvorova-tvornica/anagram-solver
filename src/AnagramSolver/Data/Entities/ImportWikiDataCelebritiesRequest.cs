@@ -12,14 +12,14 @@ public class ImportWikiDataCelebritiesRequest
 
     public ICollection<ImportWikiDataCelebritiesPageRequest> PageRequests { get; private set; } = new List<ImportWikiDataCelebritiesPageRequest>();
 
-    public ImportWikiDataCelebritiesRequest(string? occupationId, string? nationalityId)
+    public ImportWikiDataCelebritiesRequest(string? wikiDataOccupationId, string? wikiDataNationalityId)
     {
-        if (occupationId == null && nationalityId == null)
+        if (wikiDataOccupationId == null && wikiDataOccupationId == null)
         {
             throw new BusinessRuleViolationException("Either occupationId or nationalityId are required");
         }
-        WikiDataOccupationId = occupationId;
-        WikiDataNationalityId = nationalityId;
+        WikiDataOccupationId = wikiDataOccupationId;
+        WikiDataNationalityId = wikiDataNationalityId;
     }
 
     
