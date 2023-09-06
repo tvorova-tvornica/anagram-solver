@@ -71,7 +71,7 @@ app.UseExceptionHandler(exceptionHandlerApp =>
         if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsync($"Unique entity already exists!");
+            await context.Response.WriteAsync($"Entity with the same unique key already exists!");
             return;
         }
 
