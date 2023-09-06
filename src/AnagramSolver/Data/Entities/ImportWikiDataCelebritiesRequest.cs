@@ -4,6 +4,7 @@ namespace AnagramSolver.Data.Entities;
 
 public class ImportWikiDataCelebritiesRequest
 {
+    private const int ImportWikiDataCelebritiesPageSize = 200;
     public int Id { get; private set; }
     public string? WikiDataOccupationId { get; private set; }
     public string? WikiDataNationalityId { get; private set;}
@@ -28,16 +29,14 @@ public class ImportWikiDataCelebritiesRequest
         {
             throw new BusinessRuleViolationException("Only scheduled import requests can add page requests");
         }
-
-        var pageSize = 200;
-        var pageCount = (totalCount + pageSize - 1) / pageSize;
+        var pageCount = (totalCount + ImportWikiDataCelebritiesPageSize - 1) / ImportWikiDataCelebritiesPageSize;
 
         for (int i = 0; i < pageCount; i++)
         {
             PageRequests.Add(new ImportWikiDataCelebritiesPageRequest 
             {
-                Limit = pageSize,
-                Offset = i * pageSize,
+                Limit = ImportWikiDataCelebritiesPageSize,
+                Offset = i * ImportWikiDataCelebritiesPageSize,
             });
         }
         Status = ImportWikiDataCelebritiesRequestStatus.PageRequestsScheduled;

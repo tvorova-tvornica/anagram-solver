@@ -12,7 +12,7 @@ public class WikiDataHttpClient
         _httpClient = httpClient;
         _httpClient.BaseAddress = new Uri("https://query.wikidata.org");
         _httpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/sparql-results+json");
-        _httpClient.DefaultRequestHeaders.Add(HeaderNames.UserAgent, ".NET/6.0 ScraperBot/1.0 (+http://www.example.com/ScraperBot.html)");
+        _httpClient.DefaultRequestHeaders.Add(HeaderNames.UserAgent, ".NET/6.0 ScraperBot/1.0 (+https://anagram-solver.fly.dev)");
     }
 
     public async Task<int> GetTotalCelebrityCountAsync(string? occupationId, string? nationalityId)
