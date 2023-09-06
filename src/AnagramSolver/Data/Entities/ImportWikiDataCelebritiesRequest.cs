@@ -16,12 +16,11 @@ public class ImportWikiDataCelebritiesRequest
     {
         if (wikiDataOccupationId == null && wikiDataOccupationId == null)
         {
-            throw new BusinessRuleViolationException("Either occupationId or nationalityId are required");
+            throw new BusinessRuleViolationException("At least one of occupationId or nationalityId is required");
         }
         WikiDataOccupationId = wikiDataOccupationId;
         WikiDataNationalityId = wikiDataNationalityId;
     }
-
     
     public void AddPageRequests(int totalCount)
     {
