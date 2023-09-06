@@ -23,7 +23,7 @@ builder.Services.AddTransient<ImportWikiDataCelebritiesPageJob>();
 builder.Services.AddTransient<ImportWikiDataCelebrityPagesSchedulerJob>();
 builder.Services.AddTransient<ImportWikiDataCelebrityRequestsSchedulerJob>();
 builder.Services.AddTransient<ProcessImportWikiDataCelebrityRequestsJob>();
-builder.Services.AddTransient<RequestImportWikiDataCelebrityPagesJob>();
+builder.Services.AddTransient<RequestWikiDataCelebrityPagesImportJob>();
 builder.Services.AddHttpClient<WikiDataHttpClient>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

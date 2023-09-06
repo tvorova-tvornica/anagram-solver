@@ -45,11 +45,8 @@ public class CelebrityController : ControllerBase
     [HttpPost("import-celebrities")]
     public async Task ImportCelebrities([FromBody] ImportCelebritiesRequestDto importCelebritiesRequestDto)
     {
-        var request = new ImportWikiDataCelebritiesRequest()
-        {
-            WikiDataOccupationId = importCelebritiesRequestDto.OccupationId,
-            WikiDataNationalityId = importCelebritiesRequestDto.NationalityId,
-        };
+        var request = new ImportWikiDataCelebritiesRequest(occupationId: importCelebritiesRequestDto.OccupationId, 
+                                                           nationalityId: importCelebritiesRequestDto.NationalityId);
         _dbContext.Add(request);
         await _dbContext.SaveChangesAsync();
     }

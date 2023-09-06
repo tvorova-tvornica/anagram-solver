@@ -5,12 +5,22 @@ namespace AnagramSolver.Data.Entities;
 public class ImportWikiDataCelebritiesRequest
 {
     public int Id { get; private set; }
-    public required string WikiDataOccupationId { get; init; }
-    public string? WikiDataNationalityId { get; init;}
+    public string? WikiDataOccupationId { get; private set; }
+    public string? WikiDataNationalityId { get; private set;}
 
     public ImportWikiDataCelebritiesRequestStatus Status { get; private set; } = ImportWikiDataCelebritiesRequestStatus.Requested;
 
     public ICollection<ImportWikiDataCelebritiesPageRequest> PageRequests { get; private set; } = new List<ImportWikiDataCelebritiesPageRequest>();
+
+    public ImportWikiDataCelebritiesRequest(string? occupationId, string? nationalityId)
+    {
+        if (occupationId == null && nationalityId == null)
+        {
+            throw new BusinessRuleViolationException("Either occupationId or nationalityId are required");
+        }
+        WikiDataOccupationId = occupationId;
+        WikiDataNationalityId = nationalityId;
+    }
 
     
     public void AddPageRequests(int totalCount)
