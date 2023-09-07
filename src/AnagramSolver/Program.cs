@@ -19,11 +19,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AnagramSolverContext>(options =>
             options.UseNpgsql(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
 
-builder.Services.AddTransient<ImportWikiDataCelebritiesPageJob>();
-builder.Services.AddTransient<ProcessScheduledImportWikiDataCelebrityPagesJob>();
-builder.Services.AddTransient<ImportWikiDataCelebrityRequestsSchedulerJob>();
-builder.Services.AddTransient<ProcessImportWikiDataCelebrityRequestsJob>();
-builder.Services.AddTransient<ScheduleWikiDataCelebrityPagesImportJob>();
+builder.Services.AddTransient<ImportCelebritiesPageJob>();
+builder.Services.AddTransient<EnqueueScheduledImportCelebrityPagesJob>();
+builder.Services.AddTransient<ImportCelebrityRequestsSchedulerJob>();
+builder.Services.AddTransient<ProcessImportCelebrityRequestsJob>();
+builder.Services.AddTransient<ScheduleCelebrityPagesImportJob>();
 builder.Services.AddHttpClient<WikiDataHttpClient>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -105,7 +105,7 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 
-RecurringJob.AddOrUpdate<ImportWikiDataCelebrityRequestsSchedulerJob>("ImportWikiDataCelebrityRequestsSchedulerJob", x => x.ScheduleAsync(), Cron.Minutely);
-RecurringJob.AddOrUpdate<ProcessImportWikiDataCelebrityRequestsJob>("ProcessImportWikiDataCelebrityRequestsJob", x => x.ProcessAsync(), Cron.Minutely);
+RecurringJob.AddOrUpdate<ImportCelebrityRequestsSchedulerJob>("ImportWikiDataCelebrityRequestsSchedulerJob", x => x.ScheduleAsync(), Cron.Minutely);
+RecurringJob.AddOrUpdate<ProcessImportCelebrityRequestsJob>("ProcessImportWikiDataCelebrityRequestsJob", x => x.ProcessAsync(), Cron.Minutely);
 
 app.Run();
