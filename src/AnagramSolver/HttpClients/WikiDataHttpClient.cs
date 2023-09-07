@@ -115,7 +115,7 @@ public class WikiDataHttpClient
                     LIMIT {limit}
                 }}
                 OPTIONAL {{
-                    ?item wdt:P18 ?image.ƒ
+                    ?item wdt:P18 ?image.
                     ?item wdt:P21 ?gender.
                     ?item wdt:P31 wd:Q5.
                     OPTIONAL {{
