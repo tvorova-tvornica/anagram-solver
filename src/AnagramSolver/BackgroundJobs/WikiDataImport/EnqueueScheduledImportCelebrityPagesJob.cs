@@ -14,7 +14,7 @@ public class EnqueueScheduledImportCelebrityPagesJob
         _db = db;
     }
 
-    public async Task ProcessAsync(int importRequestId)
+    public async Task EnqueueAsync(int importRequestId)
     {
         var importRequest = await _db.ImportWikiDataCelebritiesRequests
             .Include(x => x.PageRequests)

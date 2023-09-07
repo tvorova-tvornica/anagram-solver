@@ -22,7 +22,7 @@ public class ImportCelebrityRequestsSchedulerJob
         
         requestedImports.ForEach(x => {
             var jobId = BackgroundJob.Enqueue<ScheduleCelebrityPagesImportJob>(y => y.RequestAsync(x.Id));
-            BackgroundJob.ContinueJobWith<EnqueueScheduledImportCelebrityPagesJob>(jobId, y => y.ProcessAsync(x.Id));
+            BackgroundJob.ContinueJobWith<EnqueueScheduledImportCelebrityPagesJob>(jobId, y => y.EnqueueAsync(x.Id));
             x.MarkScheduled();
         });
 
