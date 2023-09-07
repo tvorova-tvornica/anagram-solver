@@ -68,7 +68,7 @@ public class WikiDataHttpClient
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
-                        ?statement0 (ps:P106) wd:{occupationId}.
+                        ?statement0 (ps:P106/(wdt:P279*)) wd:{occupationId}.
                     }}
                 }}
         }}";
@@ -81,7 +81,7 @@ public class WikiDataHttpClient
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P27 ?statement1.
-                        ?statement1 (ps:P27) wd:{nationalityId}.
+                        ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
                     }}
                 }}
         }}";
@@ -94,9 +94,9 @@ public class WikiDataHttpClient
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
-                        ?statement0 (ps:P106) wd:{occupationId}.
+                        ?statement0 (ps:P106/(wdt:P279*)) wd:{occupationId}.
                         ?item p:P27 ?statement1.
-                        ?statement1 (ps:P27) wd:{nationalityId}.
+                        ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
                     }}
                 }}
         }}";
@@ -109,7 +109,7 @@ public class WikiDataHttpClient
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
-                        ?statement0 (ps:P106) wd:{occupationId}.
+                        ?statement0 (ps:P106/(wdt:P279*)) wd:{occupationId}.
                     }}
                     OFFSET {offset}
                     LIMIT {limit}
@@ -141,7 +141,7 @@ public class WikiDataHttpClient
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P27 ?statement1.
-                        ?statement1 (ps:P27) wd:{nationalityId}.
+                        ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
                     }}
                     OFFSET {offset}
                     LIMIT {limit}
@@ -173,9 +173,9 @@ public class WikiDataHttpClient
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
-                        ?statement0 (ps:P106) wd:{occupationId}.
+                        ?statement0 (ps:P106/(wdt:P279*)) wd:{occupationId}.
                         ?item p:P27 ?statement1.
-                        ?statement1 (ps:P27) wd:{nationalityId}.
+                        ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
                     }}
                     OFFSET {offset}
                     LIMIT {limit}
