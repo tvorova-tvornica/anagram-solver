@@ -4,7 +4,7 @@ namespace AnagramSolver.Data.Entities;
 
 public class ImportWikiDataCelebritiesRequest
 {
-    private const int ImportWikiDataCelebritiesPageSize = 200;
+    private const int ImportWikiDataCelebritiesPageSize = 800;
     public int Id { get; private set; }
     public string? WikiDataOccupationId { get; private set; }
     public string? WikiDataNationalityId { get; private set;}
