@@ -21,7 +21,8 @@ public class ImportWikiDataCelebrityRequestsSchedulerJob
             .ToListAsync();
         
         requestedImports.ForEach(x => {
-            BackgroundJob.Enqueue<RequestWikiDataCelebrityPagesImportJob>(y => y.RequestAsync(x.Id));
+            var jobId = BackgroundJob.Enqueue<ScheduleWikiDataCelebrityPagesImportJob>(y => y.RequestAsync(x.Id));
+            BackgroundJob.ContinueJobWith<ProcessScheduledImportWikiDataCelebrityPagesJob>(jobId, y => y.ProcessAsync(x.Id));
             x.MarkScheduled();
         });
 

@@ -5,24 +5,29 @@ using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest;
 
 namespace AnagramSolver.BackgroundJobs;
 
-public class ImportWikiDataCelebrityPagesSchedulerJob
+public class ProcessScheduledImportWikiDataCelebrityPagesJob
 {
     private readonly AnagramSolverContext _db;
 
-    public ImportWikiDataCelebrityPagesSchedulerJob(AnagramSolverContext db)
+    public ProcessScheduledImportWikiDataCelebrityPagesJob(AnagramSolverContext db)
     {
         _db = db;
     }
 
-    public async Task ScheduleAsync()
+    public async Task ProcessAsync(int importRequestId)
     {
-        var pageRequests = await _db.ImportWikiDataCelebritiesPageRequests
-                .Where(x => x.Status == ImportWikiDataCelebritiesPageRequestStatus.Requested)
-                .ToListAsync();
+        var importRequest = await _db.ImportWikiDataCelebritiesRequests
+            .Include(x => x.PageRequests)
+            .SingleAsync(x => x.Id == importRequestId);
         
-        pageRequests.ForEach(x => {
-            BackgroundJob.Enqueue<ImportWikiDataCelebritiesPageJob>(y => y.ImportAsync(x.Id));
-            x.MarkScheduled();
+        var scheduledPageRequests = importRequest.PageRequests
+            .Where(x => x.Status == ImportWikiDataCelebritiesPageRequestStatus.Scheduled)
+            .ToList();
+        
+        var delayInSeconds = 5;
+        scheduledPageRequests.ForEach(x => {
+            BackgroundJob.Schedule<ImportWikiDataCelebritiesPageJob>(y => y.ImportAsync(x.Id), TimeSpan.FromSeconds(delayInSeconds));
+            delayInSeconds += 5;
         });
         
         await _db.SaveChangesAsync();

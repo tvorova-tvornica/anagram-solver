@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AnagramSolver.BackgroundJobs;
 
- public class RequestWikiDataCelebrityPagesImportJob
+ public class ScheduleWikiDataCelebrityPagesImportJob
  {
     private readonly AnagramSolverContext _db;
     private readonly WikiDataHttpClient _httpClient;
 
-    public RequestWikiDataCelebrityPagesImportJob(AnagramSolverContext db, WikiDataHttpClient httpClient)
+    public ScheduleWikiDataCelebrityPagesImportJob(AnagramSolverContext db, WikiDataHttpClient httpClient)
     {
         _db = db;
         _httpClient = httpClient;

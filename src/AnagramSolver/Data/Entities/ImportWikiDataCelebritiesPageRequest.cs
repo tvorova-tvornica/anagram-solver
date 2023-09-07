@@ -10,16 +10,7 @@ public class ImportWikiDataCelebritiesPageRequest
 
     public ImportWikiDataCelebritiesRequest ImportCelebritiesRequest { get; private set; } = null!;
 
-    public ImportWikiDataCelebritiesPageRequestStatus Status { get; private set; } = ImportWikiDataCelebritiesPageRequestStatus.Requested;
-
-    public void MarkScheduled()
-    {
-        if (Status != ImportWikiDataCelebritiesPageRequestStatus.Requested)
-        {
-            throw new BusinessRuleViolationException("Only requested import page requests can transition to scheduled.");
-        }
-        Status = ImportWikiDataCelebritiesPageRequestStatus.Scheduled;
-    }
+    public ImportWikiDataCelebritiesPageRequestStatus Status { get; private set; } = ImportWikiDataCelebritiesPageRequestStatus.Scheduled;
 
     public void MarkProcessed()
     {
@@ -32,7 +23,6 @@ public class ImportWikiDataCelebritiesPageRequest
 
     public enum ImportWikiDataCelebritiesPageRequestStatus
     {
-        Requested,
         Scheduled,
         Processed,
     }
