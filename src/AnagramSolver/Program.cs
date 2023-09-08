@@ -1,4 +1,5 @@
 using AnagramSolver.BackgroundJobs;
+using AnagramSolver.BackgroundJobs.WikiDataImport;
 using AnagramSolver.Data;
 using AnagramSolver.Exceptions;
 using AnagramSolver.HttpClients;
@@ -105,7 +106,7 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 
-RecurringJob.AddOrUpdate<ImportCelebrityRequestsSchedulerJob>("ImportWikiDataCelebrityRequestsSchedulerJob", x => x.ScheduleAsync(), Cron.Minutely);
+RecurringJob.AddOrUpdate<ImportCelebrityRequestsSchedulerJob>("ImportWikiDataCelebrityRequestsSchedulerJob", x => x.ScheduleSingleAsync(), Cron.Minutely);
 RecurringJob.AddOrUpdate<ProcessImportCelebrityRequestsJob>("ProcessImportWikiDataCelebrityRequestsJob", x => x.ProcessAsync(), Cron.Minutely);
 
 app.Run();
