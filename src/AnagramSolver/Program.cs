@@ -1,6 +1,11 @@
+using AnagramSolver.BackgroundJobs;
+using AnagramSolver.BackgroundJobs.WikiDataImport;
 using AnagramSolver.Data;
-using AnagramSolver.Extensions;
+using AnagramSolver.Exceptions;
+using AnagramSolver.HttpClients;
 using EntityFramework.Exceptions.Common;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +19,13 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AnagramSolverContext>(options =>
             options.UseNpgsql(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
+
+builder.Services.AddTransient<ImportCelebritiesPageJob>();
+builder.Services.AddTransient<EnqueueScheduledImportCelebrityPagesJob>();
+builder.Services.AddTransient<ImportCelebrityRequestsSchedulerJob>();
+builder.Services.AddTransient<ProcessImportCelebrityRequestsJob>();
+builder.Services.AddTransient<ScheduleCelebrityPagesImportJob>();
+builder.Services.AddHttpClient<WikiDataHttpClient>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -33,6 +45,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.SameSite = SameSiteMode.Strict;
     });
 
+builder.Services.AddHangfire(config =>
+		        config.UsePostgreSqlStorage(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
+
+builder.Services.AddHangfireServer();
+
 var app = builder.Build();
 
 app.UseExceptionHandler(exceptionHandlerApp =>
@@ -45,17 +62,17 @@ app.UseExceptionHandler(exceptionHandlerApp =>
         var exceptionHandlerPathFeature =
             context.Features.Get<IExceptionHandlerPathFeature>();
 
-        if (exceptionHandlerPathFeature?.Error is InvalidFullNameException)
+        if (exceptionHandlerPathFeature?.Error is BusinessRuleViolationException)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsync($"Celebrity full name is invalid: {exceptionHandlerPathFeature.Error.Message}!");
+            await context.Response.WriteAsync($"Business rule violation: {exceptionHandlerPathFeature.Error.Message}!");
             return;
         }
 
         if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsync($"Celebrity with same name already exists!");
+            await context.Response.WriteAsync($"Entity with the same unique key already exists!");
             return;
         }
 
@@ -78,10 +95,18 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+GlobalConfiguration.Configuration
+       .UseActivator(new HangfireActivator(app.Services));
+       
+app.UseHangfireDashboard("/background-jobs");
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapFallbackToFile("index.html");
+
+RecurringJob.AddOrUpdate<ImportCelebrityRequestsSchedulerJob>("ImportWikiDataCelebrityRequestsSchedulerJob", x => x.ScheduleSingleAsync(), Cron.Minutely);
+RecurringJob.AddOrUpdate<ProcessImportCelebrityRequestsJob>("ProcessImportWikiDataCelebrityRequestsJob", x => x.ProcessAsync(), Cron.Minutely);
 
 app.Run();

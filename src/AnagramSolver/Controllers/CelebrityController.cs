@@ -22,7 +22,12 @@ public class CelebrityController : ControllerBase
     [HttpPost("create-celebrity")]
     public async Task CreateCelebrity([FromBody] CreateCelebrityDto celebrityDto)
     {
-        var celebrity = new Celebrity(celebrityDto.FullName);
+        var celebrity = new Celebrity(celebrityDto.FullName)
+        {
+            PhotoUrl = celebrityDto.PhotoUrl,
+            WikipediaUrl = celebrityDto.WikipediaUrl,
+        };
+
         _dbContext.Add(celebrity);
         await _dbContext.SaveChangesAsync();
     }
@@ -34,5 +39,15 @@ public class CelebrityController : ControllerBase
             .Where(c => c.AnagramKey == anagramDto.AnagramKey)
             .Select(c => c.FullName)
             .ToListAsync();
+    }
+
+    [Authorize]
+    [HttpPost("import-celebrities")]
+    public async Task ImportCelebrities([FromBody] ImportCelebritiesRequestDto importCelebritiesRequestDto)
+    {
+        var request = new ImportWikiDataCelebritiesRequest(wikiDataOccupationId: importCelebritiesRequestDto.OccupationId, 
+                                                           wikiDataNationalityId: importCelebritiesRequestDto.NationalityId);
+        _dbContext.Add(request);
+        await _dbContext.SaveChangesAsync();
     }
 }
