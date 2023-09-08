@@ -15,7 +15,7 @@ namespace AnagramSolver.BackgroundJobs.WikiDataImport;
         _httpClient = httpClient;
     }
 
-    public async Task RequestAsync(int importCelebritiesRequestId)
+    public async Task ScheduleAsync(int importCelebritiesRequestId)
     {
         var request = await _db.ImportWikiDataCelebritiesRequests.SingleAsync(x => x.Id == importCelebritiesRequestId);
 

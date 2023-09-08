@@ -26,7 +26,6 @@ public class ImportCelebritiesPageJob
         
         if (pageRequest == null)
         {
-            //TODO warn log
             return;
         }
 
@@ -51,8 +50,10 @@ public class ImportCelebritiesPageJob
             .Where(x => celebrityNames.Contains(x.FullName.ToLower()))
             .Select(x => x.FullName.ToLower())
             .ToListAsync();
+        
+        var celebritiesToInsert = celebrities.Where(x => !existingCelebrityNames.Contains(x.FullName.ToLower()));
 
-        _db.Celebrities.AddRange(celebrities.Where(x => !existingCelebrityNames.Contains(x.FullName.ToLower())));
+        _db.Celebrities.AddRange(celebritiesToInsert);
 
         pageRequest.MarkProcessed();
 

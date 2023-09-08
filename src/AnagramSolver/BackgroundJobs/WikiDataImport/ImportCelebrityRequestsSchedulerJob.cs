@@ -14,17 +14,28 @@ public class ImportCelebrityRequestsSchedulerJob
         _db = db;
     }
 
-    public async Task ScheduleAsync()
+    public async Task ScheduleSingleAsync()
     {
-        var requestedImports = await _db.ImportWikiDataCelebritiesRequests
-            .Where(x => x.Status == ImportWikiDataCelebritiesRequestStatus.Requested)
-            .ToListAsync();
+        var isAnyRequestProcessing = await _db.ImportWikiDataCelebritiesRequests
+            .AnyAsync(x => x.Status != ImportWikiDataCelebritiesRequestStatus.Requested && 
+                           x.Status != ImportWikiDataCelebritiesRequestStatus.Processed);
+
+        if (isAnyRequestProcessing)
+        {
+            return;
+        }          
+
+        var requestedImport = await _db.ImportWikiDataCelebritiesRequests
+            .FirstOrDefaultAsync(x => x.Status == ImportWikiDataCelebritiesRequestStatus.Requested);
         
-        requestedImports.ForEach(x => {
-            var jobId = BackgroundJob.Enqueue<ScheduleCelebrityPagesImportJob>(y => y.RequestAsync(x.Id));
-            BackgroundJob.ContinueJobWith<EnqueueScheduledImportCelebrityPagesJob>(jobId, y => y.EnqueueAsync(x.Id));
-            x.MarkScheduled();
-        });
+        if (requestedImport is null)
+        {
+            return;
+        }
+        
+        var jobId = BackgroundJob.Enqueue<ScheduleCelebrityPagesImportJob>(y => y.ScheduleAsync(requestedImport.Id));
+        BackgroundJob.ContinueJobWith<EnqueueScheduledImportCelebrityPagesJob>(jobId, y => y.EnqueueAsync(requestedImport.Id));
+        requestedImport.MarkScheduled();
 
         await _db.SaveChangesAsync();
     }

@@ -29,7 +29,5 @@ public class EnqueueScheduledImportCelebrityPagesJob
             BackgroundJob.Schedule<ImportCelebritiesPageJob>(y => y.ImportAsync(x.Id), TimeSpan.FromSeconds(delayInSeconds));
             delayInSeconds += 5;
         });
-        
-        await _db.SaveChangesAsync();
     }
 }
