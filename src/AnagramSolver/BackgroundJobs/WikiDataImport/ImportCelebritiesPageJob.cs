@@ -2,6 +2,7 @@ using AnagramSolver.Data;
 using AnagramSolver.Data.Entities;
 using AnagramSolver.HttpClients;
 using Microsoft.EntityFrameworkCore;
+using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest;
 
 namespace AnagramSolver.BackgroundJobs;
 
@@ -20,7 +21,14 @@ public class ImportCelebritiesPageJob
     {
         var pageRequest = await _db.ImportWikiDataCelebritiesPageRequests
             .Include(x => x.ImportCelebritiesRequest)
-            .SingleAsync(x => x.Id == importPageRequestId);
+            .Where(x => x.Status == ImportWikiDataCelebritiesPageRequestStatus.Scheduled)
+            .FirstOrDefaultAsync(x => x.Id == importPageRequestId);
+        
+        if (pageRequest == null)
+        {
+            //TODO warn log
+            return;
+        }
 
         var occupationId = pageRequest.ImportCelebritiesRequest.WikiDataOccupationId;
         var nationalityId = pageRequest.ImportCelebritiesRequest.WikiDataNationalityId;
