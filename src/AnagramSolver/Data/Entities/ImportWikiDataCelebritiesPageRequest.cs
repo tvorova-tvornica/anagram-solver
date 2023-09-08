@@ -16,7 +16,7 @@ public class ImportWikiDataCelebritiesPageRequest
     {
         if (Status != ImportWikiDataCelebritiesPageRequestStatus.Scheduled)
         {
-            throw new BusinessRuleViolationException("Import page is already processed.");
+            throw new BusinessRuleViolationException("Page is already processed.");
         }
         Status = ImportWikiDataCelebritiesPageRequestStatus.Processed;
     }
