@@ -2,7 +2,7 @@ using AnagramSolver.Data;
 using AnagramSolver.HttpClients;
 using Microsoft.EntityFrameworkCore;
 
-namespace AnagramSolver.BackgroundJobs;
+namespace AnagramSolver.BackgroundJobs.WikiDataImport;
 
  public class ScheduleCelebrityPagesImportJob
  {

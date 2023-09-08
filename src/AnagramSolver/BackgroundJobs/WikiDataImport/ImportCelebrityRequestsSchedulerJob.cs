@@ -3,7 +3,7 @@ using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesRequest;
 
-namespace AnagramSolver.BackgroundJobs;
+namespace AnagramSolver.BackgroundJobs.WikiDataImport;
 
 public class ImportCelebrityRequestsSchedulerJob
 {

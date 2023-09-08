@@ -4,7 +4,7 @@ using AnagramSolver.HttpClients;
 using Microsoft.EntityFrameworkCore;
 using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest;
 
-namespace AnagramSolver.BackgroundJobs;
+namespace AnagramSolver.BackgroundJobs.WikiDataImport;
 
 public class ImportCelebritiesPageJob
 {
