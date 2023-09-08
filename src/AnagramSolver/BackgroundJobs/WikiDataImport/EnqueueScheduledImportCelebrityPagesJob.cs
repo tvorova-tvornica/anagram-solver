@@ -8,6 +8,7 @@ namespace AnagramSolver.BackgroundJobs.WikiDataImport;
 public class EnqueueScheduledImportCelebrityPagesJob
 {
     private readonly AnagramSolverContext _db;
+    private const int DelayStepInSeconds = 8;
 
     public EnqueueScheduledImportCelebrityPagesJob(AnagramSolverContext db)
     {
@@ -24,10 +25,10 @@ public class EnqueueScheduledImportCelebrityPagesJob
             .Where(x => x.Status == ImportWikiDataCelebritiesPageRequestStatus.Scheduled)
             .ToList();
         
-        var delayInSeconds = 5;
+        var delayInSeconds = DelayStepInSeconds;
         scheduledPageRequests.ForEach(x => {
             BackgroundJob.Schedule<ImportCelebritiesPageJob>(y => y.ImportAsync(x.Id), TimeSpan.FromSeconds(delayInSeconds));
-            delayInSeconds += 5;
+            delayInSeconds += DelayStepInSeconds;
         });
     }
 }
