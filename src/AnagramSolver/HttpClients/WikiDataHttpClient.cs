@@ -111,7 +111,7 @@ public class WikiDataHttpClient
                         ?item p:P106 ?statement0.
                         ?statement0 (ps:P106/(wdt:P279*)) wd:{occupationId}.
                     }}
-                    ORDER BY ?itemLabel
+                    ORDER BY ?item
                     OFFSET {offset}
                     LIMIT {limit}
                 }}
@@ -144,7 +144,7 @@ public class WikiDataHttpClient
                         ?item p:P27 ?statement1.
                         ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
                     }}
-                    ORDER BY ?itemLabel
+                    ORDER BY ?item
                     OFFSET {offset}
                     LIMIT {limit}
                 }}
@@ -179,7 +179,7 @@ public class WikiDataHttpClient
                         ?item p:P27 ?statement1.
                         ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
                     }}
-                    ORDER BY ?itemLabel
+                    ORDER BY ?item
                     OFFSET {offset}
                     LIMIT {limit}
                 }}
