@@ -98,7 +98,10 @@ app.UseAuthorization();
 GlobalConfiguration.Configuration
        .UseActivator(new HangfireActivator(app.Services));
        
-app.UseHangfireDashboard("/background-jobs");
+app.UseHangfireDashboard("/background-jobs", new DashboardOptions
+{
+    Authorization = new [] { new HangfireAuthFilter() }
+});
 
 app.MapControllerRoute(
     name: "default",

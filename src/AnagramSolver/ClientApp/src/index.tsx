@@ -4,6 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
+import { LogIn } from "./pages/LogIn";
 import reportWebVitals from "./reportWebVitals";
 import { theme } from "./theme";
 import { ToggleColorMode } from "./components/toggle-color-mode";
@@ -30,6 +31,7 @@ root.render(
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" Component={Home} />
+                        <Route path="/log-in" Component={LogIn} />
                     </Routes>
                 </BrowserRouter>
             </ChakraProvider>
