@@ -33,11 +33,16 @@ public class CelebrityController : ControllerBase
     }
 
     [HttpGet("resolve-anagram")]
-    public async Task<List<string>> ResolveAnagram([FromQuery] ResolveAnagramDto anagramDto)
+    public async Task<List<ResolveAnagramResult>> ResolveAnagram([FromQuery] ResolveAnagramDto anagramDto)
     {
         return await _dbContext.Celebrities
             .Where(c => c.AnagramKey == anagramDto.AnagramKey)
-            .Select(c => c.FullName)
+            .Select(c => new ResolveAnagramResult
+            {
+                FullName = c.FullName,
+                PhotoUrl = c.PhotoUrl,
+                WikipediaUrl = c.WikipediaUrl,
+            })
             .ToListAsync();
     }
 
@@ -45,7 +50,7 @@ public class CelebrityController : ControllerBase
     [HttpPost("import-celebrities")]
     public async Task ImportCelebrities([FromBody] ImportCelebritiesRequestDto importCelebritiesRequestDto)
     {
-        var request = new ImportWikiDataCelebritiesRequest(wikiDataOccupationId: importCelebritiesRequestDto.OccupationId, 
+        var request = new ImportWikiDataCelebritiesRequest(wikiDataOccupationId: importCelebritiesRequestDto.OccupationId,
                                                            wikiDataNationalityId: importCelebritiesRequestDto.NationalityId);
         _dbContext.Add(request);
         await _dbContext.SaveChangesAsync();

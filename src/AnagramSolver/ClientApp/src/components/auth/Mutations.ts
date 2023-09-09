@@ -1,6 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 
-export const useLogInMutation = ({ username, password }: { username: string, password: string }) => 
+export const useLogInMutation = ({
+    username,
+    password,
+}: {
+    username: string;
+    password: string;
+}) =>
     useMutation({
         mutationKey: ["log-in", username, password],
         mutationFn: async () => {
@@ -9,7 +15,7 @@ export const useLogInMutation = ({ username, password }: { username: string, pas
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ username, password }),
             });
         },
     });
