@@ -42,6 +42,7 @@ public class ImportCelebritiesPageJob
             PhotoUrl = x.Image?.Value,
             WikipediaUrl = x.WikipediaLink?.Value,
         })
+        .DistinctBy(x => x.FullName.ToLower(new CultureInfo("en-US")))
         .ToList();
 
         var celebrityNames = celebrities.Select(x => x.FullName.ToLower(new CultureInfo("en-US"))).ToList();
