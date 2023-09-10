@@ -1,3 +1,4 @@
+using System.Globalization;
 using AnagramSolver.BackgroundJobs;
 using AnagramSolver.BackgroundJobs.WikiDataImport;
 using AnagramSolver.Data;
@@ -8,6 +9,7 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -90,6 +92,20 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture(new CultureInfo("en-US")),
+    SupportedCultures = new List<CultureInfo>
+    {
+        new CultureInfo("en-US"),
+    },
+    SupportedUICultures = new List<CultureInfo>
+    {
+        new CultureInfo("en-US"),
+    }
+});
+
 app.UseRouting();
 
 app.UseAuthentication();
