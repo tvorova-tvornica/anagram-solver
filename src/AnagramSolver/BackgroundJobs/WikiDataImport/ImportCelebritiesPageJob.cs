@@ -43,15 +43,15 @@ public class ImportCelebritiesPageJob
         })
         .ToList();
 
-        var celebrityNames = celebrities.Select(x => x.FullName.ToUpper()).ToList();
+        var celebrityNames = celebrities.Select(x => x.FullName.ToLowerInvariant()).ToList();
 
         var existingCelebrityNames = await _db.Celebrities
-            .Where(x => celebrityNames.Contains(x.FullName.ToUpper()))
-            .Select(x => x.FullName)
+            .Where(x => celebrityNames.Contains(x.FullName.ToLowerInvariant()))
+            .Select(x => x.FullName.ToLowerInvariant())
             .ToListAsync();
 
         var celebritiesToInsert = celebrities
-            .Where(x => !existingCelebrityNames.Any(name => string.Equals(name, x.FullName, StringComparison.OrdinalIgnoreCase)));
+            .Where(x => !existingCelebrityNames.Contains(x.FullName));
 
         _db.Celebrities.AddRange(celebritiesToInsert);
 
