@@ -61,7 +61,7 @@ export const AnagramSolver: FC<{}> = () => {
                     {resolveAnagramResult.data?.length &&
                         resolveAnagramResult.data.map((result) => (
                             <Card
-                                direction={{ base: "column", sm: "row" }}
+                                direction="row"
                                 objectFit="cover"
                                 overflow="hidden"
                                 initial={{ x: 50 }}
@@ -72,8 +72,8 @@ export const AnagramSolver: FC<{}> = () => {
                             >
                                 {result.photoUrl && (
                                     <Image
-                                        objectFit="cover"
-                                        maxW={{ base: "100%", sm: "120px" }}
+                                        fit="cover"
+                                        maxW={{base: "100px", sm: "120px"}}
                                         src={result.photoUrl}
                                         alt={result.fullName}
                                     />
