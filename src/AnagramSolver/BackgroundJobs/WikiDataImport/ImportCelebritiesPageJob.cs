@@ -46,8 +46,8 @@ public class ImportCelebritiesPageJob
         var celebrityNames = celebrities.Select(x => x.FullName.ToLowerInvariant()).ToList();
 
         var existingCelebrityNames = await _db.Celebrities
-            .Where(x => celebrityNames.Contains(x.FullName.ToLowerInvariant()))
-            .Select(x => x.FullName.ToLowerInvariant())
+            .Where(x => celebrityNames.Contains(x.FullName.ToLower()))
+            .Select(x => x.FullName.ToLower())
             .ToListAsync();
 
         var celebritiesToInsert = celebrities
