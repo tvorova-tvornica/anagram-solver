@@ -52,7 +52,7 @@ public class ImportCelebritiesPageJob
             .ToListAsync();
 
         var celebritiesToInsert = celebrities
-            .Where(x => !existingCelebrityNames.Contains(x.FullName));
+            .Where(x => !existingCelebrityNames.Contains(x.FullName.ToLower(new CultureInfo("en-US"))));
 
         _db.Celebrities.AddRange(celebritiesToInsert);
 
