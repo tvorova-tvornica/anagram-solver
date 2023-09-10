@@ -1,3 +1,4 @@
+using System.Globalization;
 using AnagramSolver.Data;
 using AnagramSolver.Data.Entities;
 using AnagramSolver.HttpClients;
@@ -43,7 +44,7 @@ public class ImportCelebritiesPageJob
         })
         .ToList();
 
-        var celebrityNames = celebrities.Select(x => x.FullName.ToLowerInvariant()).ToList();
+        var celebrityNames = celebrities.Select(x => x.FullName.ToLower()).ToList();
 
         var existingCelebrityNames = await _db.Celebrities
             .Where(x => celebrityNames.Contains(x.FullName.ToLower()))
