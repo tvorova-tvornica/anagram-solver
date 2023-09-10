@@ -93,17 +93,18 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
+var supportedCultures = new[]
+{
+    new CultureInfo("en-US"),
+};
+
 app.UseRequestLocalization(new RequestLocalizationOptions
 {
-    DefaultRequestCulture = new RequestCulture(new CultureInfo("en-US")),
-    SupportedCultures = new List<CultureInfo>
-    {
-        new CultureInfo("en-US"),
-    },
-    SupportedUICultures = new List<CultureInfo>
-    {
-        new CultureInfo("en-US"),
-    }
+    DefaultRequestCulture = new RequestCulture("en-US"),
+    // Formatting numbers, dates, etc.
+    SupportedCultures = supportedCultures,
+    // UI strings that we have localized.
+    SupportedUICultures = supportedCultures
 });
 
 app.UseRouting();
