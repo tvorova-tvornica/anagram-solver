@@ -41,17 +41,17 @@ public class ImportCelebritiesPageJob
             PhotoUrl = x.Image?.Value,
             WikipediaUrl = x.WikipediaLink?.Value,
         })
-        .DistinctBy(x => x.FullName.ToLower())
         .ToList();
 
         var celebrityNames = celebrities.Select(x => x.FullName.ToLower()).ToList();
 
         var existingCelebrityNames = await _db.Celebrities
             .Where(x => celebrityNames.Contains(x.FullName.ToLower()))
-            .Select(x => x.FullName.ToLower())
+            .Select(x => x.FullName)
             .ToListAsync();
-        
-        var celebritiesToInsert = celebrities.Where(x => !existingCelebrityNames.Contains(x.FullName.ToLower()));
+
+        var celebritiesToInsert = celebrities
+            .Where(x => !existingCelebrityNames.Any(name => string.Equals(name, x.FullName, StringComparison.OrdinalIgnoreCase)));
 
         _db.Celebrities.AddRange(celebritiesToInsert);
 
