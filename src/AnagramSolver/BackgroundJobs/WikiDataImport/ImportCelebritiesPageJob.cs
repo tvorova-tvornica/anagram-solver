@@ -43,10 +43,10 @@ public class ImportCelebritiesPageJob
         })
         .ToList();
 
-        var celebrityNames = celebrities.Select(x => x.FullName.ToLower()).ToList();
+        var celebrityNames = celebrities.Select(x => x.FullName.ToUpper()).ToList();
 
         var existingCelebrityNames = await _db.Celebrities
-            .Where(x => celebrityNames.Contains(x.FullName.ToLower()))
+            .Where(x => celebrityNames.Contains(x.FullName.ToUpper()))
             .Select(x => x.FullName)
             .ToListAsync();
 
