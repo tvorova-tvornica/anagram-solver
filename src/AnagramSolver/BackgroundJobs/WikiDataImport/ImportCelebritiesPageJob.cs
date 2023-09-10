@@ -44,7 +44,7 @@ public class ImportCelebritiesPageJob
         })
         .ToList();
 
-        var celebrityNames = celebrities.Select(x => x.FullName.ToLower()).ToList();
+        var celebrityNames = celebrities.Select(x => x.FullName.ToLower(new CultureInfo("en-US"))).ToList();
 
         var existingCelebrityNames = await _db.Celebrities
             .Where(x => celebrityNames.Contains(x.FullName.ToLower()))
