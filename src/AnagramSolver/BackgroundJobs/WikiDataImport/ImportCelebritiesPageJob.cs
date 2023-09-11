@@ -1,6 +1,7 @@
 using System.Globalization;
 using AnagramSolver.Data;
 using AnagramSolver.Data.Entities;
+using AnagramSolver.Extensions;
 using AnagramSolver.HttpClients;
 using Microsoft.EntityFrameworkCore;
 using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest;
@@ -43,6 +44,7 @@ public class ImportCelebritiesPageJob
             WikipediaUrl = x.WikipediaLink?.Value,
         })
         .DistinctBy(x => x.FullName.ToLower(new CultureInfo("en-US")))
+        .Where(x => !string.IsNullOrWhiteSpace(x.FullName.ToRemovedPunctuation().ToRemovedWhitespace()))
         .ToList();
 
         var celebrityNames = celebrities.Select(x => x.FullName.ToLower(new CultureInfo("en-US"))).ToList();
