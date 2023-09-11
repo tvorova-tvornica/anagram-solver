@@ -2,22 +2,19 @@ import {
     Box,
     Card,
     CardBody,
-    CardFooter,
     Flex,
     Heading,
-    Icon,
     Image,
     Input,
     InputGroup,
     InputRightElement,
-    Link,
+    Skeleton,
     Spinner,
     Stack,
     Text,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FC, useState } from "react";
-import { FcGoogle, FcWikipedia } from "react-icons/fc";
 import { useDebounce } from "../../hooks/useDebounce";
 import { AnimatedText } from "../animated-text/AnimatedText";
 import { useResolveAnagramQuery } from "./Queries";
@@ -61,19 +58,44 @@ export const AnagramSolver: FC<{}> = () => {
                     {resolveAnagramResult.data?.length &&
                         resolveAnagramResult.data.map((result) => (
                             <Card
+                                cursor="pointer"
                                 direction="row"
                                 objectFit="cover"
                                 overflow="hidden"
+                                mb="10px"
                                 initial={{ x: 50 }}
                                 animate={{ x: 0 }}
                                 exit={{ opacity: 0 }}
                                 key={result.fullName}
                                 as={motion.div}
+                                onClick={() => {
+                                    window.open(
+                                        result?.wikipediaUrl ??
+                                            `https://www.google.com/search?q=${result.fullName.replace(
+                                                /\s/g,
+                                                "+"
+                                            )}`,
+                                        "_blank"
+                                    );
+                                }}
                             >
                                 {result.photoUrl && (
                                     <Image
                                         fit="cover"
-                                        maxW={{base: "100px", sm: "120px"}}
+                                        fallback={
+                                            <Skeleton
+                                                w={{
+                                                    base: "100px",
+                                                    sm: "120px",
+                                                }}
+                                                h={{
+                                                    base: "193px",
+                                                    sm: "173px",
+                                                }}
+                                            />
+                                        }
+                                        w={{ base: "100px", sm: "120px" }}
+                                        h={{ base: "193px", sm: "173px" }}
                                         src={result.photoUrl}
                                         alt={result.fullName}
                                     />
@@ -85,29 +107,6 @@ export const AnagramSolver: FC<{}> = () => {
                                             {result.fullName}
                                         </Heading>
                                     </CardBody>
-
-                                    <CardFooter>
-                                        <Link
-                                            fontSize="30px"
-                                            isExternal
-                                            href={`https://www.google.com/search?q=${result.fullName.replace(
-                                                /\s/g,
-                                                "+"
-                                            )}`}
-                                            mr="10px"
-                                        >
-                                            <Icon as={FcGoogle} />
-                                        </Link>
-                                        {result.wikipediaUrl && (
-                                            <Link
-                                                fontSize="30px"
-                                                isExternal
-                                                href={result.wikipediaUrl}
-                                            >
-                                                <Icon as={FcWikipedia} />
-                                            </Link>
-                                        )}
-                                    </CardFooter>
                                 </Stack>
                             </Card>
                         ))}
