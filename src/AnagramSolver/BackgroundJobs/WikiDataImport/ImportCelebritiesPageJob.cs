@@ -38,14 +38,15 @@ public class ImportCelebritiesPageJob
 
         var wikiDataCelebrities = await _httpClient.GetCelebritiesPageAsync(occupationId, nationalityId, limit, offset);
 
-        var celebrities = wikiDataCelebrities!.Results!.Bindings.Select(x => new Celebrity(x.ItemLabel.Value)
-        {
-            PhotoUrl = x.Image?.Value,
-            WikipediaUrl = x.WikipediaLink?.Value,
-        })
-        .DistinctBy(x => x.FullName.ToLower(new CultureInfo("en-US")))
-        .Where(x => !string.IsNullOrWhiteSpace(x.FullName.ToRemovedPunctuation().ToRemovedWhitespace()))
-        .ToList();
+        var celebrities = wikiDataCelebrities!.Results!.Bindings
+            .Where(x => !string.IsNullOrWhiteSpace(x.ItemLabel.Value.ToRemovedWhitespace().ToRemovedPunctuation()))
+            .Select(x => new Celebrity(x.ItemLabel.Value) 
+            {
+                PhotoUrl = x.Image?.Value,
+                WikipediaUrl = x.WikipediaLink?.Value,
+            })
+            .DistinctBy(x => x.FullName.ToLower(new CultureInfo("en-US")))
+            .ToList();
 
         var celebrityNames = celebrities.Select(x => x.FullName.ToLower(new CultureInfo("en-US"))).ToList();
 
