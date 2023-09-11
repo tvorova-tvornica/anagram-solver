@@ -17,7 +17,7 @@ public class Celebrity
 
         if (string.IsNullOrWhiteSpace(nameWithoutWhitespacesAndPunctuation))
         {
-            throw new BusinessRuleViolationException("Celebrity full name must contain letters");
+            throw new BusinessRuleViolationException($"Celebrity full name must contain letters: {fullName}");
         }
 
         FullName = fullName;
