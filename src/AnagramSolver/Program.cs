@@ -15,6 +15,7 @@ using Sentry;
 var sentryDSN = Environment.GetEnvironmentVariable("SENTRY_DSN");
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseShutdownTimeout(TimeSpan.FromMinutes(1));
 
 if (sentryDSN is not null)
 {
@@ -83,7 +84,7 @@ builder.Services.AddHangfire(config =>
     config.UsePostgreSqlStorage(builder.Configuration.GetValue<string>("CONNECTION_STRING"));
 });
 
-builder.Services.AddHangfireServer(config => config.ShutdownTimeout = TimeSpan.FromMinutes(5));
+builder.Services.AddHangfireServer(config => config.ShutdownTimeout = TimeSpan.FromMinutes(1));
 
 var app = builder.Build();
 
