@@ -12,6 +12,29 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
+using Sentry;
+
+var sentryDSN = Environment.GetEnvironmentVariable("SENTRY_DSN");
+
+if (sentryDSN != null)
+{
+    SentrySdk.Init(options =>
+    {
+        options.Dsn = sentryDSN;
+
+        // This option is recommended. It enables Sentry's "Release Health" feature.
+        options.AutoSessionTracking = true;
+
+        // Enabling this option is recommended for client applications only. It ensures all threads use the same global scope.
+        options.IsGlobalModeEnabled = false;
+
+        // This option will enable Sentry's tracing features. You still need to start transactions and spans.
+        options.EnableTracing = true;
+
+        // Example sample rate for your transactions: captures 10% of transactions
+        options.TracesSampleRate = 0.1;
+    });
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +71,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 builder.Services.AddHangfire(config =>
-		        config.UsePostgreSqlStorage(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
+                config.UsePostgreSqlStorage(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
 
 builder.Services.AddHangfireServer();
 
@@ -86,7 +109,7 @@ app.UseExceptionHandler(exceptionHandlerApp =>
 });
 
 if (!app.Environment.IsDevelopment())
-{   
+{
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
@@ -100,10 +123,10 @@ app.UseAuthorization();
 
 GlobalConfiguration.Configuration
        .UseActivator(new HangfireActivator(app.Services));
-       
+
 app.UseHangfireDashboard("/background-jobs", new DashboardOptions
 {
-    Authorization = new [] { new HangfireAuthFilter() }
+    Authorization = new[] { new HangfireAuthFilter() }
 });
 
 app.MapControllerRoute(
