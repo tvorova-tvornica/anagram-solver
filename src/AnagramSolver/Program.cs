@@ -16,7 +16,7 @@ using Sentry;
 
 var sentryDSN = Environment.GetEnvironmentVariable("SENTRY_DSN");
 
-if (sentryDSN != null)
+if (sentryDSN is not null)
 {
     SentrySdk.Init(options =>
     {
@@ -76,6 +76,15 @@ builder.Services.AddHangfire(config =>
 builder.Services.AddHangfireServer();
 
 var app = builder.Build();
+
+try
+{
+    throw null;
+}
+catch (Exception ex)
+{
+    SentrySdk.CaptureException(ex);
+}
 
 app.UseExceptionHandler(exceptionHandlerApp =>
 {
