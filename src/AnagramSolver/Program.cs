@@ -1,4 +1,3 @@
-using System.Globalization;
 using AnagramSolver.BackgroundJobs;
 using AnagramSolver.BackgroundJobs.WikiDataImport;
 using AnagramSolver.Data;
@@ -9,34 +8,50 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
 using Sentry;
 
 var sentryDSN = Environment.GetEnvironmentVariable("SENTRY_DSN");
 
+var builder = WebApplication.CreateBuilder(args);
+
 if (sentryDSN is not null)
 {
+    var autoSessionTracking = true;
+    var isGlobalModeEnabled = false;
+    var enableTracing = true;
+    var tracesSampleRate = 0.1;
+
     SentrySdk.Init(options =>
     {
         options.Dsn = sentryDSN;
 
         // This option is recommended. It enables Sentry's "Release Health" feature.
-        options.AutoSessionTracking = true;
+        options.AutoSessionTracking = autoSessionTracking;
 
         // Enabling this option is recommended for client applications only. It ensures all threads use the same global scope.
-        options.IsGlobalModeEnabled = false;
+        options.IsGlobalModeEnabled = isGlobalModeEnabled;
 
         // This option will enable Sentry's tracing features. You still need to start transactions and spans.
-        options.EnableTracing = true;
+        options.EnableTracing = enableTracing;
 
         // Example sample rate for your transactions: captures 10% of transactions
-        options.TracesSampleRate = 0.1;
+        options.TracesSampleRate = tracesSampleRate;
+    });
+
+    builder.Host.ConfigureLogging(c =>
+    {
+        c.AddSentry(options =>
+        {
+            options.Dsn = sentryDSN;
+            options.AutoSessionTracking = autoSessionTracking;
+            options.IsGlobalModeEnabled = isGlobalModeEnabled;
+            options.EnableTracing = enableTracing;
+            options.TracesSampleRate = tracesSampleRate;
+        });
     });
 }
-
-var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -71,20 +86,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 builder.Services.AddHangfire(config =>
-                config.UsePostgreSqlStorage(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
+{
+    config.UsePostgreSqlStorage(builder.Configuration.GetValue<string>("CONNECTION_STRING"));
+});
 
 builder.Services.AddHangfireServer();
 
-var app = builder.Build();
 
-try
-{
-    throw null;
-}
-catch (Exception ex)
-{
-    SentrySdk.CaptureException(ex);
-}
+var app = builder.Build();
 
 app.UseExceptionHandler(exceptionHandlerApp =>
 {
