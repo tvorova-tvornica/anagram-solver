@@ -83,8 +83,7 @@ builder.Services.AddHangfire(config =>
     config.UsePostgreSqlStorage(builder.Configuration.GetValue<string>("CONNECTION_STRING"));
 });
 
-builder.Services.AddHangfireServer();
-
+builder.Services.AddHangfireServer(config => config.ShutdownTimeout = TimeSpan.FromMinutes(5));
 
 var app = builder.Build();
 
