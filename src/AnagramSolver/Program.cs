@@ -79,10 +79,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.SameSite = SameSiteMode.Strict;
     });
 
-builder.Services.AddHangfire(config =>
-{
-    config.UsePostgreSqlStorage(builder.Configuration.GetValue<string>("CONNECTION_STRING"));
-});
+builder.Services.AddHangfire(config => config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                                             .UseSimpleAssemblyNameTypeSerializer()
+                                             .UseRecommendedSerializerSettings()
+                                             .UsePostgreSqlStorage(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
 
 builder.Services.AddHangfireServer(config => config.ShutdownTimeout = TimeSpan.FromMinutes(1));
 
