@@ -64,7 +64,7 @@ public class WikiDataHttpClient
     private string GetOccupationOnlyCountQuery(string occupationId)
     {
         return $@"sparql?query=SELECT DISTINCT (COUNT(?item) AS ?count) WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE]"". }}
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
@@ -77,7 +77,7 @@ public class WikiDataHttpClient
     private string GetNationalityOnlyCountQuery(string nationalityId)
     {
         return $@"sparql?query=SELECT DISTINCT (COUNT(?item) AS ?count) WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE]"". }}
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P27 ?statement1.
@@ -90,7 +90,7 @@ public class WikiDataHttpClient
     private string GetFullCountQuery(string occupationId, string nationalityId)
     {
         return $@"sparql?query=SELECT DISTINCT (COUNT(?item) AS ?count) WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE]"". }}
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
@@ -104,74 +104,96 @@ public class WikiDataHttpClient
 
     private string GetOccupationOnlyCelebritiesPageQuery(string occupationId, int limit, int offset)
     {
-        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?genderLabel ?wikipediaLink WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hrv"". }}
+        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrwiki ?enwiki WHERE {{
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
                         ?statement0 (ps:P106/(wdt:P279*)) wd:{occupationId}.
                     }}
-                    ORDER BY ?item
+                    ORDER BY ?itemLabel
                     OFFSET {offset}
                     LIMIT {limit}
                 }}
+
                 OPTIONAL {{
                     ?item wdt:P18 ?image.
-                    ?item wdt:P21 ?gender.
-                    ?item wdt:P31 wd:Q5.
-                    OPTIONAL {{
-                        ?wikipediaLink_en schema:about ?item;
-                        schema:inLanguage ""en"";
-                        schema:isPartOf <https://en.wikipedia.org/>.
-                    }}
-                    OPTIONAL {{
-                        ?wikipediaLink schema:about ?item;
-                        schema:inLanguage ?lang;
-                        schema:isPartOf <https://www.wikipedia.org/>.
-                        FILTER (LANGMATCHES(LANG(?lang), ""en"") = false)
+                }}
+  
+                OPTIONAL {{
+                    SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""en"".
+                                            ?item schema:description ?enDescription
                     }}
                 }}
-                BIND(COALESCE(?wikipediaLink_en, ?wikipediaLink) AS ?wikipediaLink)
+  
+                OPTIONAL {{
+                    SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""hr"".
+                                            ?item schema:description ?hrDescription
+                    }}
+                }}
+  
+                OPTIONAL {{
+                    ?enwiki schema:about ?item;
+                    schema:inLanguage ""en"";
+                    schema:isPartOf <https://en.wikipedia.org/>.
+                }}
+  
+                OPTIONAL {{
+                    ?hrwiki schema:about ?item;
+                        schema:inLanguage ""hr"";
+                        schema:isPartOf <https://hr.wikipedia.org/>.
+                }}
         }}";
     }
 
     private string GetNationalityOnlyCelebritiesPageQuery(string nationalityId, int limit, int offset)
     {
-        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?genderLabel ?wikipediaLink WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hrv"". }}
+        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrwiki ?enwiki WHERE {{
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P27 ?statement1.
                         ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
                     }}
-                    ORDER BY ?item
+                    ORDER BY ?itemLabel
                     OFFSET {offset}
                     LIMIT {limit}
                 }}
+
                 OPTIONAL {{
                     ?item wdt:P18 ?image.
-                    ?item wdt:P21 ?gender.
-                    ?item wdt:P31 wd:Q5.
-                    OPTIONAL {{
-                        ?wikipediaLink_en schema:about ?item;
-                        schema:inLanguage ""en"";
-                        schema:isPartOf <https://en.wikipedia.org/>.
-                    }}
-                    OPTIONAL {{
-                        ?wikipediaLink schema:about ?item;
-                        schema:inLanguage ?lang;
-                        schema:isPartOf <https://www.wikipedia.org/>.
-                        FILTER (LANGMATCHES(LANG(?lang), ""en"") = false)
+                }}
+  
+                OPTIONAL {{
+                    SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""en"".
+                                            ?item schema:description ?enDescription
                     }}
                 }}
-                BIND(COALESCE(?wikipediaLink_en, ?wikipediaLink) AS ?wikipediaLink)
+  
+                OPTIONAL {{
+                    SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""hr"".
+                                            ?item schema:description ?hrDescription
+                    }}
+                }}
+  
+                OPTIONAL {{
+                    ?enwiki schema:about ?item;
+                    schema:inLanguage ""en"";
+                    schema:isPartOf <https://en.wikipedia.org/>.
+                }}
+  
+                OPTIONAL {{
+                    ?hrwiki schema:about ?item;
+                        schema:inLanguage ""hr"";
+                        schema:isPartOf <https://hr.wikipedia.org/>.
+                }}
         }}";
     }
 
     private string GetFullCelebritiesPageQuery(string occupationId, string nationalityId, int limit, int offset)
     {
-        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?genderLabel ?wikipediaLink WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hrv"". }}
+        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrWikipedia ?enWikipedia WHERE {{
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
@@ -179,27 +201,38 @@ public class WikiDataHttpClient
                         ?item p:P27 ?statement1.
                         ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
                     }}
-                    ORDER BY ?item
+                    ORDER BY ?itemLabel
                     OFFSET {offset}
                     LIMIT {limit}
                 }}
+
                 OPTIONAL {{
                     ?item wdt:P18 ?image.
-                    ?item wdt:P21 ?gender.
-                    ?item wdt:P31 wd:Q5.
-                    OPTIONAL {{
-                        ?wikipediaLink_en schema:about ?item;
-                        schema:inLanguage ""en"";
-                        schema:isPartOf <https://en.wikipedia.org/>.
-                    }}
-                    OPTIONAL {{
-                        ?wikipediaLink schema:about ?item;
-                        schema:inLanguage ?lang;
-                        schema:isPartOf <https://www.wikipedia.org/>.
-                        FILTER (LANGMATCHES(LANG(?lang), ""en"") = false)
+                }}
+  
+                OPTIONAL {{
+                    SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""en"".
+                                            ?item schema:description ?enDescription
                     }}
                 }}
-                BIND(COALESCE(?wikipediaLink_en, ?wikipediaLink) AS ?wikipediaLink)
+  
+                OPTIONAL {{
+                    SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""hr"".
+                                            ?item schema:description ?hrDescription
+                    }}
+                }}
+  
+                OPTIONAL {{
+                    ?enWikipedia schema:about ?item;
+                    schema:inLanguage ""en"";
+                    schema:isPartOf <https://en.wikipedia.org/>.
+                }}
+  
+                OPTIONAL {{
+                    ?hrWikipedia schema:about ?item;
+                        schema:inLanguage ""hr"";
+                        schema:isPartOf <https://hr.wikipedia.org/>.
+                }}
         }}";
     }
 }

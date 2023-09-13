@@ -40,28 +40,26 @@ public class ImportCelebritiesPageJob
 
         var celebrities = wikiDataCelebrities!.Results!.Bindings
             .Where(x => !string.IsNullOrWhiteSpace(x.ItemLabel.Value.ToRemovedWhitespace().ToRemovedPunctuation()))
-            .Select(x => new Celebrity(x.ItemLabel.Value) 
+            .Select(x => new Celebrity(x.ItemLabel.Value)
             {
+                WikiDataPageId = x.Item.Value,
                 PhotoUrl = x.Image?.Value,
-                WikipediaUrl = x.WikipediaLink?.Value,
+                Description = x.EnDescription?.Value ?? x.HrDescription?.Value,
+                WikipediaUrl = x.EnWikipedia?.Value ?? x.HrWikipedia?.Value,
             })
-            .DistinctBy(x => x.FullName.ToLower(new CultureInfo("en-US")))
+            .DistinctBy(x => x.WikiDataPageId)
             .ToList();
+        
+        var celebrityWikiDataPageIds = celebrities.Select(x => x.WikiDataPageId).ToList();
 
-        var celebrityNames = celebrities.Select(x => x.FullName.ToLower(new CultureInfo("en-US"))).ToList();
-
-        var existingCelebrityNames = await _db.Celebrities
-            .Where(x => celebrityNames.Contains(x.FullName.ToLower()))
-            .Select(x => x.FullName.ToLower())
+        var existingCelebrityWikiDataPageIds = await _db.Celebrities
+            .Where(x => celebrityWikiDataPageIds.Contains(x.WikiDataPageId))
+            .Select(x => x.WikiDataPageId)
             .ToListAsync();
-
-        var celebritiesToInsert = celebrities
-            .Where(x => !existingCelebrityNames.Contains(x.FullName.ToLower(new CultureInfo("en-US"))));
-
+        
+        var celebritiesToInsert = celebrities.Where(x => !existingCelebrityWikiDataPageIds.Contains(x.WikiDataPageId));
         _db.Celebrities.AddRange(celebritiesToInsert);
-
-        pageRequest.MarkProcessed();
-
+        
         await _db.SaveChangesAsync();
     }
 }
