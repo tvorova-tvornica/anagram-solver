@@ -104,7 +104,7 @@ public class WikiDataHttpClient
 
     private string GetOccupationOnlyCelebritiesPageQuery(string occupationId, int limit, int offset)
     {
-        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrwiki ?enwiki WHERE {{
+        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrWikipedia ?enWikipedia WHERE {{
                 SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
@@ -133,13 +133,13 @@ public class WikiDataHttpClient
                 }}
   
                 OPTIONAL {{
-                    ?enwiki schema:about ?item;
+                    ?enWikipedia schema:about ?item;
                     schema:inLanguage ""en"";
                     schema:isPartOf <https://en.wikipedia.org/>.
                 }}
   
                 OPTIONAL {{
-                    ?hrwiki schema:about ?item;
+                    ?hrWikipedia schema:about ?item;
                         schema:inLanguage ""hr"";
                         schema:isPartOf <https://hr.wikipedia.org/>.
                 }}
@@ -148,7 +148,7 @@ public class WikiDataHttpClient
 
     private string GetNationalityOnlyCelebritiesPageQuery(string nationalityId, int limit, int offset)
     {
-        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrwiki ?enwiki WHERE {{
+        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrWikipedia ?enWikipedia WHERE {{
                 SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
@@ -177,13 +177,13 @@ public class WikiDataHttpClient
                 }}
   
                 OPTIONAL {{
-                    ?enwiki schema:about ?item;
+                    ?enWikipedia schema:about ?item;
                     schema:inLanguage ""en"";
                     schema:isPartOf <https://en.wikipedia.org/>.
                 }}
   
                 OPTIONAL {{
-                    ?hrwiki schema:about ?item;
+                    ?hrWikipedia schema:about ?item;
                         schema:inLanguage ""hr"";
                         schema:isPartOf <https://hr.wikipedia.org/>.
                 }}
