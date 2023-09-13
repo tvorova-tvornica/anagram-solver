@@ -11,6 +11,7 @@ public class Celebrity
     public string? PhotoUrl { get; init; }
     public string? WikipediaUrl { get; init; }
     public string? Description { get; init; }
+    public string? WikiDataPageId { get; init; }
 
     public Celebrity(string fullName)
     {

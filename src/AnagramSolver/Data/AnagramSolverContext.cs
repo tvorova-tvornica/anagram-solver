@@ -43,6 +43,10 @@ public class AnagramSolverContext : DbContext
                     .HasIndex(c => c.AnagramKey)
                     .HasMethod("hash");
         
+        modelBuilder.Entity<Celebrity>()
+                    .HasIndex(c => c.WikiDataPageId)
+                    .IsUnique();
+        
         modelBuilder.Entity<ImportWikiDataCelebritiesRequest>()
                     .Property(r => r.Status)
                     .IsConcurrencyToken();

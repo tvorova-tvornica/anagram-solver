@@ -2,6 +2,7 @@
 using AnagramSolver.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AnagramSolver.Data.Migrations
 {
     [DbContext(typeof(AnagramSolverContext))]
-    partial class AnagramSolverContextModelSnapshot : ModelSnapshot
+    [Migration("20230913210436_AddWikiDataPageIdColumnToCelebritiesTable")]
+    partial class AddWikiDataPageIdColumnToCelebritiesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,9 +59,6 @@ namespace AnagramSolver.Data.Migrations
                     NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("AnagramKey"), "hash");
 
                     b.HasIndex("FullName")
-                        .IsUnique();
-
-                    b.HasIndex("WikiDataPageId")
                         .IsUnique();
 
                     b.ToTable("Celebrities", (string)null);
