@@ -7,7 +7,8 @@ public static class StringExtensions
 {
     public static string ToAnagramKey(this string value)
     {
-        return value.ToLower()
+        return value.Normalize()
+                    .ToUpperInvariant()
                     .ToRemovedWhitespace()
                     .ToRemovedPunctuation()
                     .ToAlphabeticallyOrdered();
@@ -37,6 +38,6 @@ public static class StringExtensions
         while (textElements.MoveNext())
             graphemeClusters.Add(textElements.Current.ToString()!);
 
-        return string.Concat(graphemeClusters.OrderBy(x => x).ToList());
+        return string.Concat(graphemeClusters.OrderBy(x => x, StringComparer.Ordinal).ToList());
     }
 }
