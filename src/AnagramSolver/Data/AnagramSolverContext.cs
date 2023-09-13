@@ -32,10 +32,6 @@ public class AnagramSolverContext : DbContext
                     .IsRequired();
 
         modelBuilder.Entity<Celebrity>()
-                    .HasIndex(c => c.FullName)
-                    .IsUnique();
-
-        modelBuilder.Entity<Celebrity>()
                     .Property(c => c.AnagramKey)
                     .IsRequired();
         
