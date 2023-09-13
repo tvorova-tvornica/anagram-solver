@@ -5,7 +5,6 @@
 
 app = "anagram-solver"
 primary_region = "ams"
-kill_timeout = 60
 
 [build]
 
@@ -15,4 +14,5 @@ kill_timeout = 60
   auto_stop_machines = false
   auto_start_machines = true
   min_machines_running = 1
+  kill_timeout = 60
   processes = ["app"]
