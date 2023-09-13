@@ -60,6 +60,7 @@ public class ImportCelebritiesPageJob
         var celebritiesToInsert = celebrities.Where(x => !existingCelebrityWikiDataPageIds.Contains(x.WikiDataPageId));
         _db.Celebrities.AddRange(celebritiesToInsert);
         
+        pageRequest.MarkProcessed();
         await _db.SaveChangesAsync();
     }
 }
