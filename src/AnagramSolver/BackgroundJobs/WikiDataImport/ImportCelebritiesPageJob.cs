@@ -1,4 +1,3 @@
-using System.Globalization;
 using AnagramSolver.Data;
 using AnagramSolver.Data.Entities;
 using AnagramSolver.Extensions;
