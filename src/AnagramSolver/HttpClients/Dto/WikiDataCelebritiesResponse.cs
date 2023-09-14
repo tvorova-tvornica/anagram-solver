@@ -1,5 +1,3 @@
-using AnagramSolver.BackgroundJobs;
-
 namespace AnagramSolver.HttpClients.Dto;
 
 public class WikiDataCelebritiesResponse
@@ -13,9 +11,12 @@ public class WikiDataCelebritiesResponse
 
     public class WikiDataCelebrity
     {
+        public required WikiDataStringValue Item { get; set; }
         public required WikiDataStringValue ItemLabel { get; set; }
         public WikiDataStringValue? Image { get; set; }
-        public WikiDataStringValue? GenderLabel { get; set; }
-        public WikiDataStringValue? WikipediaLink { get; set; }
+        public WikiDataStringValue? EnDescription { get; set; }
+        public WikiDataStringValue? HrDescription { get; set; }
+        public WikiDataStringValue? EnWikipedia { get; set; }
+        public WikiDataStringValue? HrWikipedia { get; set; }
     }
 }

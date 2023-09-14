@@ -32,16 +32,16 @@ public class AnagramSolverContext : DbContext
                     .IsRequired();
 
         modelBuilder.Entity<Celebrity>()
-                    .HasIndex(c => c.FullName)
-                    .IsUnique();
-
-        modelBuilder.Entity<Celebrity>()
                     .Property(c => c.AnagramKey)
                     .IsRequired();
         
         modelBuilder.Entity<Celebrity>()
                     .HasIndex(c => c.AnagramKey)
                     .HasMethod("hash");
+        
+        modelBuilder.Entity<Celebrity>()
+                    .HasIndex(c => c.WikiDataPageId)
+                    .IsUnique();
         
         modelBuilder.Entity<ImportWikiDataCelebritiesRequest>()
                     .Property(r => r.Status)
