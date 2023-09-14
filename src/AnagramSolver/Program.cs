@@ -1,15 +1,11 @@
 using AnagramSolver.BackgroundJobs;
 using AnagramSolver.BackgroundJobs.WikiDataImport;
 using AnagramSolver.Data;
-using AnagramSolver.Exceptions;
 using AnagramSolver.Extensions;
 using AnagramSolver.HttpClients;
-using EntityFramework.Exceptions.Common;
 using Hangfire;
 using Hangfire.PostgreSql;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(55));
