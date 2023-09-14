@@ -7,7 +7,6 @@ using AnagramSolver.HttpClients;
 using EntityFramework.Exceptions.Common;
 using Hangfire;
 using Hangfire.PostgreSql;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
@@ -42,36 +41,7 @@ builder.Services.AddHangfireServer(config => config.ShutdownTimeout = TimeSpan.F
 
 var app = builder.Build();
 
-app.UseExceptionHandler(exceptionHandlerApp =>
-{
-    exceptionHandlerApp.Run(async context =>
-    {
-        // using static System.Net.Mime.MediaTypeNames;
-        context.Response.ContentType = Text.Plain;
-
-        var exceptionHandlerPathFeature =
-            context.Features.Get<IExceptionHandlerPathFeature>();
-
-        if (exceptionHandlerPathFeature?.Error is BusinessRuleViolationException)
-        {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsync($"Business rule violation: {exceptionHandlerPathFeature.Error.Message}!");
-            return;
-        }
-
-        if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
-        {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsync($"Entity with the same unique key already exists!");
-            return;
-        }
-
-        if (exceptionHandlerPathFeature?.Error is not null)
-        {
-            throw exceptionHandlerPathFeature.Error;
-        }
-    });
-});
+app.UseAnagramSolverExceptionHandler();
 
 if (!app.Environment.IsDevelopment())
 {
