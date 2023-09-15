@@ -4,11 +4,9 @@ import {
     CardBody,
     Flex,
     Heading,
-    Image,
     Input,
     InputGroup,
     InputRightElement,
-    Skeleton,
     Spinner,
     Stack,
     Text,
@@ -18,6 +16,7 @@ import { FC, useState } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
 import { AnimatedText } from "../animated-text/AnimatedText";
 import { useResolveAnagramQuery } from "./Queries";
+import { AnagramSolverResultImage } from "./AnagramSolverResultImage";
 
 export const AnagramSolver: FC<{}> = () => {
     const [anagram, setAnagram] = useState("");
@@ -56,7 +55,7 @@ export const AnagramSolver: FC<{}> = () => {
             <Flex direction="column" mt="50px">
                 <AnimatePresence>
                     {resolveAnagramResult.data?.length &&
-                        resolveAnagramResult.data.map((result) => (
+                        resolveAnagramResult.data.map((result, index) => (
                             <Card
                                 cursor="pointer"
                                 direction="row"
@@ -66,7 +65,7 @@ export const AnagramSolver: FC<{}> = () => {
                                 initial={{ x: 50 }}
                                 animate={{ x: 0 }}
                                 exit={{ opacity: 0 }}
-                                key={result.fullName}
+                                key={index}
                                 as={motion.div}
                                 onClick={() => {
                                     window.open(
@@ -79,33 +78,25 @@ export const AnagramSolver: FC<{}> = () => {
                                     );
                                 }}
                             >
-                                {result.photoUrl && (
-                                    <Image
-                                        fit="cover"
-                                        fallback={
-                                            <Skeleton
-                                                w={{
-                                                    base: "100px",
-                                                    sm: "120px",
-                                                }}
-                                                h={{
-                                                    base: "193px",
-                                                    sm: "173px",
-                                                }}
-                                            />
-                                        }
-                                        w={{ base: "100px", sm: "120px" }}
-                                        h={{ base: "193px", sm: "173px" }}
-                                        src={result.photoUrl}
-                                        alt={result.fullName}
-                                    />
-                                )}
-
+                                <AnagramSolverResultImage
+                                    imageUrl={result.photoUrl}
+                                    alt={result.fullName}
+                                />
                                 <Stack>
                                     <CardBody>
                                         <Heading size="xl">
                                             {result.fullName}
                                         </Heading>
+                                        {result.description && (
+                                            <Text
+                                                as="i"
+                                                noOfLines={3}
+                                                pl="6px"
+                                                borderLeft="3px solid #69545f"
+                                            >
+                                                {result.description}
+                                            </Text>
+                                        )}
                                     </CardBody>
                                 </Stack>
                             </Card>

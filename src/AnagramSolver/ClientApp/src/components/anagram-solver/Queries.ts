@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 export type ResolveAnagramResult = {
     fullName: string;
     photoUrl?: string;
+    description?: string;
     wikipediaUrl?: string;
 };
 

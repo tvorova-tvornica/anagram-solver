@@ -33,14 +33,15 @@ public class CelebrityController : ControllerBase
     }
 
     [HttpGet("resolve-anagram")]
-    public async Task<List<ResolveAnagramResult>> ResolveAnagram([FromQuery] ResolveAnagramDto anagramDto)
+    public Task<List<ResolveAnagramResult>> ResolveAnagram([FromQuery] ResolveAnagramDto anagramDto)
     {
-        return await _dbContext.Celebrities
+        return _dbContext.Celebrities
             .Where(c => c.AnagramKey == anagramDto.AnagramKey)
             .Select(c => new ResolveAnagramResult
             {
                 FullName = c.FullName,
                 PhotoUrl = c.PhotoUrl,
+                Description = c.Description,
                 WikipediaUrl = c.WikipediaUrl,
             })
             .ToListAsync();
