@@ -92,6 +92,7 @@ export const AnagramSolver: FC<{}> = () => {
                                                 as="i"
                                                 noOfLines={3}
                                                 pl="6px"
+                                                color="dimgrey"
                                                 borderLeft="3px solid #69545f"
                                             >
                                                 {result.description}
