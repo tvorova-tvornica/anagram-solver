@@ -7,7 +7,7 @@ public static class StringExtensions
 {
     public static string ToAnagramKey(this string value)
     {
-        return value.Normalize()
+        return value.Normalize(NormalizationForm.FormKC)
                     .ToUpperInvariant()
                     .ToRemovedWhitespace()
                     .ToRemovedPunctuation()

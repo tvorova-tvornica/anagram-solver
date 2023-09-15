@@ -64,7 +64,7 @@ public class WikiDataHttpClient
     private string GetOccupationOnlyCountQuery(string occupationId)
     {
         return $@"sparql?query=SELECT DISTINCT (COUNT(?item) AS ?count) WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr, de"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
@@ -77,7 +77,7 @@ public class WikiDataHttpClient
     private string GetNationalityOnlyCountQuery(string nationalityId)
     {
         return $@"sparql?query=SELECT DISTINCT (COUNT(?item) AS ?count) WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr, de"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P27 ?statement1.
@@ -90,7 +90,7 @@ public class WikiDataHttpClient
     private string GetFullCountQuery(string occupationId, string nationalityId)
     {
         return $@"sparql?query=SELECT DISTINCT (COUNT(?item) AS ?count) WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr, de"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
@@ -105,13 +105,13 @@ public class WikiDataHttpClient
     private string GetOccupationOnlyCelebritiesPageQuery(string occupationId, int limit, int offset)
     {
         return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrWikipedia ?enWikipedia WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr, de"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
                         ?statement0 (ps:P106/(wdt:P279*)) wd:{occupationId}.
                     }}
-                    ORDER BY ?itemLabel
+                    ORDER BY ?item
                     OFFSET {offset}
                     LIMIT {limit}
                 }}
@@ -149,13 +149,13 @@ public class WikiDataHttpClient
     private string GetNationalityOnlyCelebritiesPageQuery(string nationalityId, int limit, int offset)
     {
         return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrWikipedia ?enWikipedia WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr, de"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P27 ?statement1.
                         ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
                     }}
-                    ORDER BY ?itemLabel
+                    ORDER BY ?item
                     OFFSET {offset}
                     LIMIT {limit}
                 }}
@@ -193,7 +193,7 @@ public class WikiDataHttpClient
     private string GetFullCelebritiesPageQuery(string occupationId, string nationalityId, int limit, int offset)
     {
         return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrWikipedia ?enWikipedia WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr"". }}
+                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr, de"". }}
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
@@ -201,7 +201,7 @@ public class WikiDataHttpClient
                         ?item p:P27 ?statement1.
                         ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
                     }}
-                    ORDER BY ?itemLabel
+                    ORDER BY ?item
                     OFFSET {offset}
                     LIMIT {limit}
                 }}
