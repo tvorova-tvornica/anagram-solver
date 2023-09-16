@@ -27,12 +27,13 @@ interface Props {
 }
 
 export const AuthContextProvider: React.FC<Props> = ({ children }) => {
-    const navigate = useNavigate();
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [hasInvalidSignInAttempt, setHasInvalidSignInAttempt] = useState<boolean>(false);
 
     const signInMutation = useSignInMutation();
     const signOutMutation = useSignOutMutation();
+    
+    const navigate = useNavigate();
 
     const signInHandler = (credentials: SignInCredentials) => {
         signInMutation.mutateAsync(credentials)
