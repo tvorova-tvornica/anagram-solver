@@ -2,12 +2,12 @@ import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Home } from "./pages/Home";
-import { SignIn } from "./pages/SignIn";
+import { BrowserRouter, Routes } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import { theme } from "./theme";
 import { ToggleColorMode } from "./components/toggle-color-mode";
+import { AuthContextProvider } from "./contexts/auth/AuthContext";
+import { AppRoutes } from "./components/routes";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -29,10 +29,9 @@ root.render(
             <ChakraProvider theme={theme}>
                 <ToggleColorMode />
                 <BrowserRouter>
-                    <Routes>
-                        <Route path="/" Component={Home} />
-                        <Route path="/sign-in" Component={SignIn} />
-                    </Routes>
+                    <AuthContextProvider>
+                        <AppRoutes />
+                    </AuthContextProvider>
                 </BrowserRouter>
             </ChakraProvider>
         </QueryClientProvider>

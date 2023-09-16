@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 
 import {
     Input,
@@ -11,17 +11,17 @@ import {
     Heading,
 } from "@chakra-ui/react";
 
-import { useLogInMutation } from "./Mutations";
+import AuthContext from "../../contexts/auth/AuthContext";
 
 export const LogInForm: FC<{}> = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const logInMutation = useLogInMutation({ username, password });
+    const authCtx = useContext(AuthContext);
 
     return (
         <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
             <Stack align={"center"}>
-                <Heading fontSize={"4xl"}>Sign in to your account</Heading>
+                <Heading fontSize={"3xl"}>Sign in to admin account</Heading>
             </Stack>
             <Box
                 rounded={"lg"}
@@ -59,7 +59,7 @@ export const LogInForm: FC<{}> = () => {
                             _hover={{
                                 bg: "blue.500",
                             }}
-                            onClick={() => logInMutation.mutate()}
+                            onClick={() => authCtx.signIn({ username, password })}
                         >
                             Sign in
                         </Button>
