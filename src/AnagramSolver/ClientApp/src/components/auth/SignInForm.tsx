@@ -14,7 +14,7 @@ import {
 
 import AuthContext from "../../contexts/auth/AuthContext";
 
-export const LogInForm: FC<{}> = () => {
+export const SignInForm: FC<{}> = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const authCtx = useContext(AuthContext);
