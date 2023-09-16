@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 export type AuthContextType = {
     isAuthenticated: boolean;
     signIn: (credentials: SignInCredentials) => void;
+    hasInvalidSignInAttempt: boolean;
     signOut: () => void;
 };
 
@@ -17,6 +18,7 @@ export type SignInCredentials = {
 const AuthContext = React.createContext<AuthContextType>({
     isAuthenticated: false,
     signIn: (__credentials) => {},
+    hasInvalidSignInAttempt: false,
     signOut: () => {}
 });
 
@@ -27,6 +29,7 @@ interface Props {
 export const AuthContextProvider: React.FC<Props> = ({ children }) => {
     const navigate = useNavigate();
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [hasInvalidSignInAttempt, setHasInvalidSignInAttempt] = useState<boolean>(false);
 
     const signInMutation = useSignInMutation();
     const signOutMutation = useSignOutMutation();
@@ -38,6 +41,8 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
                 {
                     setIsAuthenticated(true);
                     navigate("/import-requests")
+                } else {
+                    setHasInvalidSignInAttempt(true);
                 }
             });
     };
@@ -57,6 +62,7 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
     const contextValue: AuthContextType = {
         isAuthenticated: isAuthenticated || isAuthenticatedQuery.data || false,
         signIn: signInHandler,
+        hasInvalidSignInAttempt,
         signOut: signOutHandler,
     };
 

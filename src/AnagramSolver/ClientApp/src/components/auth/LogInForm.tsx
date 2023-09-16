@@ -9,6 +9,7 @@ import {
     useColorModeValue,
     Stack,
     Heading,
+    FormErrorMessage,
 } from "@chakra-ui/react";
 
 import AuthContext from "../../contexts/auth/AuthContext";
@@ -39,9 +40,11 @@ export const LogInForm: FC<{}> = () => {
                                 setUsername(event.target.value)
                             }
                             placeholder="Enter username"
+                            id="username"
+                            isInvalid={authCtx.hasInvalidSignInAttempt}
                         />
                     </FormControl>
-                    <FormControl id="password">
+                    <FormControl id="password" isInvalid={authCtx.hasInvalidSignInAttempt}>
                         <FormLabel>Password</FormLabel>
                         <Input
                             type="password"
@@ -50,7 +53,10 @@ export const LogInForm: FC<{}> = () => {
                                 setPassword(event.target.value)
                             }
                             placeholder="Enter password"
+                            id="password"
+                            isInvalid={authCtx.hasInvalidSignInAttempt}
                         />
+                        <FormErrorMessage>Invalid credentials</FormErrorMessage>
                     </FormControl>
                     <Stack spacing={10}>
                         <Button
