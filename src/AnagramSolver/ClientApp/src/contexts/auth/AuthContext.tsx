@@ -54,6 +54,7 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
                 if (res.isSuccessful)
                 {
                     setIsAuthenticated(false);
+                    navigate("/sign-in");
                 }
             });
     };
