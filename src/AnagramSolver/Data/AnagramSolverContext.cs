@@ -40,7 +40,7 @@ public class AnagramSolverContext : DbContext
                     .HasMethod("hash");
         
         modelBuilder.Entity<Celebrity>()
-                    .HasIndex(c => c.AnagramKey)
+                    .HasIndex(c => c.HrAnagramKey)
                     .HasMethod("hash");
         
         modelBuilder.Entity<Celebrity>()
