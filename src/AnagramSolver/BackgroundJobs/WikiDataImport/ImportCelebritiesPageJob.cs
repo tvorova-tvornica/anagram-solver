@@ -56,7 +56,6 @@ public class ImportCelebritiesPageJob
             .ToListAsync();
         
         var celebritiesToRemove = existingCelebrities.Where(x => x.OverrideOnNextWikiDataImport);
-        
         _db.Celebrities.RemoveRange(celebritiesToRemove);
         
         var celebritiesToInsert = celebrities.Where(x => !existingCelebrities.Where(y => !y.OverrideOnNextWikiDataImport)
