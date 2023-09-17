@@ -145,7 +145,7 @@ public class WikiDataHttpClient
 
     private string GetCelebritiesPageQuery(string queryFilter)
     {
-        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrWikipedia ?enWikipedia WHERE {{
+        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrItemLabel ?hrWikipedia ?enWikipedia WHERE {{
                 SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr, de"". }}
                 {{
                     {queryFilter}
@@ -165,6 +165,12 @@ public class WikiDataHttpClient
                     SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""hr"".
                                             ?item schema:description ?hrDescription
                     }}
+                }}
+
+                OPTIONAL {{
+                    SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""hr, en"".
+                                            ?item rdfs:label ?hrItemLabel
+                    }}  
                 }}
   
                 OPTIONAL {{

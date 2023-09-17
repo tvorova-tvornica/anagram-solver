@@ -22,7 +22,7 @@ public class CelebrityController : ControllerBase
     [HttpPost("create-celebrity")]
     public async Task CreateCelebrity([FromBody] CreateCelebrityDto celebrityDto)
     {
-        var celebrity = new Celebrity(celebrityDto.FullName)
+        var celebrity = new Celebrity(celebrityDto.FullName, null)
         {
             PhotoUrl = celebrityDto.PhotoUrl,
             WikipediaUrl = celebrityDto.WikipediaUrl,

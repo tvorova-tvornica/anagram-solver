@@ -1,4 +1,3 @@
-using System.Globalization;
 using AnagramSolver.Data;
 using AnagramSolver.Data.Entities;
 using AnagramSolver.Extensions;
@@ -40,7 +39,7 @@ public class ImportCelebritiesPageJob
 
         var celebrities = wikiDataCelebrities!.Results!.Bindings
             .Where(x => !string.IsNullOrWhiteSpace(x.ItemLabel.Value.ToRemovedWhitespace().ToRemovedPunctuation()))
-            .Select(x => new Celebrity(x.ItemLabel.Value)
+            .Select(x => new Celebrity(x.ItemLabel.Value, x.HrItemLabel?.Value)
             {
                 WikiDataPageId = x.Item.Value,
                 PhotoUrl = x.Image?.Value,
