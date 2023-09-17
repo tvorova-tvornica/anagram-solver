@@ -15,8 +15,8 @@ public class AuthController : ControllerBase
         _configuration = configuration;
     }
     
-    [HttpPost("log-in")]
-    public async Task<IActionResult> LogIn([FromBody] LogInDto logInDto)
+    [HttpPost("sign-in")]
+    public async Task<IActionResult> SignInAsync([FromBody] LogInDto logInDto)
     {
         var adminUsername = _configuration["ADMIN_USERNAME"];
         var adminPassword = _configuration["ADMIN_PASSWORD"];
@@ -52,8 +52,8 @@ public class AuthController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("log-out")]
-    public async Task<IActionResult> LogOut()
+    [HttpPost("sign-out")]
+    public async Task<IActionResult> SignOutAsync()
     {
         await HttpContext.SignOutAsync(
             CookieAuthenticationDefaults.AuthenticationScheme);
@@ -61,8 +61,8 @@ public class AuthController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("is-logged-in")]
-    public bool IsLoggedIn()
+    [HttpGet("is-authenticated")]
+    public bool IsAuthenticated()
     {
         return HttpContext.User?.Identity?.IsAuthenticated ?? false;
     }

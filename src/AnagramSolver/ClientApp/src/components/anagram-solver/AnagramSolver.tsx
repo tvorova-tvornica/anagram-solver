@@ -119,6 +119,10 @@ export const AnagramSolver: FC<{}> = () => {
                         )}
                 </AnimatePresence>
             </Flex>
+            <Text pt={6} fontSize={"sm"} textAlign={"center"}>
+                <b>© {new Date().getFullYear()} Pseudo_rasisti</b> - Inspired by pub quiz Cappuccio &
+                Dena Izbornik
+            </Text>
         </Box>
     );
 };
