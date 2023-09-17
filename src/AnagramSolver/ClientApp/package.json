@@ -32,7 +32,7 @@
     "scripts": {
         "prestart": "node ./.proxy/aspnetcore-https && node ./.proxy/aspnetcore-react",
         "start": "rimraf ./build && react-scripts start",
-        "build": "react-scripts build",
+        "build": "GENERATE_SOURCEMAP=false react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "format": "prettier . --write"
