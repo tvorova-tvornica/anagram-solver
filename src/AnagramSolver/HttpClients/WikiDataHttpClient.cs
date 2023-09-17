@@ -104,106 +104,51 @@ public class WikiDataHttpClient
 
     private string GetOccupationOnlyCelebritiesPageQuery(string occupationId, int limit, int offset)
     {
-        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrWikipedia ?enWikipedia WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr, de"". }}
-                {{
-                    SELECT DISTINCT ?item WHERE {{
-                        ?item p:P106 ?statement0.
-                        ?statement0 (ps:P106/(wdt:P279*)) wd:{occupationId}.
-                    }}
-                    ORDER BY ?item
-                    OFFSET {offset}
-                    LIMIT {limit}
-                }}
-
-                OPTIONAL {{
-                    ?item wdt:P18 ?image.
-                }}
-  
-                OPTIONAL {{
-                    SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""en"".
-                                            ?item schema:description ?enDescription
-                    }}
-                }}
-  
-                OPTIONAL {{
-                    SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""hr"".
-                                            ?item schema:description ?hrDescription
-                    }}
-                }}
-  
-                OPTIONAL {{
-                    ?enWikipedia schema:about ?item;
-                    schema:inLanguage ""en"";
-                    schema:isPartOf <https://en.wikipedia.org/>.
-                }}
-  
-                OPTIONAL {{
-                    ?hrWikipedia schema:about ?item;
-                        schema:inLanguage ""hr"";
-                        schema:isPartOf <https://hr.wikipedia.org/>.
-                }}
-        }}";
+        return GetCelebritiesPageQuery(queryFilter: $@"
+            SELECT DISTINCT ?item WHERE {{
+                ?item p:P106 ?statement0.
+                ?statement0 (ps:P106/(wdt:P279*)) wd:{occupationId}.
+            }}
+            ORDER BY ?item
+            OFFSET {offset}
+            LIMIT {limit}
+        ");
     }
 
     private string GetNationalityOnlyCelebritiesPageQuery(string nationalityId, int limit, int offset)
     {
-        return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrWikipedia ?enWikipedia WHERE {{
-                SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr, de"". }}
-                {{
-                    SELECT DISTINCT ?item WHERE {{
-                        ?item p:P27 ?statement1.
-                        ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
-                    }}
-                    ORDER BY ?item
-                    OFFSET {offset}
-                    LIMIT {limit}
-                }}
-
-                OPTIONAL {{
-                    ?item wdt:P18 ?image.
-                }}
-  
-                OPTIONAL {{
-                    SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""en"".
-                                            ?item schema:description ?enDescription
-                    }}
-                }}
-  
-                OPTIONAL {{
-                    SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""hr"".
-                                            ?item schema:description ?hrDescription
-                    }}
-                }}
-  
-                OPTIONAL {{
-                    ?enWikipedia schema:about ?item;
-                    schema:inLanguage ""en"";
-                    schema:isPartOf <https://en.wikipedia.org/>.
-                }}
-  
-                OPTIONAL {{
-                    ?hrWikipedia schema:about ?item;
-                        schema:inLanguage ""hr"";
-                        schema:isPartOf <https://hr.wikipedia.org/>.
-                }}
-        }}";
+        return GetCelebritiesPageQuery(queryFilter: $@"
+            SELECT DISTINCT ?item WHERE {{
+                ?item p:P27 ?statement1.
+                ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
+            }}
+            ORDER BY ?item
+            OFFSET {offset}
+            LIMIT {limit}
+        ");
     }
 
     private string GetFullCelebritiesPageQuery(string occupationId, string nationalityId, int limit, int offset)
     {
+        return GetCelebritiesPageQuery(queryFilter: $@"
+            SELECT DISTINCT ?item WHERE {{
+                ?item p:P106 ?statement0.
+                ?statement0 (ps:P106/(wdt:P279*)) wd:{occupationId}.
+                ?item p:P27 ?statement1.
+                ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
+            }}
+            ORDER BY ?item
+            OFFSET {offset}
+            LIMIT {limit}
+        ");
+    }
+
+    private string GetCelebritiesPageQuery(string queryFilter)
+    {
         return $@"sparql?query=SELECT DISTINCT ?item ?itemLabel ?image ?enDescription ?hrDescription ?hrWikipedia ?enWikipedia WHERE {{
                 SERVICE wikibase:label {{ bd:serviceParam wikibase:language ""[AUTO_LANGUAGE], en, es, fr, hr, de"". }}
                 {{
-                    SELECT DISTINCT ?item WHERE {{
-                        ?item p:P106 ?statement0.
-                        ?statement0 (ps:P106/(wdt:P279*)) wd:{occupationId}.
-                        ?item p:P27 ?statement1.
-                        ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
-                    }}
-                    ORDER BY ?item
-                    OFFSET {offset}
-                    LIMIT {limit}
+                    {queryFilter}
                 }}
 
                 OPTIONAL {{
