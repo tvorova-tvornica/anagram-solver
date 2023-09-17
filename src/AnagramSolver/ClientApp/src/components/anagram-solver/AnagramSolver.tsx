@@ -120,7 +120,7 @@ export const AnagramSolver: FC<{}> = () => {
                 </AnimatePresence>
             </Flex>
             <Text pt={6} fontSize={"sm"} textAlign={"center"}>
-                <b>© {new Date().getFullYear()} PSEUDO_RASISTI</b>
+                © {new Date().getFullYear()} PSEUDO_RASISTI
             </Text>
         </Box>
     );
