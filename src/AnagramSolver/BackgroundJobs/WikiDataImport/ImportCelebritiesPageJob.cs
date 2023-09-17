@@ -51,12 +51,18 @@ public class ImportCelebritiesPageJob
         
         var celebrityWikiDataPageIds = celebrities.Select(x => x.WikiDataPageId).ToList();
 
-        var existingCelebrityWikiDataPageIds = await _db.Celebrities
+        var existingCelebrities = await _db.Celebrities
             .Where(x => celebrityWikiDataPageIds.Contains(x.WikiDataPageId))
-            .Select(x => x.WikiDataPageId)
             .ToListAsync();
         
-        var celebritiesToInsert = celebrities.Where(x => !existingCelebrityWikiDataPageIds.Contains(x.WikiDataPageId));
+        var celebritiesToRemove = existingCelebrities.Where(x => x.OverrideOnNextWikiDataImport);
+        
+        _db.Celebrities.RemoveRange(celebritiesToRemove);
+        
+        var celebritiesToInsert = celebrities.Where(x => !existingCelebrities.Where(y => !y.OverrideOnNextWikiDataImport)
+                                                                             .Select(y => y.WikiDataPageId)
+                                                                             .Contains(x.WikiDataPageId));
+
         _db.Celebrities.AddRange(celebritiesToInsert);
         
         pageRequest.MarkProcessed();
