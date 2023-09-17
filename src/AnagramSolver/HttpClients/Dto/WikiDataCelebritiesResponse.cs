@@ -16,6 +16,7 @@ public class WikiDataCelebritiesResponse
         public WikiDataStringValue? Image { get; set; }
         public WikiDataStringValue? EnDescription { get; set; }
         public WikiDataStringValue? HrDescription { get; set; }
+        public WikiDataStringValue? HrItemLabel { get; set; }
         public WikiDataStringValue? EnWikipedia { get; set; }
         public WikiDataStringValue? HrWikipedia { get; set; }
     }

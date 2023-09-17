@@ -1,4 +1,3 @@
-using System.Globalization;
 using AnagramSolver.Data;
 using AnagramSolver.Data.Entities;
 using AnagramSolver.Extensions;
@@ -40,7 +39,7 @@ public class ImportCelebritiesPageJob
 
         var celebrities = wikiDataCelebrities!.Results!.Bindings
             .Where(x => !string.IsNullOrWhiteSpace(x.ItemLabel.Value.ToRemovedWhitespace().ToRemovedPunctuation()))
-            .Select(x => new Celebrity(x.ItemLabel.Value)
+            .Select(x => new Celebrity(x.ItemLabel.Value, x.HrItemLabel?.Value)
             {
                 WikiDataPageId = x.Item.Value,
                 PhotoUrl = x.Image?.Value,
@@ -52,12 +51,17 @@ public class ImportCelebritiesPageJob
         
         var celebrityWikiDataPageIds = celebrities.Select(x => x.WikiDataPageId).ToList();
 
-        var existingCelebrityWikiDataPageIds = await _db.Celebrities
+        var existingCelebrities = await _db.Celebrities
             .Where(x => celebrityWikiDataPageIds.Contains(x.WikiDataPageId))
-            .Select(x => x.WikiDataPageId)
             .ToListAsync();
         
-        var celebritiesToInsert = celebrities.Where(x => !existingCelebrityWikiDataPageIds.Contains(x.WikiDataPageId));
+        var celebritiesToRemove = existingCelebrities.Where(x => x.OverrideOnNextWikiDataImport);
+        _db.Celebrities.RemoveRange(celebritiesToRemove);
+        
+        var celebritiesToInsert = celebrities.Where(x => !existingCelebrities.Where(y => !y.OverrideOnNextWikiDataImport)
+                                                                             .Select(y => y.WikiDataPageId)
+                                                                             .Contains(x.WikiDataPageId));
+
         _db.Celebrities.AddRange(celebritiesToInsert);
         
         pageRequest.MarkProcessed();

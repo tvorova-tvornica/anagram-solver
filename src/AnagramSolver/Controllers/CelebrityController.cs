@@ -22,7 +22,7 @@ public class CelebrityController : ControllerBase
     [HttpPost("create-celebrity")]
     public async Task CreateCelebrity([FromBody] CreateCelebrityDto celebrityDto)
     {
-        var celebrity = new Celebrity(celebrityDto.FullName)
+        var celebrity = new Celebrity(celebrityDto.FullName, null)
         {
             PhotoUrl = celebrityDto.PhotoUrl,
             WikipediaUrl = celebrityDto.WikipediaUrl,
@@ -36,10 +36,10 @@ public class CelebrityController : ControllerBase
     public Task<List<ResolveAnagramResult>> ResolveAnagram([FromQuery] ResolveAnagramDto anagramDto)
     {
         return _dbContext.Celebrities
-            .Where(c => c.AnagramKey == anagramDto.AnagramKey)
+            .Where(c => c.AnagramKey == anagramDto.AnagramKey || c.HrAnagramKey == anagramDto.AnagramKey)
             .Select(c => new ResolveAnagramResult
             {
-                FullName = c.FullName,
+                FullName = anagramDto.AnagramKey == c.AnagramKey ? c.FullName : c.HrFullName!,
                 PhotoUrl = c.PhotoUrl,
                 Description = c.Description,
                 WikipediaUrl = c.WikipediaUrl,
