@@ -22,11 +22,9 @@ public class CelebrityController : ControllerBase
     [HttpPost("create-celebrity")]
     public async Task CreateCelebrity([FromBody] CreateCelebrityDto celebrityDto)
     {
-        var celebrity = new Celebrity(celebrityDto.FullName, null)
-        {
-            PhotoUrl = celebrityDto.PhotoUrl,
-            WikipediaUrl = celebrityDto.WikipediaUrl,
-        };
+        var celebrity = new Celebrity(fullName: celebrityDto.FullName, 
+                                      photoUrl: celebrityDto.PhotoUrl, 
+                                      wikipediaUrl: celebrityDto.WikipediaUrl);
 
         _dbContext.Add(celebrity);
         await _dbContext.SaveChangesAsync();

@@ -2,6 +2,7 @@
 using AnagramSolver.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AnagramSolver.Data.Migrations
 {
     [DbContext(typeof(AnagramSolverContext))]
-    partial class AnagramSolverContextModelSnapshot : ModelSnapshot
+    [Migration("20230918212017_DropOverrideOnNextWikiDataImportColumnFromCelebritiesTable")]
+    partial class DropOverrideOnNextWikiDataImportColumnFromCelebritiesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,7 +100,7 @@ namespace AnagramSolver.Data.Migrations
 
                     b.HasIndex("ImportCelebritiesRequestId");
 
-                    b.ToTable("ImportWikiDataCelebritiesPageRequests", (string)null);
+                    b.ToTable("ImportWikiDataCelebritiesPageRequests");
                 });
 
             modelBuilder.Entity("AnagramSolver.Data.Entities.ImportWikiDataCelebritiesRequest", b =>
@@ -121,7 +124,7 @@ namespace AnagramSolver.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ImportWikiDataCelebritiesRequests", (string)null);
+                    b.ToTable("ImportWikiDataCelebritiesRequests");
                 });
 
             modelBuilder.Entity("AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest", b =>
