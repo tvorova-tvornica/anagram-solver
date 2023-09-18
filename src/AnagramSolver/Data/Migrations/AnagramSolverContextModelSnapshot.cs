@@ -97,7 +97,7 @@ namespace AnagramSolver.Data.Migrations
 
                     b.HasIndex("ImportCelebritiesRequestId");
 
-                    b.ToTable("ImportWikiDataCelebritiesPageRequests");
+                    b.ToTable("ImportWikiDataCelebritiesPageRequests", (string)null);
                 });
 
             modelBuilder.Entity("AnagramSolver.Data.Entities.ImportWikiDataCelebritiesRequest", b =>
@@ -121,7 +121,7 @@ namespace AnagramSolver.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ImportWikiDataCelebritiesRequests");
+                    b.ToTable("ImportWikiDataCelebritiesRequests", (string)null);
                 });
 
             modelBuilder.Entity("AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest", b =>
