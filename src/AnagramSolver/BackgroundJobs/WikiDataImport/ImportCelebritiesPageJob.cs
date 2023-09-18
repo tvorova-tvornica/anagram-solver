@@ -32,7 +32,7 @@ public class ImportCelebritiesPageJob
         }
 
         var wikiDataCelebritiesByPageId = await GetWikiDataCelebritiesByPageIdAsync(pageRequest);
-        await UpsertCelebrities(wikiDataCelebritiesByPageId);
+        await UpsertCelebritiesAsync(wikiDataCelebritiesByPageId);
         pageRequest.MarkProcessed();
 
         await _db.SaveChangesAsync();
