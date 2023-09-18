@@ -28,13 +28,13 @@ public class ImportCelebritiesPageJob
 
         if (pageRequest == null)
         {
-            return;
+            throw new Exception($"Cannot find import page request (id:{importPageRequestId}) with 'Scheduled' status");
         }
 
         var wikiDataCelebritiesByPageId = await GetWikiDataCelebritiesByPageId(pageRequest);
         await UpsertCelebrities(wikiDataCelebritiesByPageId);
         pageRequest.MarkProcessed();
-        
+
         await _db.SaveChangesAsync();
     }
 
