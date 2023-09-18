@@ -31,14 +31,14 @@ public class ImportCelebritiesPageJob
             throw new Exception($"Cannot find import page request (id:{importPageRequestId}) with 'Scheduled' status");
         }
 
-        var wikiDataCelebritiesByPageId = await GetWikiDataCelebritiesByPageId(pageRequest);
+        var wikiDataCelebritiesByPageId = await GetWikiDataCelebritiesByPageIdAsync(pageRequest);
         await UpsertCelebrities(wikiDataCelebritiesByPageId);
         pageRequest.MarkProcessed();
 
         await _db.SaveChangesAsync();
     }
 
-    private async Task<Dictionary<string, WikiDataCelebritiesResponse.WikiDataCelebrity>> GetWikiDataCelebritiesByPageId(ImportWikiDataCelebritiesPageRequest pageRequest)
+    private async Task<Dictionary<string, WikiDataCelebritiesResponse.WikiDataCelebrity>> GetWikiDataCelebritiesByPageIdAsync(ImportWikiDataCelebritiesPageRequest pageRequest)
     {
         var occupationId = pageRequest.ImportCelebritiesRequest.WikiDataOccupationId;
         var nationalityId = pageRequest.ImportCelebritiesRequest.WikiDataNationalityId;
@@ -51,7 +51,7 @@ public class ImportCelebritiesPageJob
             .ToDictionary(k => k.Item.Value, v => v);
     }
 
-    private async Task UpsertCelebrities(Dictionary<string, WikiDataCelebritiesResponse.WikiDataCelebrity> wikiDataCelebritiesByPageId)
+    private async Task UpsertCelebritiesAsync(Dictionary<string, WikiDataCelebritiesResponse.WikiDataCelebrity> wikiDataCelebritiesByPageId)
     {
         var celebrityWikiDataPageIds = wikiDataCelebritiesByPageId.Keys;
 
