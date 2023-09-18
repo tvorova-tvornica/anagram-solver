@@ -35,35 +35,44 @@ public class ImportCelebritiesPageJob
         var limit = pageRequest.Limit;
         var offset = pageRequest.Offset;
 
-        var wikiDataCelebrities = await _httpClient.GetCelebritiesPageAsync(occupationId, nationalityId, limit, offset);
-
-        var celebrities = wikiDataCelebrities!.Results!.Bindings
+        var wikiDataCelebritiesByPageId = (await _httpClient.GetCelebritiesPageAsync(occupationId, nationalityId, limit, offset))!.Results!.Bindings
             .Where(x => !string.IsNullOrWhiteSpace(x.ItemLabel.Value.ToRemovedWhitespace().ToRemovedPunctuation()))
-            .Select(x => new Celebrity(x.ItemLabel.Value, x.HrItemLabel?.Value)
-            {
-                WikiDataPageId = x.Item.Value,
-                PhotoUrl = x.Image?.Value,
-                Description = x.EnDescription?.Value ?? x.HrDescription?.Value,
-                WikipediaUrl = x.EnWikipedia?.Value ?? x.HrWikipedia?.Value,
-            })
-            .DistinctBy(x => x.WikiDataPageId)
-            .ToList();
+            .DistinctBy(x => x.Item.Value)
+            .ToDictionary(k => k.Item.Value, v => v);
         
-        var celebrityWikiDataPageIds = celebrities.Select(x => x.WikiDataPageId).ToList();
+        var celebrityWikiDataPageIds = wikiDataCelebritiesByPageId.Keys;
 
         var existingCelebrities = await _db.Celebrities
             .Where(x => celebrityWikiDataPageIds.Contains(x.WikiDataPageId))
             .ToListAsync();
         
-        var celebritiesToRemove = existingCelebrities.Where(x => x.OverrideOnNextWikiDataImport);
-        _db.Celebrities.RemoveRange(celebritiesToRemove);
-        
-        var celebritiesToInsert = celebrities.Where(x => !existingCelebrities.Where(y => !y.OverrideOnNextWikiDataImport)
-                                                                             .Select(y => y.WikiDataPageId)
-                                                                             .Contains(x.WikiDataPageId));
+        existingCelebrities.ForEach(x => {
+            var wikiDataCelebrity = wikiDataCelebritiesByPageId.GetValueOrDefault(x.WikiDataPageId!);
 
-        _db.Celebrities.AddRange(celebritiesToInsert);
+            if (wikiDataCelebrity is null)
+            {
+                return;
+            }
+
+            x.Update(fullName: wikiDataCelebrity.ItemLabel.Value, 
+                     hrFullName: wikiDataCelebrity.HrItemLabel?.Value,
+                     photoUrl: wikiDataCelebrity.Image?.Value,
+                     description: wikiDataCelebrity.EnDescription?.Value ?? wikiDataCelebrity.HrDescription?.Value,
+                     wikipediaUrl: wikiDataCelebrity.EnWikipedia?.Value ?? wikiDataCelebrity.HrWikipedia?.Value);
+        });
         
+        var celebritiesToInsert = wikiDataCelebritiesByPageId.Values
+            .Where(x => !existingCelebrities.Select(y => y.WikiDataPageId).Contains(x.Item.Value))
+            .Select(x => new Celebrity(fullName: x.ItemLabel.Value, 
+                                       hrFullName: x.HrItemLabel?.Value, 
+                                       photoUrl: x.Image?.Value,
+                                       description: x.EnDescription?.Value ?? x.HrDescription?.Value,
+                                       wikipediaUrl: x.EnWikipedia?.Value ?? x.HrWikipedia?.Value)
+            {
+                WikiDataPageId = x.Item.Value,
+            });
+        
+        _db.Celebrities.AddRange(celebritiesToInsert);
         pageRequest.MarkProcessed();
         await _db.SaveChangesAsync();
     }
