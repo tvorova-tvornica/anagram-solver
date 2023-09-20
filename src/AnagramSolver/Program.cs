@@ -84,7 +84,12 @@ builder.Services.AddHangfire(config => config.SetDataCompatibilityLevel(Compatib
                                              .UseRecommendedSerializerSettings()
                                              .UsePostgreSqlStorage(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
 
-builder.Services.AddHangfireServer(config => config.ShutdownTimeout = TimeSpan.FromSeconds(50));
+builder.Services.AddHangfireServer(config =>
+{
+    config.ShutdownTimeout = TimeSpan.FromSeconds(50);
+    config.StopTimeout = TimeSpan.FromSeconds(45);
+    config.ServerTimeout = TimeSpan.FromSeconds(45);
+});
 
 var app = builder.Build();
 
