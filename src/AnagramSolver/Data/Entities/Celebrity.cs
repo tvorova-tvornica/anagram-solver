@@ -57,6 +57,11 @@ public class Celebrity
             HrFullName = hrFullName;
             HrAnagramKey = hrFullName?.ToAnagramKey();
         }
+        else 
+        {
+            HrFullName = null;
+            HrAnagramKey = null;
+        }
     }
 
     private void ValidateFullName(string fullName)
