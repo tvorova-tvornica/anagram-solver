@@ -109,15 +109,13 @@ app.UseExceptionHandler(exceptionHandlerApp =>
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync($"Business rule violation: {exceptionHandlerPathFeature.Error.Message}!");
         }
-
-        if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
+        else if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
         {
             app.Logger.LogWarning($"Unique constraint violation: {exceptionHandlerPathFeature.Error}");
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync($"Entity with the same unique key already exists!");
         }
-
-        if (exceptionHandlerPathFeature?.Error is not null)
+        else if (exceptionHandlerPathFeature?.Error is not null)
         {
             app.Logger.LogError($"Error occured while executing controller method: {exceptionHandlerPathFeature.Error}");
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
