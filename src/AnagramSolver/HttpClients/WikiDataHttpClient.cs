@@ -68,7 +68,7 @@ public class WikiDataHttpClient
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
-                        ?statement0 ps:P106 wd:{occupationId}.
+                        ?statement0 (ps:P106) wd:{occupationId}.
                     }}
                 }}
         }}";
@@ -94,7 +94,7 @@ public class WikiDataHttpClient
                 {{
                     SELECT DISTINCT ?item WHERE {{
                         ?item p:P106 ?statement0.
-                        ?statement0 ps:P106 wd:{occupationId}.
+                        ?statement0 (ps:P106) wd:{occupationId}.
                         ?item p:P27 ?statement1.
                         ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
                     }}
@@ -107,7 +107,7 @@ public class WikiDataHttpClient
         return GetCelebritiesPageQuery(queryFilter: $@"
             SELECT DISTINCT ?item WHERE {{
                 ?item p:P106 ?statement0.
-                ?statement0 ps:P106 wd:{occupationId}.
+                ?statement0 (ps:P106) wd:{occupationId}.
             }}
             ORDER BY ?item
             OFFSET {offset}
@@ -133,7 +133,7 @@ public class WikiDataHttpClient
         return GetCelebritiesPageQuery(queryFilter: $@"
             SELECT DISTINCT ?item WHERE {{
                 ?item p:P106 ?statement0.
-                ?statement0 ps:P106 wd:{occupationId}.
+                ?statement0 (ps:P106) wd:{occupationId}.
                 ?item p:P27 ?statement1.
                 ?statement1 (ps:P27/(wdt:P279*)) wd:{nationalityId}.
             }}
