@@ -33,7 +33,7 @@ public class ImportCelebrityRequestsSchedulerJob
             return;
         }
         
-        var jobId = BackgroundJob.Enqueue<ScheduleCelebrityPagesImportJob>(y => y.ScheduleAsync(requestedImport.Id));
+        var jobId = BackgroundJob.Schedule<ScheduleCelebrityPagesImportJob>(y => y.ScheduleAsync(requestedImport.Id), TimeSpan.FromSeconds(5));
         BackgroundJob.ContinueJobWith<EnqueueScheduledImportCelebrityPagesJob>(jobId, y => y.EnqueueAsync(requestedImport.Id));
         requestedImport.MarkScheduled();
 

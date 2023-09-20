@@ -11,7 +11,7 @@ public static class StringExtensions
                     .ToUpperInvariant()
                     .ToRemovedWhitespace()
                     .ToRemovedPunctuation()
-                    .ToAlphabeticallyOrdered();
+                    .ToOrderedByOrdinalValue();
     }
 
     public static string ToRemovedWhitespace(this string value)
@@ -30,7 +30,7 @@ public static class StringExtensions
         return sb.ToString();
     }
 
-    public static string ToAlphabeticallyOrdered(this string value)
+    public static string ToOrderedByOrdinalValue(this string value)
     {
         var graphemeClusters = new List<string>();
         var textElements = StringInfo.GetTextElementEnumerator(value);

@@ -50,7 +50,7 @@ public class Celebrity
 
     private void SetHrFullName(string fullName, string? hrFullName)
     {
-        var hasNonNullUniqueHrName = hrFullName is not null &&
+        var hasNonNullUniqueHrName = hrFullName?.ToRemovedWhitespace().ToRemovedPunctuation() is not null &&
                     !string.Equals(fullName, hrFullName, StringComparison.OrdinalIgnoreCase);
 
         if (hasNonNullUniqueHrName)
