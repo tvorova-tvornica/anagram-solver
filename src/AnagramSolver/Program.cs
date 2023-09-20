@@ -114,7 +114,7 @@ app.UseExceptionHandler(exceptionHandlerApp =>
 
         if (exceptionHandlerPathFeature?.Error is not null)
         {
-            app.Logger.LogError($"Error occured when executing controller method: {exceptionHandlerPathFeature.Error}");
+            app.Logger.LogError($"Error occured while executing controller method: {exceptionHandlerPathFeature.Error}");
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
             if (app.Environment.IsDevelopment())
