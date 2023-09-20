@@ -41,8 +41,7 @@ public class Celebrity
 
         this.FullName = fullName;
         this.AnagramKey = fullName.ToAnagramKey();
-        this.HrFullName = hrFullName;
-        this.HrAnagramKey = fullName.ToAnagramKey();
+        SetHrFullName(fullName, hrFullName);
         this.PhotoUrl = photoUrl;
         this.Description = description;
         this.WikipediaUrl = wikipediaUrl;
