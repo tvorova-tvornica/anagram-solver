@@ -41,7 +41,7 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
                 if (res.isSuccessful)
                 {
                     setIsAuthenticated(true);
-                    navigate("/import-requests")
+                    navigate("/import-requests");
                 } else {
                     setHasInvalidSignInAttempt(true);
                 }
