@@ -2,15 +2,35 @@ import {
     Flex,
     Icon,
     Image,
+    LayoutProps,
     Skeleton,
     useColorModeValue,
 } from "@chakra-ui/react";
-import React, { FC } from "react";
+import { FC } from "react";
 import { FiUser } from "react-icons/fi";
 
 type AnagramSolverResultImageProps = {
     imageUrl?: string;
     alt?: string;
+};
+
+const IMAGE_SIZING_VALUES: LayoutProps = {
+    minW: {
+        base: "100px",
+        sm: "120px",
+    },
+    maxW: {
+        base: "100px",
+        sm: "120px",
+    },
+    minH: {
+        base: "193px",
+        sm: "173px",
+    },
+    maxH: {
+        base: "193px",
+        sm: "173px",
+    },
 };
 
 export const AnagramSolverResultImage: FC<AnagramSolverResultImageProps> = ({
@@ -28,14 +48,7 @@ export const AnagramSolverResultImage: FC<AnagramSolverResultImageProps> = ({
                 justify="center"
                 align="center"
                 background={placeholderBackgroundColor}
-                minW={{
-                    base: "100px",
-                    sm: "120px",
-                }}
-                minH={{
-                    base: "193px",
-                    sm: "173px",
-                }}
+                {...IMAGE_SIZING_VALUES}
             >
                 <Icon fontSize="50px" as={FiUser} />
             </Flex>
@@ -45,20 +58,8 @@ export const AnagramSolverResultImage: FC<AnagramSolverResultImageProps> = ({
     return (
         <Image
             fit="cover"
-            fallback={
-                <Skeleton
-                    w={{
-                        base: "100px",
-                        sm: "120px",
-                    }}
-                    h={{
-                        base: "193px",
-                        sm: "173px",
-                    }}
-                />
-            }
-            w={{ base: "100px", sm: "120px" }}
-            h={{ base: "193px", sm: "173px" }}
+            fallback={<Skeleton {...IMAGE_SIZING_VALUES} />}
+            {...IMAGE_SIZING_VALUES}
             src={imageUrl}
             alt={alt}
         />

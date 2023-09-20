@@ -19,7 +19,7 @@ const AuthContext = React.createContext<AuthContextType>({
     isAuthenticated: false,
     signIn: (__credentials) => {},
     hasInvalidSignInAttempt: false,
-    signOut: () => {}
+    signOut: () => {},
 });
 
 interface Props {
@@ -28,35 +28,32 @@ interface Props {
 
 export const AuthContextProvider: React.FC<Props> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [hasInvalidSignInAttempt, setHasInvalidSignInAttempt] = useState<boolean>(false);
+    const [hasInvalidSignInAttempt, setHasInvalidSignInAttempt] =
+        useState<boolean>(false);
 
     const signInMutation = useSignInMutation();
     const signOutMutation = useSignOutMutation();
-    
+
     const navigate = useNavigate();
 
     const signInHandler = (credentials: SignInCredentials) => {
-        signInMutation.mutateAsync(credentials)
-            .then(res => {
-                if (res.isSuccessful)
-                {
-                    setIsAuthenticated(true);
-                    navigate("/import-requests");
-                } else {
-                    setHasInvalidSignInAttempt(true);
-                }
-            });
+        signInMutation.mutateAsync(credentials).then((res) => {
+            if (res.isSuccessful) {
+                setIsAuthenticated(true);
+                navigate("/import-requests");
+            } else {
+                setHasInvalidSignInAttempt(true);
+            }
+        });
     };
 
     const signOutHandler = () => {
-        signOutMutation.mutateAsync()
-            .then(res => {
-                if (res.isSuccessful)
-                {
-                    setIsAuthenticated(false);
-                    navigate("/sign-in");
-                }
-            });
+        signOutMutation.mutateAsync().then((res) => {
+            if (res.isSuccessful) {
+                setIsAuthenticated(false);
+                navigate("/sign-in");
+            }
+        });
     };
 
     const isAuthenticatedQuery = useIsAuthenticatedQuery();

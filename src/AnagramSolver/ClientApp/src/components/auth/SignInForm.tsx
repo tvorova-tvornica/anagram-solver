@@ -44,7 +44,10 @@ export const SignInForm: FC<{}> = () => {
                             isInvalid={authCtx.hasInvalidSignInAttempt}
                         />
                     </FormControl>
-                    <FormControl id="password" isInvalid={authCtx.hasInvalidSignInAttempt}>
+                    <FormControl
+                        id="password"
+                        isInvalid={authCtx.hasInvalidSignInAttempt}
+                    >
                         <FormLabel>Password</FormLabel>
                         <Input
                             type="password"
@@ -65,7 +68,9 @@ export const SignInForm: FC<{}> = () => {
                             _hover={{
                                 bg: "blue.500",
                             }}
-                            onClick={() => authCtx.signIn({ username, password })}
+                            onClick={() =>
+                                authCtx.signIn({ username, password })
+                            }
                         >
                             Sign in
                         </Button>

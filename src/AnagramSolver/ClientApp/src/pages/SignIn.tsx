@@ -4,7 +4,6 @@ import { SignInForm } from "../components/auth";
 import { Flex, useColorModeValue } from "@chakra-ui/react";
 
 export const SignIn: FC<{}> = () => {
-    
     return (
         <Flex
             minH={"100vh"}

@@ -24,7 +24,7 @@ export const AnagramSolver: FC<{}> = () => {
     const resolveAnagramResult = useResolveAnagramQuery(debouncedAnagram);
 
     return (
-        <Box minW={["300px", null, "600px"]} minH="500px" pt="5%">
+        <Box w="95%" maxW="600px" h="40vh" pt="5%">
             <AnimatedText
                 m="auto"
                 w="fit-content"
@@ -52,7 +52,7 @@ export const AnagramSolver: FC<{}> = () => {
                 </InputGroup>
             </Box>
 
-            <Flex direction="column" mt="50px">
+            <Flex direction="column" mt="50px" overflow="scroll">
                 <AnimatePresence>
                     {resolveAnagramResult.data?.length &&
                         resolveAnagramResult.data.map((result, index) => (
@@ -92,6 +92,7 @@ export const AnagramSolver: FC<{}> = () => {
                                                 as="i"
                                                 noOfLines={3}
                                                 pl="6px"
+                                                mt="6px"
                                                 color="dimgrey"
                                                 borderLeft="3px solid #69545f"
                                             >

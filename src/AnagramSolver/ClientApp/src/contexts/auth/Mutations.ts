@@ -14,7 +14,7 @@ export const useSignInMutation = () =>
             });
 
             return {
-                isSuccessful: result.status === 200
+                isSuccessful: result.status === 200,
             };
         },
     });
@@ -31,7 +31,7 @@ export const useSignOutMutation = () =>
             });
 
             return {
-                isSuccessful: result.status === 200
+                isSuccessful: result.status === 200,
             };
         },
     });
