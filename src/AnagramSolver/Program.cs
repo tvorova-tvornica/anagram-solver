@@ -146,19 +146,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.Use(async (context, next) => {
-    var anagramQueryParam = context.Request.Query["anagram"].ToString();
-
-    if (string.IsNullOrWhiteSpace(anagramQueryParam))
-    {
-        await next.Invoke();
-    }
-    else
-    {
-        var transaction = SentrySdk.StartTransaction("celebrity-anagram", "resolve-anagram");
-        SentrySdk.ConfigureScope(scope => scope.Transaction = transaction);
-        await next.Invoke();
-        transaction.Finish();
-    }
+    var transaction = SentrySdk.StartTransaction(context.Request.Path, context.Request.Method);
+    SentrySdk.ConfigureScope(scope => scope.Transaction = transaction);
+    await next.Invoke();
+    transaction.Finish();
 });
 
 GlobalConfiguration.Configuration
