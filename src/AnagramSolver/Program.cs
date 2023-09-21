@@ -74,13 +74,13 @@ app.UseExceptionHandler(exceptionHandlerApp =>
 
         if (exceptionHandlerPathFeature?.Error is BusinessRuleViolationException)
         {
-            SentrySdk.CaptureMessage($"Business rule violation: {exceptionHandlerPathFeature.Error}");
+            //SentrySdk.CaptureMessage($"Business rule violation: {exceptionHandlerPathFeature.Error}");
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync($"Business rule violation: {exceptionHandlerPathFeature.Error.Message}!");
         }
         else if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
         {
-            SentrySdk.CaptureMessage($"Unique constraint violation: {exceptionHandlerPathFeature.Error}");
+            //SentrySdk.CaptureMessage($"Unique constraint violation: {exceptionHandlerPathFeature.Error}");
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync($"Entity with the same unique key already exists!");
         }
