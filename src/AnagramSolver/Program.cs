@@ -9,6 +9,7 @@ using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Sentry;
 using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -73,19 +74,19 @@ app.UseExceptionHandler(exceptionHandlerApp =>
 
         if (exceptionHandlerPathFeature?.Error is BusinessRuleViolationException)
         {
-            app.Logger.LogWarning($"Business rule violation: {exceptionHandlerPathFeature.Error.Message}");
+            app.Logger.LogWarning(exceptionHandlerPathFeature.Error, "Business rule violation");
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync($"Business rule violation: {exceptionHandlerPathFeature.Error.Message}!");
         }
         else if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
         {
-            app.Logger.LogWarning($"Unique constraint violation: {exceptionHandlerPathFeature.Error}");
+            app.Logger.LogWarning(exceptionHandlerPathFeature.Error, "Unique constraint violation");
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync($"Entity with the same unique key already exists!");
         }
         else if (exceptionHandlerPathFeature?.Error is not null)
         {
-            app.Logger.LogError($"Error occured while executing controller method: {exceptionHandlerPathFeature.Error}");
+            app.Logger.LogError(exceptionHandlerPathFeature.Error, "Error occured while executing controller action");
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
             if (app.Environment.IsDevelopment())
