@@ -9,12 +9,23 @@ using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using Sentry;
 using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(55));
-builder.WebHost.UseSentry();
+builder.WebHost.UseSentry(options =>
+{
+    options.SetBeforeSend((sentryEvent, hint) =>
+    {
+        if (sentryEvent.Exception != null && 
+            (sentryEvent.Exception is BusinessRuleViolationException || sentryEvent.Exception is UniqueConstraintException))
+        {
+            return null; // Don't send this event to Sentry
+        }
+        
+        return sentryEvent;
+    });
+});
 
 // Add services to the container.
 
@@ -74,19 +85,16 @@ app.UseExceptionHandler(exceptionHandlerApp =>
 
         if (exceptionHandlerPathFeature?.Error is BusinessRuleViolationException)
         {
-            //SentrySdk.CaptureMessage($"Business rule violation: {exceptionHandlerPathFeature.Error}");
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync($"Business rule violation: {exceptionHandlerPathFeature.Error.Message}!");
         }
         else if (exceptionHandlerPathFeature?.Error is UniqueConstraintException)
         {
-            //SentrySdk.CaptureMessage($"Unique constraint violation: {exceptionHandlerPathFeature.Error}");
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync($"Entity with the same unique key already exists!");
         }
         else if (exceptionHandlerPathFeature?.Error is not null)
         {
-            app.Logger.LogError(exceptionHandlerPathFeature.Error, "Error occured while executing controller action");
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
             if (app.Environment.IsDevelopment())
