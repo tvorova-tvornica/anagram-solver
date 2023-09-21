@@ -13,7 +13,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(55));
-builder.WebHost.UseSentry();
+builder.WebHost.UseSentry(o => o.CaptureFailedRequests = false);
 
 // Add services to the container.
 
