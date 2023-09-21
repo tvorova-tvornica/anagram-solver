@@ -26,7 +26,7 @@ if (sentryDSN is not null)
     // This option will enable Sentry's tracing features. You still need to start transactions and spans.
     var enableTracing = true;
     // Example sample rate for your transactions: captures 10% of transactions
-    var tracesSampleRate = 0.1;
+    var tracesSampleRate = 1.0;
 
     SentrySdk.Init(options =>
     {
