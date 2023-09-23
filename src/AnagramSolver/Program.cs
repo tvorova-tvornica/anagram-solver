@@ -17,7 +17,7 @@ builder.WebHost.UseSentry(o => o.SetBeforeSend((sentryEvent, hint) =>
 {
     if (sentryEvent.Exception is BusinessRuleViolationException)
     {
-        sentryEvent.Level = Sentry.SentryLevel.Warning;
+        sentryEvent.Level = Sentry.SentryLevel.Info;
     }
 
     return sentryEvent;
