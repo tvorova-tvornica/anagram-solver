@@ -13,7 +13,15 @@ using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(55));
-builder.WebHost.UseSentry(o => o.CaptureFailedRequests = false);
+builder.WebHost.UseSentry(o => o.SetBeforeSend((sentryEvent, hint) =>
+{
+    if (sentryEvent.Exception is BusinessRuleViolationException)
+    {
+        sentryEvent.Level = Sentry.SentryLevel.Warning;
+    }
+
+    return sentryEvent;
+}));
 
 // Add services to the container.
 
