@@ -59,8 +59,8 @@ export const AnagramSolver: FC<{}> = () => {
                             <Card
                                 cursor="pointer"
                                 direction="row"
-                                objectFit="cover"
                                 overflow="hidden"
+                                m="1px"
                                 mb="10px"
                                 initial={{ x: 50 }}
                                 animate={{ x: 0 }}
@@ -106,8 +106,10 @@ export const AnagramSolver: FC<{}> = () => {
                     {resolveAnagramResult.data &&
                         !resolveAnagramResult.data.length && (
                             <Card
+                                initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
+                                m="1px"
                                 key="not-found"
                                 as={motion.div}
                             >
