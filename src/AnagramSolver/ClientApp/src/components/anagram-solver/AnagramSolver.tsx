@@ -24,7 +24,7 @@ export const AnagramSolver: FC<{}> = () => {
     const resolveAnagramResult = useResolveAnagramQuery(debouncedAnagram);
 
     return (
-        <Box w="95%" maxW="600px" h="40vh" pt="5%">
+        <Box w="95%" maxW="600px">
             <AnimatedText
                 m="auto"
                 w="fit-content"
