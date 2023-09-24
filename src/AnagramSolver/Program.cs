@@ -33,7 +33,7 @@ builder.Services.AddDbContext<AnagramSolverContext>(options =>
 builder.Services.AddTransient<CelebritiesPageImportJob>();
 builder.Services.AddTransient<EnqueueScheduledCelebrityPagesImportJob>();
 builder.Services.AddTransient<ImportCelebrityRequestsSchedulerJob>();
-builder.Services.AddTransient<ProcessImportCelebrityRequestsJob>();
+builder.Services.AddTransient<ImportCelebrityRequestsProcessorJob>();
 builder.Services.AddTransient<ScheduleCelebrityPagesImportJob>();
 builder.Services.AddHttpClient<WikiDataHttpClient>();
 
@@ -135,6 +135,6 @@ app.MapControllerRoute(
 app.MapFallbackToFile("index.html");
 
 RecurringJob.AddOrUpdate<ImportCelebrityRequestsSchedulerJob>("ImportWikiDataCelebrityRequestsSchedulerJob", x => x.ScheduleSingleAsync(), Cron.Minutely);
-RecurringJob.AddOrUpdate<ProcessImportCelebrityRequestsJob>("ProcessImportWikiDataCelebrityRequestsJob", x => x.ProcessAsync(), Cron.Minutely);
+RecurringJob.AddOrUpdate<ImportCelebrityRequestsProcessorJob>("ProcessImportWikiDataCelebrityRequestsJob", x => x.ProcessAsync(), Cron.Minutely);
 
 app.Run();

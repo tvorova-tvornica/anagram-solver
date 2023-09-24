@@ -5,11 +5,11 @@ using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesRequest;
 
 namespace AnagramSolver.BackgroundJobs.WikiDataImport;
 
-public class ProcessImportCelebrityRequestsJob
+public class ImportCelebrityRequestsProcessorJob
 {
     private readonly AnagramSolverContext _db;
 
-    public ProcessImportCelebrityRequestsJob(AnagramSolverContext db)
+    public ImportCelebrityRequestsProcessorJob(AnagramSolverContext db)
     {
         _db = db;
     }
