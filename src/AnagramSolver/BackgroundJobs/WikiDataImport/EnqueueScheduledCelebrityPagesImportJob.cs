@@ -27,7 +27,7 @@ public class EnqueueScheduledCelebrityPagesImportJob
         
         var delayInSeconds = DelayStepInSeconds;
         scheduledPageRequests.ForEach(x => {
-            BackgroundJob.Schedule<ImportCelebritiesPageJob>(y => y.ImportAsync(x.Id), TimeSpan.FromSeconds(delayInSeconds));
+            BackgroundJob.Schedule<CelebritiesPageImportJob>(y => y.ImportAsync(x.Id), TimeSpan.FromSeconds(delayInSeconds));
             delayInSeconds += DelayStepInSeconds;
         });
     }

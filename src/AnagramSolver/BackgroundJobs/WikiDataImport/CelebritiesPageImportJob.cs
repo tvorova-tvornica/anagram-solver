@@ -8,12 +8,12 @@ using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest;
 
 namespace AnagramSolver.BackgroundJobs.WikiDataImport;
 
-public class ImportCelebritiesPageJob
+public class CelebritiesPageImportJob
 {
     private readonly AnagramSolverContext _db;
     private readonly WikiDataHttpClient _httpClient;
 
-    public ImportCelebritiesPageJob(AnagramSolverContext db, WikiDataHttpClient httpClient)
+    public CelebritiesPageImportJob(AnagramSolverContext db, WikiDataHttpClient httpClient)
     {
         _db = db;
         _httpClient = httpClient;

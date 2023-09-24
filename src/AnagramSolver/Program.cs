@@ -30,7 +30,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AnagramSolverContext>(options =>
             options.UseNpgsql(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
 
-builder.Services.AddTransient<ImportCelebritiesPageJob>();
+builder.Services.AddTransient<CelebritiesPageImportJob>();
 builder.Services.AddTransient<EnqueueScheduledCelebrityPagesImportJob>();
 builder.Services.AddTransient<ImportCelebrityRequestsSchedulerJob>();
 builder.Services.AddTransient<ProcessImportCelebrityRequestsJob>();
