@@ -31,10 +31,10 @@ builder.Services.AddDbContext<AnagramSolverContext>(options =>
             options.UseNpgsql(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
 
 builder.Services.AddTransient<ImportCelebritiesPageJob>();
-builder.Services.AddTransient<EnqueueScheduledCelebrityPageImportsJob>();
+builder.Services.AddTransient<EnqueueScheduledCelebritiesPageImportsJob>();
 builder.Services.AddTransient<ImportCelebrityRequestsSchedulerJob>();
 builder.Services.AddTransient<ImportCelebrityRequestsProcessorJob>();
-builder.Services.AddTransient<ScheduleCelebrityPageImportsJob>();
+builder.Services.AddTransient<ScheduleCelebritiesPageImportsJob>();
 builder.Services.AddHttpClient<WikiDataHttpClient>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
