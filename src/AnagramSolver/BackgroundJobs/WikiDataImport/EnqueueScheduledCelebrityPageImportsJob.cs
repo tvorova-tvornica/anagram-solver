@@ -5,12 +5,12 @@ using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest;
 
 namespace AnagramSolver.BackgroundJobs.WikiDataImport;
 
-public class EnqueueScheduledCelebrityPagesImportJob
+public class EnqueueScheduledCelebrityPageImportsJob
 {
     private readonly AnagramSolverContext _db;
     private const int DelayStepInSeconds = 8;
 
-    public EnqueueScheduledCelebrityPagesImportJob(AnagramSolverContext db)
+    public EnqueueScheduledCelebrityPageImportsJob(AnagramSolverContext db)
     {
         _db = db;
     }
@@ -27,7 +27,7 @@ public class EnqueueScheduledCelebrityPagesImportJob
         
         var delayInSeconds = DelayStepInSeconds;
         scheduledPageRequests.ForEach(x => {
-            BackgroundJob.Schedule<CelebritiesPageImportJob>(y => y.ImportAsync(x.Id), TimeSpan.FromSeconds(delayInSeconds));
+            BackgroundJob.Schedule<ImportCelebritiesPageJob>(y => y.ImportAsync(x.Id), TimeSpan.FromSeconds(delayInSeconds));
             delayInSeconds += DelayStepInSeconds;
         });
     }
