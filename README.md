@@ -2,7 +2,7 @@
 
 # anagram-solver
 
-This app allows users to upload wikidata json generated from https://query.wikidata.org/querybuilder/?uselang=en to populate its database and to query anagrams for matching persons available in database.
+This app allows admin user to schedule celebrities import from WikiData and unauthenticated users to resolve anagrams.
 
 ## backend app
 Backend is built using ASP.NET core and Postgres.
@@ -14,4 +14,4 @@ Client is built using React and TS and is deployed with backend as a single unit
 App is dockerized and deployed to fly.io
 
 ## running app locally
-dotnet watch . ...
+dotnet watch
