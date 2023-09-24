@@ -5,12 +5,12 @@ using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest;
 
 namespace AnagramSolver.BackgroundJobs.WikiDataImport;
 
-public class EnqueueScheduledImportCelebrityPagesJob
+public class EnqueueScheduledCelebrityPagesImportJob
 {
     private readonly AnagramSolverContext _db;
     private const int DelayStepInSeconds = 8;
 
-    public EnqueueScheduledImportCelebrityPagesJob(AnagramSolverContext db)
+    public EnqueueScheduledCelebrityPagesImportJob(AnagramSolverContext db)
     {
         _db = db;
     }
