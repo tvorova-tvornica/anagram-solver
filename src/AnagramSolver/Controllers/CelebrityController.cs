@@ -33,7 +33,6 @@ public class CelebrityController : ControllerBase
         await _dbContext.SaveChangesAsync();
     }
 
-    [Authorize]
     [HttpGet("resolve-anagram")]
     public Task<List<ResolveAnagramResult>> ResolveAnagram([FromQuery] ResolveAnagramDto anagramDto)
     {
