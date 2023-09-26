@@ -5,7 +5,7 @@ export function Home() {
     return (
         <Flex
             position="absolute"
-            top={[60, null, null, null, 80]}
+            top={[60, null, null, null, 96]}
             w="100%"
             align="center"
             justify="center"
