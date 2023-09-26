@@ -2,7 +2,6 @@ import {
     Box,
     Card,
     CardBody,
-    Flex,
     Heading,
     Input,
     InputGroup,
@@ -10,13 +9,14 @@ import {
     Spinner,
     Stack,
     Text,
+    VStack,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FC, useState } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
 import { AnimatedText } from "../animated-text/AnimatedText";
-import { useResolveAnagramQuery } from "./Queries";
 import { AnagramSolverResultImage } from "./AnagramSolverResultImage";
+import { useResolveAnagramQuery } from "./Queries";
 
 export const AnagramSolver: FC<{}> = () => {
     const [anagram, setAnagram] = useState("");
@@ -52,7 +52,7 @@ export const AnagramSolver: FC<{}> = () => {
                 </InputGroup>
             </Box>
 
-            <Flex direction="column" mt="50px" overflow="scroll">
+            <VStack mt="50px" align="stretch">
                 <AnimatePresence>
                     {resolveAnagramResult.data?.length &&
                         resolveAnagramResult.data.map((result, index) => (
@@ -60,8 +60,6 @@ export const AnagramSolver: FC<{}> = () => {
                                 cursor="pointer"
                                 direction="row"
                                 overflow="hidden"
-                                m="1px"
-                                mb="10px"
                                 initial={{ x: 50 }}
                                 animate={{ x: 0 }}
                                 exit={{ opacity: 0 }}
@@ -109,7 +107,6 @@ export const AnagramSolver: FC<{}> = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                m="1px"
                                 key="not-found"
                                 as={motion.div}
                             >
@@ -121,8 +118,9 @@ export const AnagramSolver: FC<{}> = () => {
                             </Card>
                         )}
                 </AnimatePresence>
-            </Flex>
-            <Text pt={6} fontSize={"sm"} textAlign={"center"}>
+            </VStack>
+
+            <Text mt={6} fontSize={"sm"} textAlign={"center"}>
                 © {new Date().getFullYear()} PSEUDO_RASISTI
             </Text>
         </Box>
