@@ -1,5 +1,4 @@
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -7,16 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 import { theme } from "./theme";
 import { ToggleColorMode } from "./components/toggle-color-mode";
 import { AuthContextProvider } from "./contexts/auth/AuthContext";
+import { QueryContextProvider } from "./contexts/query/QueryContext";
 import { AppRoutes } from "./components/routes";
-
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            refetchOnMount: false,
-            refetchOnWindowFocus: false,
-        },
-    },
-});
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
@@ -24,17 +15,17 @@ const root = ReactDOM.createRoot(
 
 root.render(
     <React.StrictMode>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-        <QueryClientProvider client={queryClient}>
+        <AuthContextProvider>
+            <ColorModeScript initialColorMode={theme.config.initialColorMode} />
             <ChakraProvider theme={theme}>
                 <ToggleColorMode />
                 <BrowserRouter>
-                    <AuthContextProvider>
+                    <QueryContextProvider>
                         <AppRoutes />
-                    </AuthContextProvider>
+                    </QueryContextProvider>
                 </BrowserRouter>
             </ChakraProvider>
-        </QueryClientProvider>
+        </AuthContextProvider>
     </React.StrictMode>
 );
 

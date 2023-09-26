@@ -13,11 +13,14 @@ import {
 } from "@chakra-ui/react";
 
 import AuthContext from "../../contexts/auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export const SignInForm: FC<{}> = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [hasInvalidSignInAttempt, setHasInvalidSignInAttempt] = useState(false);
     const authCtx = useContext(AuthContext);
+    const navigate = useNavigate();
 
     return (
         <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
@@ -41,12 +44,12 @@ export const SignInForm: FC<{}> = () => {
                             }
                             placeholder="Enter username"
                             id="username"
-                            isInvalid={authCtx.hasInvalidSignInAttempt}
+                            isInvalid={hasInvalidSignInAttempt}
                         />
                     </FormControl>
                     <FormControl
                         id="password"
-                        isInvalid={authCtx.hasInvalidSignInAttempt}
+                        isInvalid={hasInvalidSignInAttempt}
                     >
                         <FormLabel>Password</FormLabel>
                         <Input
@@ -57,7 +60,7 @@ export const SignInForm: FC<{}> = () => {
                             }
                             placeholder="Enter password"
                             id="password"
-                            isInvalid={authCtx.hasInvalidSignInAttempt}
+                            isInvalid={hasInvalidSignInAttempt}
                         />
                         <FormErrorMessage>Invalid credentials</FormErrorMessage>
                     </FormControl>
@@ -70,6 +73,13 @@ export const SignInForm: FC<{}> = () => {
                             }}
                             onClick={() =>
                                 authCtx.signIn({ username, password })
+                                    .then(isSuccessful => {
+                                        if (isSuccessful) {
+                                            navigate("/import-requests");
+                                        } else {
+                                            setHasInvalidSignInAttempt(true);
+                                        }
+                                    })
                             }
                         >
                             Sign in
