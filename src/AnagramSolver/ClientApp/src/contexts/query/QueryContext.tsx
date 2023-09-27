@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { UnauthorizedError } from "./UnauthorizedError";
 import AuthContext from "../auth/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 interface Props {
     children: React.ReactNode;
@@ -10,12 +9,10 @@ interface Props {
 
 export const QueryContextProvider: React.FC<Props> = ({ children }) => {
     const authContext = useContext(AuthContext);
-    const navigate = useNavigate();
 
     const handleUnauthorizedError = (error: any) => {
         if (error instanceof UnauthorizedError) {
-            authContext.signOut()
-                .then(__ => navigate("/sign-in"));
+            authContext.signOut();
         }
     };
 

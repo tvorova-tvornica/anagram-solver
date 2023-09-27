@@ -17,14 +17,14 @@ root.render(
     <React.StrictMode>
         <AuthContextProvider>
             <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-            <ChakraProvider theme={theme}>
-                <ToggleColorMode />
-                <BrowserRouter>
-                    <QueryContextProvider>
+            <QueryContextProvider>
+                <ChakraProvider theme={theme}>
+                    <ToggleColorMode />
+                    <BrowserRouter>
                         <AppRoutes />
-                    </QueryContextProvider>
-                </BrowserRouter>
-            </ChakraProvider>
+                    </BrowserRouter>
+                </ChakraProvider>
+            </QueryContextProvider>
         </AuthContextProvider>
     </React.StrictMode>
 );
