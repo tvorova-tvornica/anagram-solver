@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import { useSignInMutation, useSignOutMutation } from "./Mutations";
-import { useIsAuthenticatedQuery } from "./Queries";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { postSignIn, postSignOut } from "./Mutations";
+import { getIsAuthenticated } from "./Queries";
 
 export type AuthContextType = {
     isAuthenticated: boolean;
-    signIn: (credentials: SignInCredentials) => void;
-    hasInvalidSignInAttempt: boolean;
-    signOut: () => void;
+    signIn: (credentials: SignInCredentials) => Promise<boolean>;
+    signOut: () => Promise<boolean>;
 };
 
 export type SignInCredentials = {
@@ -17,9 +15,8 @@ export type SignInCredentials = {
 
 const AuthContext = React.createContext<AuthContextType>({
     isAuthenticated: false,
-    signIn: (__credentials) => {},
-    hasInvalidSignInAttempt: false,
-    signOut: () => {},
+    signIn: async () => { return false },
+    signOut: async () => { return false },
 });
 
 interface Props {
@@ -28,40 +25,35 @@ interface Props {
 
 export const AuthContextProvider: React.FC<Props> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [hasInvalidSignInAttempt, setHasInvalidSignInAttempt] =
-        useState<boolean>(false);
 
-    const signInMutation = useSignInMutation();
-    const signOutMutation = useSignOutMutation();
-
-    const navigate = useNavigate();
+    useEffect(() => {
+        getIsAuthenticated()
+            .then(res => setIsAuthenticated(res));
+    }, []);
 
     const signInHandler = (credentials: SignInCredentials) => {
-        signInMutation.mutateAsync(credentials).then((res) => {
-            if (res.isSuccessful) {
-                setIsAuthenticated(true);
-                navigate("/import-requests");
-            } else {
-                setHasInvalidSignInAttempt(true);
-            }
-        });
+        return postSignIn(credentials)
+            .then(res => {
+                setIsAuthenticated(res.isSuccessful);
+                return res.isSuccessful;
+            });
     };
 
     const signOutHandler = () => {
-        signOutMutation.mutateAsync().then((res) => {
-            if (res.isSuccessful) {
-                setIsAuthenticated(false);
-                navigate("/sign-in");
-            }
-        });
+        return postSignOut()
+            .then(res => {
+                if (res.isSuccessful)
+                {
+                    setIsAuthenticated(false);
+                    return true;
+                }
+                return false;
+            });
     };
 
-    const isAuthenticatedQuery = useIsAuthenticatedQuery();
-
     const contextValue: AuthContextType = {
-        isAuthenticated: isAuthenticated || isAuthenticatedQuery.data || false,
+        isAuthenticated: isAuthenticated,
         signIn: signInHandler,
-        hasInvalidSignInAttempt,
         signOut: signOutHandler,
     };
 

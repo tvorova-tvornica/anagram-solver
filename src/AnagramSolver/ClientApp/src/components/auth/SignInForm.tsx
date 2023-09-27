@@ -13,20 +13,32 @@ import {
 } from "@chakra-ui/react";
 
 import AuthContext from "../../contexts/auth/AuthContext";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 export const SignInForm: FC<{}> = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [hasInvalidSignInAttempt, setHasInvalidSignInAttempt] = useState(false);
     const authCtx = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const colorModeValue = useColorModeValue("white", "gray.700");
+
+    const from = location.state?.from?.pathname || "/import-requests";
+
+    if (authCtx.isAuthenticated)
+    {
+        return <Navigate to={from}/>
+    }
 
     return (
         <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
             <Stack align={"center"}>
-                <Heading fontSize={"3xl"}>Sign in to admin account</Heading>
+                <Heading fontSize={"3xl"}>You must log in</Heading>
             </Stack>
             <Box
                 rounded={"lg"}
-                bg={useColorModeValue("white", "gray.700")}
+                bg={colorModeValue}
                 boxShadow={"lg"}
                 p={8}
             >
@@ -41,12 +53,12 @@ export const SignInForm: FC<{}> = () => {
                             }
                             placeholder="Enter username"
                             id="username"
-                            isInvalid={authCtx.hasInvalidSignInAttempt}
+                            isInvalid={hasInvalidSignInAttempt}
                         />
                     </FormControl>
                     <FormControl
                         id="password"
-                        isInvalid={authCtx.hasInvalidSignInAttempt}
+                        isInvalid={hasInvalidSignInAttempt}
                     >
                         <FormLabel>Password</FormLabel>
                         <Input
@@ -57,7 +69,7 @@ export const SignInForm: FC<{}> = () => {
                             }
                             placeholder="Enter password"
                             id="password"
-                            isInvalid={authCtx.hasInvalidSignInAttempt}
+                            isInvalid={hasInvalidSignInAttempt}
                         />
                         <FormErrorMessage>Invalid credentials</FormErrorMessage>
                     </FormControl>
@@ -70,6 +82,13 @@ export const SignInForm: FC<{}> = () => {
                             }}
                             onClick={() =>
                                 authCtx.signIn({ username, password })
+                                    .then(isSuccessful => {
+                                        if (isSuccessful) {
+                                            navigate(from, { replace: true });
+                                        } else {
+                                            setHasInvalidSignInAttempt(true);
+                                        }
+                                    })
                             }
                         >
                             Sign in
