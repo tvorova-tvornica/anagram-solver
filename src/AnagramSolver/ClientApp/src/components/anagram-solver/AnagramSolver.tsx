@@ -2,7 +2,6 @@ import {
     Box,
     Card,
     CardBody,
-    Flex,
     Heading,
     Input,
     InputGroup,
@@ -10,13 +9,14 @@ import {
     Spinner,
     Stack,
     Text,
+    VStack,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FC, useState } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
 import { AnimatedText } from "../animated-text/AnimatedText";
-import { useResolveAnagramQuery } from "./Queries";
 import { AnagramSolverResultImage } from "./AnagramSolverResultImage";
+import { useResolveAnagramQuery } from "./Queries";
 
 export const AnagramSolver: FC<{}> = () => {
     const [anagram, setAnagram] = useState("");
@@ -24,7 +24,7 @@ export const AnagramSolver: FC<{}> = () => {
     const resolveAnagramResult = useResolveAnagramQuery(debouncedAnagram);
 
     return (
-        <Box w="95%" maxW="600px" h="40vh" pt="5%">
+        <Box w="95%" maxW="600px">
             <AnimatedText
                 m="auto"
                 w="fit-content"
@@ -52,16 +52,14 @@ export const AnagramSolver: FC<{}> = () => {
                 </InputGroup>
             </Box>
 
-            <Flex direction="column" mt="50px" overflow="scroll">
+            <VStack mt="50px" align="stretch">
                 <AnimatePresence>
                     {resolveAnagramResult.data?.length &&
                         resolveAnagramResult.data.map((result, index) => (
                             <Card
                                 cursor="pointer"
                                 direction="row"
-                                objectFit="cover"
                                 overflow="hidden"
-                                mb="10px"
                                 initial={{ x: 50 }}
                                 animate={{ x: 0 }}
                                 exit={{ opacity: 0 }}
@@ -106,6 +104,7 @@ export const AnagramSolver: FC<{}> = () => {
                     {resolveAnagramResult.data &&
                         !resolveAnagramResult.data.length && (
                             <Card
+                                initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 key="not-found"
@@ -119,7 +118,8 @@ export const AnagramSolver: FC<{}> = () => {
                             </Card>
                         )}
                 </AnimatePresence>
-            </Flex>
+            </VStack>
+
             <Text pt={6} fontSize={"sm"} textAlign={"center"}>
                 © {new Date().getFullYear()} PSEUDO_RASISTI
             </Text>
