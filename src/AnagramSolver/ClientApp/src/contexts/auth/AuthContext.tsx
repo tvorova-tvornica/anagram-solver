@@ -15,7 +15,7 @@ export type SignInCredentials = {
 
 const AuthContext = React.createContext<AuthContextType>({
     isAuthenticated: false,
-    signIn: async (__credentials) => { return false },
+    signIn: async () => { return false },
     signOut: async () => { return false },
 });
 
