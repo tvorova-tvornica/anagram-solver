@@ -18,10 +18,10 @@ public class EnqueueScheduledCelebritiesPageImportsJob
     public async Task EnqueueAsync(int importRequestId)
     {
         var importRequest = await _db.ImportWikiDataCelebritiesRequests
-            .Include(x => x.PageRequests)
+            .Include(x => x.ImportPageRequests)
             .SingleAsync(x => x.Id == importRequestId);
         
-        var scheduledPageRequests = importRequest.PageRequests
+        var scheduledPageRequests = importRequest.ImportPageRequests
             .Where(x => x.Status == ImportWikiDataCelebritiesPageRequestStatus.Scheduled)
             .ToList();
         
