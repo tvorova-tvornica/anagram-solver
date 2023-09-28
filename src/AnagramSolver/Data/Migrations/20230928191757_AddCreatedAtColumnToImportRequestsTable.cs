@@ -16,7 +16,7 @@ namespace AnagramSolver.Data.Migrations
                 table: "ImportWikiDataCelebritiesRequests",
                 type: "timestamp with time zone",
                 nullable: false,
-                defaultValue: new DateTimeOffset(new DateTime(2023, 9, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+                defaultValue: new DateTimeOffset(new DateTime(2023, 9, 28, 12, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
         }
 
         /// <inheritdoc />
