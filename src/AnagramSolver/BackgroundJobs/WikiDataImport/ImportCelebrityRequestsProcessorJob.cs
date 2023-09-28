@@ -18,7 +18,7 @@ public class ImportCelebrityRequestsProcessorJob
     {
         var processedRequests = await _db.ImportWikiDataCelebritiesRequests
             .Where(x => x.Status == ImportWikiDataCelebritiesRequestStatus.PageRequestsScheduled && 
-                   x.PageRequests.All(y => y.Status == ImportWikiDataCelebritiesPageRequestStatus.Processed))
+                   x.ImportPageRequests.All(y => y.Status == ImportWikiDataCelebritiesPageRequestStatus.Processed))
             .ToListAsync();
 
         processedRequests.ForEach(x => x.MarkProcessed());

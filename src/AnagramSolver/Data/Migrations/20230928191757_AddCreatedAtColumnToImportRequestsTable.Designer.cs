@@ -3,6 +3,7 @@ using System;
 using AnagramSolver.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AnagramSolver.Data.Migrations
 {
     [DbContext(typeof(AnagramSolverContext))]
-    partial class AnagramSolverContextModelSnapshot : ModelSnapshot
+    [Migration("20230928191757_AddCreatedAtColumnToImportRequestsTable")]
+    partial class AddCreatedAtColumnToImportRequestsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,7 +134,7 @@ namespace AnagramSolver.Data.Migrations
             modelBuilder.Entity("AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest", b =>
                 {
                     b.HasOne("AnagramSolver.Data.Entities.ImportWikiDataCelebritiesRequest", "ImportCelebritiesRequest")
-                        .WithMany("ImportPageRequests")
+                        .WithMany("PageRequests")
                         .HasForeignKey("ImportCelebritiesRequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -141,7 +144,7 @@ namespace AnagramSolver.Data.Migrations
 
             modelBuilder.Entity("AnagramSolver.Data.Entities.ImportWikiDataCelebritiesRequest", b =>
                 {
-                    b.Navigation("ImportPageRequests");
+                    b.Navigation("PageRequests");
                 });
 #pragma warning restore 612, 618
         }

@@ -26,7 +26,9 @@ public class ImportCelebrityRequestsSchedulerJob
         }          
 
         var requestedImport = await _db.ImportWikiDataCelebritiesRequests
-            .FirstOrDefaultAsync(x => x.Status == ImportWikiDataCelebritiesRequestStatus.Requested);
+            .Where(x => x.Status == ImportWikiDataCelebritiesRequestStatus.Requested)
+            .OrderBy(x => x.CreatedAt)
+            .FirstOrDefaultAsync();
         
         if (requestedImport is null)
         {

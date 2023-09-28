@@ -1,4 +1,5 @@
 using AnagramSolver.Exceptions;
+using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest;
 
 namespace AnagramSolver.Data.Entities;
 
@@ -8,10 +9,11 @@ public class ImportWikiDataCelebritiesRequest
     public int Id { get; private set; }
     public string? WikiDataOccupationId { get; private set; }
     public string? WikiDataNationalityId { get; private set;}
+    public DateTimeOffset CreatedAt { get; private init; }
 
     public ImportWikiDataCelebritiesRequestStatus Status { get; private set; } = ImportWikiDataCelebritiesRequestStatus.Requested;
 
-    public ICollection<ImportWikiDataCelebritiesPageRequest> PageRequests { get; private set; } = new List<ImportWikiDataCelebritiesPageRequest>();
+    public ICollection<ImportWikiDataCelebritiesPageRequest> ImportPageRequests { get; private set; } = new List<ImportWikiDataCelebritiesPageRequest>();
 
     public ImportWikiDataCelebritiesRequest(string? wikiDataOccupationId, string? wikiDataNationalityId)
     {
@@ -21,6 +23,7 @@ public class ImportWikiDataCelebritiesRequest
         }
         WikiDataOccupationId = wikiDataOccupationId;
         WikiDataNationalityId = wikiDataNationalityId;
+        CreatedAt = DateTimeOffset.UtcNow;
     }
     
     public void AddPageRequests(int totalCount)
@@ -33,7 +36,7 @@ public class ImportWikiDataCelebritiesRequest
 
         for (int i = 0; i < pageCount; i++)
         {
-            PageRequests.Add(new ImportWikiDataCelebritiesPageRequest 
+            ImportPageRequests.Add(new ImportWikiDataCelebritiesPageRequest 
             {
                 Limit = ImportWikiDataCelebritiesPageSize,
                 Offset = i * ImportWikiDataCelebritiesPageSize,
@@ -55,13 +58,28 @@ public class ImportWikiDataCelebritiesRequest
     public void MarkProcessed()
     {
         var hasAnyUnprocessedPageRequests = Status != ImportWikiDataCelebritiesRequestStatus.PageRequestsScheduled ||
-                                            PageRequests.Any(x => x.Status != ImportWikiDataCelebritiesPageRequest.ImportWikiDataCelebritiesPageRequestStatus.Processed);
+                                            ImportPageRequests.Any(x => x.Status != ImportWikiDataCelebritiesPageRequest.ImportWikiDataCelebritiesPageRequestStatus.Processed);
 
         if (hasAnyUnprocessedPageRequests)
         {
             throw new BusinessRuleViolationException("Request cannot transition to processed when some page requests are not processed.");
         }
         Status = ImportWikiDataCelebritiesRequestStatus.Processed;
+    }
+
+    public double CalculateCompletionPercentage()
+    {
+        if (Status == ImportWikiDataCelebritiesRequestStatus.Processed)
+        {
+            return 100;
+        }
+
+        if (ImportPageRequests.Count == 0)
+        {
+            return 0;
+        }
+
+        return ImportPageRequests.Count(x => x.Status == ImportWikiDataCelebritiesPageRequestStatus.Processed) * 100.0 / ImportPageRequests.Count;
     }
 
     public enum ImportWikiDataCelebritiesRequestStatus
