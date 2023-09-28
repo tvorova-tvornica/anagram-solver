@@ -65,12 +65,14 @@ public class CelebrityController : ControllerBase
     public async Task<List<ImportCelebritiesRequestResult>> GetImportCelebritiesRequests(int page, int pageSize)
     {
         return await _dbContext.ImportWikiDataCelebritiesRequests
-            .OrderByDescending(x => x.Status == ImportWikiDataCelebritiesRequestStatus.Scheduled || 
-                                    x.Status == ImportWikiDataCelebritiesRequestStatus.PageRequestsScheduled)
-            .ThenBy(x => x.CreatedAt)
+            .OrderByDescending(x => x.Status == ImportWikiDataCelebritiesRequestStatus.PageRequestsScheduled || 
+                                    x.Status == ImportWikiDataCelebritiesRequestStatus.Scheduled)
+            .ThenByDescending(x => x.Status == ImportWikiDataCelebritiesRequestStatus.Requested)
+            .ThenByDescending(x => x.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Select(x => new ImportCelebritiesRequestResult(x.Id, 
+                x.CreatedAt,
                 x.WikiDataNationalityId, 
                 x.WikiDataOccupationId,
                 x.PageRequests.Count == 0 

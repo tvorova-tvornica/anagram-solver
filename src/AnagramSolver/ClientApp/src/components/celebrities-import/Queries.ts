@@ -11,6 +11,7 @@ export type ImportCelebritiesRequestResult = {
 export const useGetImportCelebritiesRequestsQuery = (page: number, pageSize: number) =>
     useQuery({
         queryKey: ["get-import-celebrities-requests", page, pageSize],
+        retry: false,
         enabled: !!page && !!pageSize,
         queryFn: async () => {
             const response = await fetch(
