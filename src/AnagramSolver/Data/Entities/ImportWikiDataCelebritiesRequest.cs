@@ -8,6 +8,7 @@ public class ImportWikiDataCelebritiesRequest
     public int Id { get; private set; }
     public string? WikiDataOccupationId { get; private set; }
     public string? WikiDataNationalityId { get; private set;}
+    public DateTimeOffset CreatedAt { get; private init; }
 
     public ImportWikiDataCelebritiesRequestStatus Status { get; private set; } = ImportWikiDataCelebritiesRequestStatus.Requested;
 
@@ -21,6 +22,7 @@ public class ImportWikiDataCelebritiesRequest
         }
         WikiDataOccupationId = wikiDataOccupationId;
         WikiDataNationalityId = wikiDataNationalityId;
+        CreatedAt = DateTimeOffset.UtcNow;
     }
     
     public void AddPageRequests(int totalCount)

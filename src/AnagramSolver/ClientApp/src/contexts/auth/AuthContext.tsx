@@ -13,6 +13,7 @@ export type SignInCredentials = {
     password: string;
 };
 
+//TODO add hasFetchedAuthStatus
 const AuthContext = React.createContext<AuthContextType>({
     isAuthenticated: false,
     signIn: async () => { return false },
