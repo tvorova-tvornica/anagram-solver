@@ -4,7 +4,6 @@ using AnagramSolver.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest;
 using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesRequest;
 
 namespace AnagramSolver.Controllers;
