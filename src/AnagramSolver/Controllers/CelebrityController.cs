@@ -61,22 +61,22 @@ public class CelebrityController : ControllerBase
 
     [Authorize]
     [HttpGet("get-import-celebrities-requests")]
-    public List<ImportCelebritiesRequestResult> GetImportCelebritiesRequests(int page, int pageSize)
+    public async Task<List<ImportCelebritiesRequestResult>> GetImportCelebritiesRequests(int page, int pageSize)
     {
-        return _dbContext.ImportWikiDataCelebritiesRequests
-            .OrderByDescending(x => x.Status == ImportWikiDataCelebritiesRequestStatus.PageRequestsScheduled || 
+        return await _dbContext.ImportWikiDataCelebritiesRequests
+            .OrderByDescending(x => x.Status == ImportWikiDataCelebritiesRequestStatus.PageRequestsScheduled ||
                                     x.Status == ImportWikiDataCelebritiesRequestStatus.Scheduled)
             .ThenByDescending(x => x.Status == ImportWikiDataCelebritiesRequestStatus.Requested)
             .ThenByDescending(x => x.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Include(x => x.ImportPageRequests)
-            .AsEnumerable()
-            .Select(x => new ImportCelebritiesRequestResult(x.Id, 
+            .AsAsyncEnumerable()
+            .Select(x => new ImportCelebritiesRequestResult(x.Id,
                 x.CreatedAt,
-                x.WikiDataNationalityId, 
+                x.WikiDataNationalityId,
                 x.WikiDataOccupationId,
                 x.CalculateCompletionPercentage()))
-            .ToList();
+            .ToListAsync();
     }
 }
