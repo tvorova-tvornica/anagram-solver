@@ -4,6 +4,7 @@ import { getIsAuthenticated } from "./Queries";
 
 export type AuthContextType = {
     isAuthenticated: boolean;
+    hasFetchedAuthStatus: boolean;
     signIn: (credentials: SignInCredentials) => Promise<boolean>;
     signOut: () => Promise<boolean>;
 };
@@ -13,9 +14,9 @@ export type SignInCredentials = {
     password: string;
 };
 
-//TODO add hasFetchedAuthStatus
 const AuthContext = React.createContext<AuthContextType>({
     isAuthenticated: false,
+    hasFetchedAuthStatus: false,
     signIn: async () => { return false },
     signOut: async () => { return false },
 });
@@ -25,11 +26,14 @@ interface Props {
 }
 
 export const AuthContextProvider: React.FC<Props> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [hasFetchedAuthStatus, setHasFetchedAuthStatus] = useState(false);
 
     useEffect(() => {
-        getIsAuthenticated()
-            .then(res => setIsAuthenticated(res));
+        getIsAuthenticated().then((res) => {
+            setIsAuthenticated(res);
+            setHasFetchedAuthStatus(true);
+        });
     }, []);
 
     const signInHandler = (credentials: SignInCredentials) => {
@@ -53,7 +57,8 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
     };
 
     const contextValue: AuthContextType = {
-        isAuthenticated: isAuthenticated,
+        isAuthenticated,
+        hasFetchedAuthStatus,
         signIn: signInHandler,
         signOut: signOutHandler,
     };
