@@ -9,12 +9,12 @@ namespace AnagramSolver.BackgroundJobs.WikiDataImport;
  {
     private readonly AnagramSolverContext _db;
     private readonly WikiDataHttpClient _httpClient;
-    private readonly ILogger _logger;
+    private readonly ILogger<ScheduleCelebritiesPageImportsJob> _logger;
 
     public ScheduleCelebritiesPageImportsJob(
         AnagramSolverContext db, 
         WikiDataHttpClient httpClient,
-        ILogger logger)
+        ILogger<ScheduleCelebritiesPageImportsJob> logger)
     {
         _db = db;
         _httpClient = httpClient;
