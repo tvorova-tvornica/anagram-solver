@@ -81,7 +81,7 @@ export const ImportCelebritiesRequestsTable: FC<{}> = () => {
             <TableContainer>
                 <Table variant="simple" size={"sm"}>
                     <TableCaption>
-                        Wiki data celebrities import requests
+                        Wiki data import celebrities requests
                     </TableCaption>
                     <Thead>
                         <Tr>
