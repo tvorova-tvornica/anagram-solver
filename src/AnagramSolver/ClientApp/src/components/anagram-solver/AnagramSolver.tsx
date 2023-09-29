@@ -119,10 +119,6 @@ export const AnagramSolver: FC<{}> = () => {
                         )}
                 </AnimatePresence>
             </VStack>
-
-            <Text pt={6} fontSize={"sm"} textAlign={"center"}>
-                © {new Date().getFullYear()} PSEUDO_RASISTI
-            </Text>
         </Box>
     );
 };
