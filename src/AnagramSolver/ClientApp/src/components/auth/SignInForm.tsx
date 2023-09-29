@@ -28,9 +28,11 @@ export const SignInForm: FC<{}> = () => {
     const from = location.state?.from?.pathname || "/import-requests";
 
     if (!authCtx.hasFetchedAuthStatus) {
-        <Box>
-            <Spinner></Spinner>
-        </Box>;
+        return (
+            <Box>
+                <Spinner></Spinner>
+            </Box>
+        );
     }
 
     if (authCtx.isAuthenticated) {
