@@ -9,13 +9,16 @@ namespace AnagramSolver.BackgroundJobs.WikiDataImport;
  {
     private readonly AnagramSolverContext _db;
     private readonly WikiDataHttpClient _httpClient;
+    private readonly ILogger<ScheduleCelebritiesPageImportsJob> _logger;
 
     public ScheduleCelebritiesPageImportsJob(
         AnagramSolverContext db, 
-        WikiDataHttpClient httpClient)
+        WikiDataHttpClient httpClient,
+        ILogger<ScheduleCelebritiesPageImportsJob> logger)
     {
         _db = db;
         _httpClient = httpClient;
+        _logger = logger;
     }
 
     public async Task ScheduleAsync(int importCelebritiesRequestId)
@@ -29,6 +32,8 @@ namespace AnagramSolver.BackgroundJobs.WikiDataImport;
         }
 
         var totalCelebrityCount = await _httpClient.GetTotalCelebrityCountAsync(request.WikiDataOccupationId, request.WikiDataNationalityId);
+
+        _logger.LogCritical($"Importing {totalCelebrityCount} celebrities");
 
         request.AddPageRequests(totalCelebrityCount);
 
