@@ -33,7 +33,11 @@ namespace AnagramSolver.BackgroundJobs.WikiDataImport;
 
         var totalCelebrityCount = await _httpClient.GetTotalCelebrityCountAsync(request.WikiDataOccupationId, request.WikiDataNationalityId);
 
-        _logger.LogCritical($"Importing {totalCelebrityCount} celebrities");
+        if (totalCelebrityCount == 0)
+        {
+            _logger.LogError($@"There are no celebrities found for wikiDataOccupationId {request.WikiDataOccupationId} 
+                                and wikiDataNationalityId {request.WikiDataNationalityId}");
+        }
 
         request.AddPageRequests(totalCelebrityCount);
 

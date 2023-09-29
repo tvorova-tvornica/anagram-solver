@@ -33,12 +33,12 @@ public class WikiDataHttpClient
 
     private string GetCountQuery(string? occupationId, string? nationalityId)
     {
-        if (occupationId is null)
+        if (string.IsNullOrWhiteSpace(occupationId))
         {
             return GetNationalityOnlyCountQuery(nationalityId!);
         }
 
-        if (nationalityId is null)
+        if (string.IsNullOrWhiteSpace(nationalityId))
         {
             return GetOccupationOnlyCountQuery(occupationId);
         }
@@ -48,12 +48,12 @@ public class WikiDataHttpClient
 
     private string GetCelebritiesQuery(string? occupationId, string? nationalityId, int limit, int offset)
     {
-        if (occupationId is null)
+        if (string.IsNullOrWhiteSpace(occupationId))
         {
             return GetNationalityOnlyCelebritiesPageQuery(nationalityId!, limit, offset);
         }
         
-        if (nationalityId is null)
+        if (string.IsNullOrWhiteSpace(nationalityId))
         {
             return GetOccupationOnlyCelebritiesPageQuery(occupationId, limit, offset);
         }
