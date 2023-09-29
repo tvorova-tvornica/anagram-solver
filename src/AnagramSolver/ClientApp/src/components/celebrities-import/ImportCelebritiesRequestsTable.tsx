@@ -88,7 +88,7 @@ export const ImportCelebritiesRequestsTable: FC<{}> = () => {
                             <Th>Created at</Th>
                             <Th>Nationality Id</Th>
                             <Th>Occupation Id</Th>
-                            <Th>Completion</Th>
+                            <Th>Progress</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
