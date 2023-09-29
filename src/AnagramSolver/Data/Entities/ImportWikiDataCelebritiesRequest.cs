@@ -58,7 +58,7 @@ public class ImportWikiDataCelebritiesRequest
     public void MarkProcessed()
     {
         var hasAnyUnprocessedPageRequests = Status != ImportWikiDataCelebritiesRequestStatus.PageRequestsScheduled ||
-                                            ImportPageRequests.Any(x => x.Status != ImportWikiDataCelebritiesPageRequest.ImportWikiDataCelebritiesPageRequestStatus.Processed);
+                                            ImportPageRequests.Any(x => x.Status != ImportWikiDataCelebritiesPageRequestStatus.Processed);
 
         if (hasAnyUnprocessedPageRequests)
         {
