@@ -39,12 +39,12 @@ public class Celebrity
     {
         ValidateFullName(fullName);
 
-        this.FullName = fullName;
-        this.AnagramKey = fullName.ToAnagramKey();
+        FullName = fullName;
+        AnagramKey = fullName.ToAnagramKey();
         SetHrFullName(fullName, hrFullName);
-        this.PhotoUrl = photoUrl;
-        this.Description = description;
-        this.WikipediaUrl = wikipediaUrl;
+        PhotoUrl = photoUrl;
+        Description = description;
+        WikipediaUrl = wikipediaUrl;
     }
 
     private void SetHrFullName(string fullName, string? hrFullName)
@@ -66,9 +66,9 @@ public class Celebrity
 
     private void ValidateFullName(string fullName)
     {
-        var nameWithoutWhitespacesAndPunctuation = fullName.ToRemovedWhitespace().ToRemovedPunctuation();
+        var nameWithoutWhitespaceAndPunctuation = fullName.ToRemovedWhitespace().ToRemovedPunctuation();
 
-        if (string.IsNullOrWhiteSpace(nameWithoutWhitespacesAndPunctuation))
+        if (string.IsNullOrWhiteSpace(nameWithoutWhitespaceAndPunctuation))
         {
             throw new BusinessRuleViolationException($"Celebrity full name must contain letters: {fullName}");
         }
