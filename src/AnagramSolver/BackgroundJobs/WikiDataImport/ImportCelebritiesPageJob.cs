@@ -27,6 +27,7 @@ public class ImportCelebritiesPageJob
     public async Task ImportAsync(int importPageRequestId)
     {
         var transaction = _sentryHub.StartTransaction("background-job", "import-celebrities-page");
+        var span = transaction.StartChild("import");
 
         var pageRequest = await _db.ImportWikiDataCelebritiesPageRequests
             .Include(x => x.ImportCelebritiesRequest)
@@ -44,6 +45,7 @@ public class ImportCelebritiesPageJob
 
         await _db.SaveChangesAsync();
 
+        span.Finish();
         transaction.Finish();
     }
 
