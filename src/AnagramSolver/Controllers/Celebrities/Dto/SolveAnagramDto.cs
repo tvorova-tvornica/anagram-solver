@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using AnagramSolver.Extensions;
 
-namespace AnagramSolver.Controllers.Dto;
+namespace AnagramSolver.Controllers.Celebrities.Dto;
 
-public record ResolveAnagramDto
+public record SolveAnagramDto
 {
     [Required]
     public required string Anagram { get; init; }

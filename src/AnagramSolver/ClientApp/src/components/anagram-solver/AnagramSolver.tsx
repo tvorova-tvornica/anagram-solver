@@ -16,12 +16,12 @@ import { FC, useState } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
 import { AnimatedText } from "../animated-text/AnimatedText";
 import { AnagramSolverResultImage } from "./AnagramSolverResultImage";
-import { useResolveAnagramQuery } from "./Queries";
+import { useSolveAnagramQuery } from "./Queries";
 
 export const AnagramSolver: FC<{}> = () => {
     const [anagram, setAnagram] = useState("");
     const debouncedAnagram = useDebounce(anagram, 500);
-    const resolveAnagramResult = useResolveAnagramQuery(debouncedAnagram);
+    const solveAnagramResult = useSolveAnagramQuery(debouncedAnagram);
 
     return (
         <Box w="95%" maxW="600px">
@@ -45,7 +45,7 @@ export const AnagramSolver: FC<{}> = () => {
                         placeholder="nag a ram..."
                     />
                     <InputRightElement>
-                        {resolveAnagramResult.isFetching && (
+                        {solveAnagramResult.isFetching && (
                             <Spinner mt="10px" />
                         )}
                     </InputRightElement>
@@ -54,8 +54,8 @@ export const AnagramSolver: FC<{}> = () => {
 
             <VStack mt="50px" align="stretch">
                 <AnimatePresence>
-                    {resolveAnagramResult.data?.length &&
-                        resolveAnagramResult.data.map((result, index) => (
+                    {solveAnagramResult.data?.length &&
+                        solveAnagramResult.data.map((result, index) => (
                             <Card
                                 cursor="pointer"
                                 direction="row"
@@ -101,8 +101,8 @@ export const AnagramSolver: FC<{}> = () => {
                                 </Stack>
                             </Card>
                         ))}
-                    {resolveAnagramResult.data &&
-                        !resolveAnagramResult.data.length && (
+                    {solveAnagramResult.data &&
+                        !solveAnagramResult.data.length && (
                             <Card
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}

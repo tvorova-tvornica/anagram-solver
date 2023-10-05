@@ -1,4 +1,4 @@
-using AnagramSolver.Controllers.Dto;
+using AnagramSolver.Controllers.Celebrities.Dto;
 using AnagramSolver.Data;
 using AnagramSolver.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesRequest;
 
-namespace AnagramSolver.Controllers;
+namespace AnagramSolver.Controllers.Celebrities;
 
 [ApiController]
 [Route("[controller]")]
@@ -34,12 +34,12 @@ public class CelebrityController : ControllerBase
         await _dbContext.SaveChangesAsync();
     }
 
-    [HttpGet("resolve-anagram")]
-    public Task<List<ResolveAnagramResult>> ResolveAnagram([FromQuery] ResolveAnagramDto anagramDto)
+    [HttpGet("solve-anagram")]
+    public Task<List<SolveAnagramResult>> SolveAnagram([FromQuery] SolveAnagramDto anagramDto)
     {
         return _dbContext.Celebrities
             .Where(c => c.AnagramKey == anagramDto.AnagramKey || c.HrAnagramKey == anagramDto.AnagramKey)
-            .Select(c => new ResolveAnagramResult
+            .Select(c => new SolveAnagramResult
             {
                 FullName = anagramDto.AnagramKey == c.AnagramKey ? c.FullName : c.HrFullName!,
                 PhotoUrl = c.PhotoUrl,

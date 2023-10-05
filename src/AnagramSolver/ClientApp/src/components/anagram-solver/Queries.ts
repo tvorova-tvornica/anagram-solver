@@ -1,20 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 
-export type ResolveAnagramResult = {
+export type SolveAnagramResult = {
     fullName: string;
     photoUrl?: string;
     description?: string;
     wikipediaUrl?: string;
 };
 
-export const useResolveAnagramQuery = (anagram: string) =>
+export const useSolveAnagramQuery = (anagram: string) =>
     useQuery({
-        queryKey: ["resolve-anagram", anagram],
+        queryKey: ["solve-anagram", anagram],
         enabled: !!anagram,
         queryFn: async () => {
             const response = await fetch(
-                `/celebrity/resolve-anagram?anagram=${anagram}`
+                `/celebrity/solve-anagram?anagram=${anagram}`
             );
-            return (await response.json()) as ResolveAnagramResult[];
+            return (await response.json()) as SolveAnagramResult[];
         },
     });

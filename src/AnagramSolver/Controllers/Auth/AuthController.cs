@@ -1,8 +1,10 @@
 using System.Security.Claims;
-using AnagramSolver.Controllers.Dto;
+using AnagramSolver.Controllers.Auth.Dto;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+
+namespace AnagramSolver.Controllers.Auth;
 
 [ApiController]
 [Route("[controller]")]
@@ -16,7 +18,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("sign-in")]
-    public async Task<IActionResult> SignInAsync([FromBody] LogInDto logInDto)
+    public async Task<IActionResult> SignInAsync([FromBody] SignInDto logInDto)
     {
         var adminUsername = _configuration["ADMIN_USERNAME"];
         var adminPassword = _configuration["ADMIN_PASSWORD"];
