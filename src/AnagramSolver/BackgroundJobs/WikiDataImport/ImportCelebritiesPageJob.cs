@@ -4,6 +4,7 @@ using AnagramSolver.Extensions;
 using AnagramSolver.HttpClients;
 using AnagramSolver.HttpClients.Dto;
 using Microsoft.EntityFrameworkCore;
+using Sentry;
 using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest;
 
 namespace AnagramSolver.BackgroundJobs.WikiDataImport;
@@ -21,6 +22,8 @@ public class ImportCelebritiesPageJob
 
     public async Task ImportAsync(int importPageRequestId)
     {
+        var transaction = SentrySdk.StartTransaction("background-job", "import-celebrities-page");
+
         var pageRequest = await _db.ImportWikiDataCelebritiesPageRequests
             .Include(x => x.ImportCelebritiesRequest)
             .Where(x => x.Status == ImportWikiDataCelebritiesPageRequestStatus.Scheduled)
@@ -36,6 +39,8 @@ public class ImportCelebritiesPageJob
         pageRequest.MarkProcessed();
 
         await _db.SaveChangesAsync();
+
+        transaction.Finish();
     }
 
     private async Task<Dictionary<string, WikiDataCelebritiesResponse.WikiDataCelebrity>> GetWikiDataCelebritiesByPageIdAsync(ImportWikiDataCelebritiesPageRequest pageRequest)
