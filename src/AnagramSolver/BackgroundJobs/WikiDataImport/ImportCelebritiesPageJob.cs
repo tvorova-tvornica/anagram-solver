@@ -13,16 +13,20 @@ public class ImportCelebritiesPageJob
 {
     private readonly AnagramSolverContext _db;
     private readonly WikiDataHttpClient _httpClient;
+    private readonly IHub _sentryHub;
 
-    public ImportCelebritiesPageJob(AnagramSolverContext db, WikiDataHttpClient httpClient)
+    public ImportCelebritiesPageJob(AnagramSolverContext db, 
+        WikiDataHttpClient httpClient,
+        IHub sentryHub)
     {
         _db = db;
         _httpClient = httpClient;
+        _sentryHub = sentryHub;
     }
 
     public async Task ImportAsync(int importPageRequestId)
     {
-        var transaction = SentrySdk.StartTransaction("background-job", "import-celebrities-page");
+        var transaction = _sentryHub.StartTransaction("background-job", "import-celebrities-page");
 
         var pageRequest = await _db.ImportWikiDataCelebritiesPageRequests
             .Include(x => x.ImportCelebritiesRequest)
