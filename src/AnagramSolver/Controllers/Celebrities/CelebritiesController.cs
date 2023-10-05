@@ -10,11 +10,11 @@ namespace AnagramSolver.Controllers.Celebrities;
 
 [ApiController]
 [Route("[controller]")]
-public class CelebrityController : ControllerBase
+public class CelebritiesController : ControllerBase
 {
     private readonly AnagramSolverContext _dbContext;
 
-    public CelebrityController(AnagramSolverContext dbContext)
+    public CelebritiesController(AnagramSolverContext dbContext)
     {
         _dbContext = dbContext;
     }

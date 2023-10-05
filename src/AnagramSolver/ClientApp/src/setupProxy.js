@@ -7,7 +7,7 @@ const target = env.ASPNETCORE_HTTPS_PORT
     ? env.ASPNETCORE_URLS.split(";")[0]
     : "http://localhost:19059";
 
-const context = ["/celebrity", "/auth", "/background-jobs"];
+const context = ["/celebrities", "/auth", "/background-jobs"];
 
 const onError = (err, req, resp, target) => {
     console.error(`${err.message}`);

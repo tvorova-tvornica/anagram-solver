@@ -13,7 +13,7 @@ export const useSolveAnagramQuery = (anagram: string) =>
         enabled: !!anagram,
         queryFn: async () => {
             const response = await fetch(
-                `/celebrity/solve-anagram?anagram=${anagram}`
+                `/celebrities/solve-anagram?anagram=${anagram}`
             );
             return (await response.json()) as SolveAnagramResult[];
         },

@@ -6,7 +6,7 @@ export const useRequestCelebritiesImportMutation = (nationalityId?: string, occu
         mutationKey: ["request-celebrities-import", nationalityId, occupationId],
         retry: false,
         mutationFn: async () => {
-            const response = await fetch("/celebrity/request-celebrities-import", {
+            const response = await fetch("/celebrities/request-celebrities-import", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

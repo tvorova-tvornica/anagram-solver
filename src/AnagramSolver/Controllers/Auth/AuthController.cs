@@ -18,7 +18,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("sign-in")]
-    public async Task<IActionResult> SignInAsync([FromBody] SignInDto logInDto)
+    public async Task<IActionResult> SignIn([FromBody] SignInDto logInDto)
     {
         var adminUsername = _configuration["ADMIN_USERNAME"];
         var adminPassword = _configuration["ADMIN_PASSWORD"];
@@ -55,7 +55,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("sign-out")]
-    public async Task<IActionResult> SignOutAsync()
+    new public async Task<IActionResult> SignOut()
     {
         await HttpContext.SignOutAsync(
             CookieAuthenticationDefaults.AuthenticationScheme);

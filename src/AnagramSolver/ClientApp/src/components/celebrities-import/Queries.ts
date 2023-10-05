@@ -15,7 +15,7 @@ export const useGetImportCelebritiesRequestsQuery = (page: number, pageSize: num
         enabled: !!page && !!pageSize,
         queryFn: async () => {
             const response = await fetch(
-                `/celebrity/get-import-celebrities-requests?page=${page}&pageSize=${pageSize}`
+                `/celebrities/get-import-celebrities-requests?page=${page}&pageSize=${pageSize}`
             );
 
             if (response.status === 401) {
