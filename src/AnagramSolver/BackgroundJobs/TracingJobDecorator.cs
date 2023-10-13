@@ -1,8 +1,4 @@
-
-using System.Runtime.ExceptionServices;
-using Microsoft.Extensions.Options;
 using Sentry;
-using Sentry.AspNetCore;
 
 namespace AnagramSolver.BackgroundJobs;
 
