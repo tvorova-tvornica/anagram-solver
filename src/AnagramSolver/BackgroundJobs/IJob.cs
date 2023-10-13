@@ -1,6 +1,6 @@
 namespace AnagramSolver.BackgroundJobs;
 
-public interface IJob<TJobData>
+public interface IJob<T>
 {
-    Task ExecuteAsync(TJobData jobData);
+    Task ExecuteAsync(T jobData);
 }
