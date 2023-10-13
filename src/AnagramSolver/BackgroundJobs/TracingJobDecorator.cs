@@ -1,6 +1,8 @@
 
 using System.Runtime.ExceptionServices;
+using Microsoft.Extensions.Options;
 using Sentry;
+using Sentry.AspNetCore;
 
 namespace AnagramSolver.BackgroundJobs;
 
@@ -27,30 +29,35 @@ public class TracingJobDecorator<T> : IJob<T>
             return;
         }
 
-        var transaction = _getHub().StartTransaction($"BackgroundJob {_decorated.GetType().Name}", "hangfire.server");
-        
-        hub.ConfigureScope(scope => {
-            scope.Transaction = transaction;
-        });
+        using (hub.PushAndLockScope())
+        {
+            var transaction = hub.StartTransaction($"BackgroundJob {_decorated.GetType().Name}", "hangfire.server");
+            
+            hub.ConfigureScope(scope =>
+            {
+                scope.Transaction = transaction;
+            });
 
-        Exception? exception = null;
-        try
-        {
-            await _decorated.ExecuteAsync(jobData).ConfigureAwait(false);
-        }
-        catch(Exception e)
-        {
-            exception = e;
-        }
-        finally
-        {
-            if (exception is null)
+            Exception? exception = null;
+
+            try
             {
-                transaction.Finish(SpanStatus.Ok);
+                await _decorated.ExecuteAsync(jobData).ConfigureAwait(false);
             }
-            else
+            catch (Exception e)
             {
-                transaction.Finish(exception);
+                exception = e;
+            }
+            finally
+            {
+                if (exception is null)
+                {
+                    transaction.Finish(SpanStatus.Ok);
+                }
+                else
+                {
+                    transaction.Finish(exception);
+                }
             }
         }
     }
