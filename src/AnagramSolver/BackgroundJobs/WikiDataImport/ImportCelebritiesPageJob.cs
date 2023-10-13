@@ -47,7 +47,9 @@ public class ImportCelebritiesPageJob : IJob<ImportCelebritiesPageJobData>
         var limit = pageRequest.Limit;
         var offset = pageRequest.Offset;
 
-        return (await _httpClient.GetCelebritiesPageAsync(occupationId, nationalityId, limit, offset))!.Results!.Bindings
+        var celebritiesPageResponse = await _httpClient.GetCelebritiesPageAsync(occupationId, nationalityId, limit, offset);
+
+        return celebritiesPageResponse!.Results!.Bindings
             .Where(x => !string.IsNullOrWhiteSpace(x.ItemLabel.Value.ToRemovedWhitespace().ToRemovedPunctuation()))
             .DistinctBy(x => x.Item.Value)
             .ToDictionary(k => k.Item.Value, v => v);
