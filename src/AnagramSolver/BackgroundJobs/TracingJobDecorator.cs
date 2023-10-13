@@ -44,21 +44,13 @@ public class TracingJobDecorator<T> : IJob<T>
         }
         finally
         {
-            if (transaction is not null)
+            if (exception is null)
             {
-                if (exception is null)
-                {
-                    transaction.Finish(SpanStatus.Ok);
-                }
-                else 
-                {
-                    transaction.Finish(exception);
-                }
+                transaction.Finish(SpanStatus.Ok);
             }
-
-            if (exception is not null)
+            else
             {
-                ExceptionDispatchInfo.Capture(exception).Throw();
+                transaction.Finish(exception);
             }
         }
     }
