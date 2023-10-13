@@ -1,3 +1,4 @@
+using System.Runtime.ExceptionServices;
 using Sentry;
 
 namespace AnagramSolver.BackgroundJobs;
@@ -53,6 +54,7 @@ public class TracingJobDecorator<T> : IJob<T>
                 else
                 {
                     transaction.Finish(exception);
+                    ExceptionDispatchInfo.Capture(exception).Throw();
                 }
             }
         }
