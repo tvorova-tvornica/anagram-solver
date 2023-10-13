@@ -1,11 +1,14 @@
 using AnagramSolver.Data;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
+using static AnagramSolver.BackgroundJobs.WikiDataImport.EnqueueScheduledCelebritiesPageImportsJob;
+using static AnagramSolver.BackgroundJobs.WikiDataImport.ImportCelebrityRequestsSchedulerJob;
+using static AnagramSolver.BackgroundJobs.WikiDataImport.ScheduleCelebritiesPageImportsJob;
 using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesRequest;
 
 namespace AnagramSolver.BackgroundJobs.WikiDataImport;
 
-public class ImportCelebrityRequestsSchedulerJob
+public class ImportCelebrityRequestsSchedulerJob : IJob<ImportCelebrityRequestsSchedulerJobData>
 {
     private readonly AnagramSolverContext _db;
 
@@ -14,7 +17,7 @@ public class ImportCelebrityRequestsSchedulerJob
         _db = db;
     }
 
-    public async Task ScheduleSingleAsync()
+    public async Task ExecuteAsync(ImportCelebrityRequestsSchedulerJobData _)
     {
         var isAnyRequestProcessing = await _db.ImportWikiDataCelebritiesRequests
             .AnyAsync(x => x.Status != ImportWikiDataCelebritiesRequestStatus.Requested && 
@@ -35,10 +38,12 @@ public class ImportCelebrityRequestsSchedulerJob
             return;
         }
         
-        var jobId = BackgroundJob.Schedule<ScheduleCelebritiesPageImportsJob>(y => y.ScheduleAsync(requestedImport.Id), TimeSpan.FromSeconds(5));
-        BackgroundJob.ContinueJobWith<EnqueueScheduledCelebritiesPageImportsJob>(jobId, y => y.EnqueueAsync(requestedImport.Id));
+        var jobId = BackgroundJob.Schedule<IJob<ScheduleCelebritiesPageImportsJobData>>(y => y.ExecuteAsync(new ScheduleCelebritiesPageImportsJobData(requestedImport.Id)), TimeSpan.FromSeconds(5));
+        BackgroundJob.ContinueJobWith<IJob<EnqueueScheduledCelebritiesPageImportsJobData>>(jobId, y => y.ExecuteAsync(new EnqueueScheduledCelebritiesPageImportsJobData(requestedImport.Id)));
         requestedImport.MarkScheduled();
 
         await _db.SaveChangesAsync();
     }
+
+    public record ImportCelebrityRequestsSchedulerJobData();
 }

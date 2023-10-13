@@ -4,39 +4,33 @@ using AnagramSolver.Extensions;
 using AnagramSolver.HttpClients;
 using AnagramSolver.HttpClients.Dto;
 using Microsoft.EntityFrameworkCore;
-using Sentry;
+using static AnagramSolver.BackgroundJobs.WikiDataImport.ImportCelebritiesPageJob;
 using static AnagramSolver.Data.Entities.ImportWikiDataCelebritiesPageRequest;
 
 namespace AnagramSolver.BackgroundJobs.WikiDataImport;
 
-public class ImportCelebritiesPageJob
+public class ImportCelebritiesPageJob : IJob<ImportCelebritiesPageJobData>
 {
     private readonly AnagramSolverContext _db;
     private readonly WikiDataHttpClient _httpClient;
-    private readonly IHub _sentryHub;
 
     public ImportCelebritiesPageJob(AnagramSolverContext db, 
-        WikiDataHttpClient httpClient,
-        IHub sentryHub)
+        WikiDataHttpClient httpClient)
     {
         _db = db;
         _httpClient = httpClient;
-        _sentryHub = sentryHub;
     }
 
-    public async Task ImportAsync(int importPageRequestId)
+    public async Task ExecuteAsync(ImportCelebritiesPageJobData data)
     {
-        var transaction = _sentryHub.StartTransaction("background-job", "import-celebrities-page");
-        var span = transaction.StartChild("import");
-
         var pageRequest = await _db.ImportWikiDataCelebritiesPageRequests
             .Include(x => x.ImportCelebritiesRequest)
             .Where(x => x.Status == ImportWikiDataCelebritiesPageRequestStatus.Scheduled)
-            .FirstOrDefaultAsync(x => x.Id == importPageRequestId);
+            .FirstOrDefaultAsync(x => x.Id == data.ImportPageRequestId);
 
         if (pageRequest == null)
         {
-            throw new Exception($"Cannot find import page request (id:{importPageRequestId}) with 'Scheduled' status");
+            throw new Exception($"Cannot find import page request (id:{data.ImportPageRequestId}) with 'Scheduled' status");
         }
 
         var wikiDataCelebritiesByPageId = await GetWikiDataCelebritiesByPageIdAsync(pageRequest);
@@ -44,9 +38,6 @@ public class ImportCelebritiesPageJob
         pageRequest.MarkProcessed();
 
         await _db.SaveChangesAsync();
-
-        span.Finish();
-        transaction.Finish();
     }
 
     private async Task<Dictionary<string, WikiDataCelebritiesResponse.WikiDataCelebrity>> GetWikiDataCelebritiesByPageIdAsync(ImportWikiDataCelebritiesPageRequest pageRequest)
@@ -99,4 +90,6 @@ public class ImportCelebritiesPageJob
 
         _db.Celebrities.AddRange(celebritiesToInsert);
     }
+
+    public record ImportCelebritiesPageJobData(int ImportPageRequestId);
 }

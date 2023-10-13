@@ -1,5 +1,4 @@
 using AnagramSolver.BackgroundJobs;
-using AnagramSolver.BackgroundJobs.WikiDataImport;
 using AnagramSolver.Data;
 using AnagramSolver.Exceptions;
 using AnagramSolver.HttpClients;
@@ -10,6 +9,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
+using static AnagramSolver.BackgroundJobs.WikiDataImport.ImportCelebrityRequestsProcessorJob;
+using static AnagramSolver.BackgroundJobs.WikiDataImport.ImportCelebrityRequestsSchedulerJob;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(55));
@@ -30,11 +31,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AnagramSolverContext>(options =>
             options.UseNpgsql(builder.Configuration.GetValue<string>("CONNECTION_STRING")));
 
-builder.Services.AddTransient<ImportCelebritiesPageJob>();
-builder.Services.AddTransient<EnqueueScheduledCelebritiesPageImportsJob>();
-builder.Services.AddTransient<ImportCelebrityRequestsSchedulerJob>();
-builder.Services.AddTransient<ImportCelebrityRequestsProcessorJob>();
-builder.Services.AddTransient<ScheduleCelebritiesPageImportsJob>();
+builder.Services.Scan(scan => scan.FromCallingAssembly()
+    .AddClasses(classes => classes.AssignableTo(typeof(IJob<>)).Where(_ => !_.IsGenericType))
+    .AsImplementedInterfaces()
+    .WithTransientLifetime());
+
+builder.Services.Decorate(typeof(IJob<>), typeof(TracingJobDecorator<>));
+
 builder.Services.AddHttpClient<WikiDataHttpClient>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -131,7 +134,7 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 
-RecurringJob.AddOrUpdate<ImportCelebrityRequestsSchedulerJob>("ImportWikiDataCelebrityRequestsSchedulerJob", x => x.ScheduleSingleAsync(), Cron.Minutely);
-RecurringJob.AddOrUpdate<ImportCelebrityRequestsProcessorJob>("ProcessImportWikiDataCelebrityRequestsJob", x => x.ProcessAsync(), Cron.Minutely);
+RecurringJob.AddOrUpdate<IJob<ImportCelebrityRequestsSchedulerJobData>>("ImportWikiDataCelebrityRequestsSchedulerJob", x => x.ExecuteAsync(new ImportCelebrityRequestsSchedulerJobData()), Cron.Minutely);
+RecurringJob.AddOrUpdate<IJob<ImportCelebrityRequestsProcessorJobData>>("ProcessImportWikiDataCelebrityRequestsJob", x => x.ExecuteAsync(new ImportCelebrityRequestsProcessorJobData()), Cron.Minutely);
 
 app.Run();
