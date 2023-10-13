@@ -120,9 +120,6 @@ app.UseSentryTracing();
 app.UseAuthentication();
 app.UseAuthorization();
 
-GlobalConfiguration.Configuration
-       .UseActivator(new HangfireActivator(app.Services));
-
 app.UseHangfireDashboard("/background-jobs", new DashboardOptions
 {
     Authorization = new[] { new HangfireAuthFilter() }
