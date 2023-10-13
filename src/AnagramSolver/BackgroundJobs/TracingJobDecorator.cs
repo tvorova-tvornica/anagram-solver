@@ -27,7 +27,7 @@ public class TracingJobDecorator<T> : IJob<T>
             return;
         }
 
-        var transaction = _getHub().StartTransaction("BackgroundJob", $"{_decorated.GetType().Name}");
+        var transaction = _getHub().StartTransaction($"BackgroundJob {_decorated.GetType().Name}", "hangfire.server");
         
         hub.ConfigureScope(scope => {
             scope.Transaction = transaction;
