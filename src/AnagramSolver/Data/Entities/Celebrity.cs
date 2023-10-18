@@ -49,7 +49,7 @@ public class Celebrity
 
     private void SetHrFullName(string fullName, string? hrFullName)
     {
-        var hasNonNullUniqueHrName = hrFullName?.ToRemovedWhitespace().ToRemovedPunctuation() is not null &&
+        var hasNonNullUniqueHrName = hrFullName?.ToRemovedWhiteSpace().ToRemovedPunctuation() is not null &&
                     !string.Equals(fullName, hrFullName, StringComparison.OrdinalIgnoreCase);
 
         if (hasNonNullUniqueHrName)
@@ -66,7 +66,7 @@ public class Celebrity
 
     private void ValidateFullName(string fullName)
     {
-        var nameWithoutWhitespaceAndPunctuation = fullName.ToRemovedWhitespace().ToRemovedPunctuation();
+        var nameWithoutWhitespaceAndPunctuation = fullName.ToRemovedWhiteSpace().ToRemovedPunctuation();
 
         if (string.IsNullOrWhiteSpace(nameWithoutWhitespaceAndPunctuation))
         {

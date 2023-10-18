@@ -50,7 +50,7 @@ public class ImportCelebritiesPageJob : IJob<ImportCelebritiesPageJobData>
         var celebritiesPageResponse = await _httpClient.GetCelebritiesPageAsync(occupationId, nationalityId, limit, offset);
 
         return celebritiesPageResponse!.Results!.Bindings
-            .Where(x => !string.IsNullOrWhiteSpace(x.ItemLabel.Value.ToRemovedWhitespace().ToRemovedPunctuation()))
+            .Where(x => !string.IsNullOrWhiteSpace(x.ItemLabel.Value.ToRemovedWhiteSpace().ToRemovedPunctuation()))
             .DistinctBy(x => x.Item.Value)
             .ToDictionary(k => k.Item.Value, v => v);
     }

@@ -9,12 +9,12 @@ public static class StringExtensions
     {
         return value.Normalize(NormalizationForm.FormKC)
                     .ToUpperInvariant()
-                    .ToRemovedWhitespace()
+                    .ToRemovedWhiteSpace()
                     .ToRemovedPunctuation()
                     .ToOrderedByOrdinalValue();
     }
 
-    public static string ToRemovedWhitespace(this string value)
+    public static string ToRemovedWhiteSpace(this string value)
     {
         return new string(value.Where(x => !char.IsWhiteSpace(x)).ToArray());
     }
