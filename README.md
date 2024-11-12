@@ -49,7 +49,6 @@ In production build, react app is built and bundled as APS.NET static asset, bei
 
 Ensure you have the following dependencies installed on your system:
 
-* **dotnet**: `version 7.0 or higher`
 * **dotnet SDK**: `version 7.0 or higher`
 * **Node.js** `version 14.0.0 or higher`
 
