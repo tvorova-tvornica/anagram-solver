@@ -2,10 +2,7 @@
   <img src="https://cdn-icons-png.flaticon.com/512/6295/6295417.png" width="100" />
 </p>
 <p align="center">
-    <h1 align="center">Spectral Analysis</h1>
-</p>
-<p align="center">
-    <em><code>► University project</code></em>
+    <h1 align="center">Anagram Solver</h1>
 </p>
 <p align="center">
 [![Deploy](https://github.com/ChainsOfPower/anagram-solver/actions/workflows/deploy.yml/badge.svg)](https://github.com/ChainsOfPower/anagram-solver/actions/workflows/deploy.yml)
