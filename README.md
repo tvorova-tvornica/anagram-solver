@@ -28,7 +28,6 @@ The goal of this project is to be able to solve any anagram of famous person. <b
 
 --- 
 ## Features
-There are three main modules of this app, namely 
 - As admin, request import of famous people from wikidata, by just providing occupation id
 - As admin, import person manually
 - As anonymous user, enter anagram in input field and immediatelly get solution
