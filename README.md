@@ -5,7 +5,9 @@
     <h1 align="center">Anagram Solver</h1>
 </p>
 <p align="center">
+
 [![Deploy](https://github.com/ChainsOfPower/anagram-solver/actions/workflows/deploy.yml/badge.svg)](https://github.com/ChainsOfPower/anagram-solver/actions/workflows/deploy.yml)
+
 	<img src="https://img.shields.io/badge/license-MIT-blue" alt="license">
 	<img src="https://img.shields.io/github/last-commit/toczekmj/MusicGenres_SpectralAnalysis?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
 	<img src="https://img.shields.io/github/languages/top/toczekmj/MusicGenres_SpectralAnalysis?style=flat&color=0080ff" alt="repo-top-language">
@@ -13,7 +15,6 @@
 <p>
 
 <hr>
-[![Deploy](https://github.com/ChainsOfPower/anagram-solver/actions/workflows/deploy.yml/badge.svg)](https://github.com/ChainsOfPower/anagram-solver/actions/workflows/deploy.yml)
 
 # anagram-solver
 
