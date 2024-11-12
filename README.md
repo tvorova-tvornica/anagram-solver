@@ -24,7 +24,7 @@
 
 ## Overview
 
-The goal of this project is to be able to solve any anagram of famous person. We attend a pub quiz once a week and one of the questions is to solve anagram. That got us wonder what would take to create a web that does just that, and to be able to solve anagram of any famous person. We decided to tackle that challenge and to create this project as a fun side-project.
+The goal of this project is to be able to solve any anagram of famous person. <br><br> We attend a pub quiz once a week and one of the questions is to solve anagram. <br><br> That got us wonder what would take to create a web that does just that, and to be able to solve anagram of any famous person.<br> We decided to tackle that challenge and to create this project as a fun side-project.
 
 --- 
 ## Features
