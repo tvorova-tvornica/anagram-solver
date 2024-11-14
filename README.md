@@ -51,8 +51,6 @@ Anagram key is calculated as follows:
 - Whitespace and punctuation is removed from normalized celebrity full name, as those are neutral characters in anagram
 - Result of that is then parsed into Unicode grapheme clusters and then ordered by ordinal value, resulting in what we call anagram key
 
-<br>
-
 Such anagram key is stored in anagram key column in celebrity table, and we use hash index type since we are interested only in exact matches.<br><br>
 When user queries for anagram solution, we calculate anagram key from that input and then query the database for matching celebrities.
 
