@@ -18,6 +18,7 @@
 > - [ Overview](#overview)
 > - [ Features](#features)
 > - [ Project Structure](#project-structure)
+> - [ Anagram solving algorithm ](#anagram-solving-algorithm)
 > - [ Getting Started](#getting-started)
 
 ---
@@ -41,7 +42,20 @@ In development, backend automatically starts react app and configures the proxy 
 In production build, react app is built and bundled as APS.NET static asset, being served from it's index page.
 
 ---
+## Anagram solving algorithm
+For each celebrity, we store full name and anagram key.
 
+Anagram key is calculated as follows:
+- Celebrity full name is normalized and case folded, as described in <a href="https://www.unicode.org/versions/Unicode11.0.0/ch03.pdf">Default Caseless Matching</a> chapter in unicode documentation
+- Whitespace and punctuation is removed from normalized celebrity full name, as those are neutral characters in anagram
+- Result of that is then parsed into Unicode grapheme clusters and then ordered by ordinal value, resulting in what we call anagram key
+
+<br>
+
+Such anagram key is stored in anagram key column in celebrity table, and we use hash index type since we are interested only in exact matches.<br><br>
+When user queries for anagram solution, we calculate anagram key from that input and then query the database for matching celebrities.
+
+---
 ##  Getting Started
 
 ***Requirements***
@@ -50,6 +64,7 @@ Ensure you have the following dependencies installed on your system:
 
 * **dotnet SDK**: `version 7.0 or higher`
 * **Node.js** `version 14.0.0 or higher`
+* **Postgres** `version 14.4 or higher`
 
 ###  Running locally
 
@@ -65,7 +80,19 @@ git clone git@github.com:tvorova-tvornica/anagram-solver.git
 cd anagram-solver
 ```
 
-3. Run the app in watch mode:
+3. Run the Postgres instance locally
+
+```sh
+docker run --name anagram_solver -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
+```
+
+4. Apply database migrations
+
+```sh
+dotnet ef database update
+```
+
+5. Run the app in watch mode:
 
 ```sh
 dotnet watch
