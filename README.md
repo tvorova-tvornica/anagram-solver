@@ -47,7 +47,7 @@ In production build, react app is built and bundled as APS.NET static asset, bei
 For each celebrity, we store full name and anagram key.
 
 Anagram key is calculated as follows:
-- Celebrity full name is normalized and case folded, as described in <a href="https://www.unicode.org/versions/Unicode11.0.0/ch03.pdf">Default Caseless Matching</a> in 3rd chapter of unicode standard
+- Celebrity full name is normalized and case folded, as described in <a href="https://www.unicode.org/versions/Unicode11.0.0/ch03.pdf">Default Caseless Matching</a> in 3rd chapter of Unicode standard
 - Whitespace and punctuation is removed from normalized celebrity full name, as those are neutral characters in anagram
 - Result of that is then parsed into Unicode grapheme clusters and then ordered by ordinal value, resulting in what we call anagram key
 
