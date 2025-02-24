@@ -85,13 +85,15 @@ cd anagram-solver
 docker run --name anagram_solver -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
 ```
 
-4. Apply database migrations
+4. Create anagram_solver database
+
+5. Apply database migrations
 
 ```sh
 dotnet ef database update
 ```
 
-5. Run the app in watch mode:
+6. Run the app in watch mode:
 
 ```sh
 dotnet watch
